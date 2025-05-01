@@ -5,53 +5,53 @@ import { Separator } from "@/components/ui/separator";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-navy-800 py-6 mt-12 h-[20vh]">
+    <footer className="bg-navy-800 py-4 mt-8 h-[25vh]">
       <div className="container mx-auto px-4 h-full flex flex-col justify-between">
-        <h2 className="text-xl font-bold mb-4 text-center text-gold">Contact Information</h2>
-        <Separator className="mb-4 bg-navy-700" />
+        <h2 className="text-lg font-bold mb-2 text-center text-gold">Contact Information</h2>
+        <Separator className="mb-3 bg-navy-700" />
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
-          <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <Mail className="text-gold" />
-              <a href="mailto:Ahmed.mokhtar12@gmail.com" className="text-white hover:text-gold transition-colors">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-4xl mx-auto">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <Mail className="text-gold h-4 w-4" />
+              <a href="mailto:Ahmed.mokhtar12@gmail.com" className="text-white text-sm hover:text-gold transition-colors">
                 Ahmed.mokhtar12@gmail.com
               </a>
             </div>
             
-            <div className="flex items-center gap-3">
-              <Phone className="text-gold" />
-              <a href="tel:009715913426" className="text-white hover:text-gold transition-colors">
+            <div className="flex items-center gap-2">
+              <Phone className="text-gold h-4 w-4" />
+              <a href="tel:009715913426" className="text-white text-sm hover:text-gold transition-colors">
                 +971 591 3426
               </a>
             </div>
           </div>
           
-          <div className="space-y-2">
-            <h3 className="text-lg font-semibold text-white mb-1">Social Media</h3>
-            <div className="flex flex-wrap gap-4">
-              <a href="https://facebook.com" className="flex items-center gap-2 text-white hover:text-gold transition-colors" target="_blank" rel="noopener noreferrer">
-                <Facebook />
+          <div className="space-y-1.5">
+            <h3 className="text-base font-semibold text-white mb-1">Social Media</h3>
+            <div className="flex flex-wrap gap-3">
+              <a href="https://facebook.com" className="flex items-center gap-1.5 text-white text-sm hover:text-gold transition-colors" target="_blank" rel="noopener noreferrer">
+                <Facebook className="h-4 w-4" />
                 <span>Facebook</span>
               </a>
-              <a href="https://instagram.com" className="flex items-center gap-2 text-white hover:text-gold transition-colors" target="_blank" rel="noopener noreferrer">
-                <Instagram />
+              <a href="https://instagram.com" className="flex items-center gap-1.5 text-white text-sm hover:text-gold transition-colors" target="_blank" rel="noopener noreferrer">
+                <Instagram className="h-4 w-4" />
                 <span>Instagram</span>
               </a>
-              <a href="https://linkedin.com" className="flex items-center gap-2 text-white hover:text-gold transition-colors" target="_blank" rel="noopener noreferrer">
-                <Linkedin />
+              <a href="https://linkedin.com" className="flex items-center gap-1.5 text-white text-sm hover:text-gold transition-colors" target="_blank" rel="noopener noreferrer">
+                <Linkedin className="h-4 w-4" />
                 <span>LinkedIn</span>
               </a>
-              <a href="https://wa.me/009715913426" className="flex items-center gap-2 text-white hover:text-gold transition-colors" target="_blank" rel="noopener noreferrer">
-                <MessageSquare />
+              <a href="https://wa.me/009715913426" className="flex items-center gap-1.5 text-white text-sm hover:text-gold transition-colors" target="_blank" rel="noopener noreferrer">
+                <MessageSquare className="h-4 w-4" />
                 <span>WhatsApp</span>
               </a>
             </div>
           </div>
         </div>
         
-        <Separator className="my-4 bg-navy-700" />
-        <p className="text-center text-sm text-gray-400">
+        <Separator className="my-2 bg-navy-700" />
+        <p className="text-center text-xs text-gray-400">
           © {new Date().getFullYear()} AI Automation Solutions. All rights reserved.
         </p>
       </div>
