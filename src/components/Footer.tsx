@@ -30,7 +30,7 @@ const Footer: React.FC = () => {
           <div className="space-y-1.5">
             <h3 className="text-base font-semibold text-white mb-1">Social Media</h3>
             <div className="flex flex-wrap gap-3">
-              <a href="https://facebook.com" className="flex items-center gap-1.5 text-white text-sm hover:text-gold transition-colors" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.facebook.com/aiautomationai" className="flex items-center gap-1.5 text-white text-sm hover:text-gold transition-colors" target="_blank" rel="noopener noreferrer">
                 <Facebook className="h-4 w-4" />
                 <span>Facebook</span>
               </a>
@@ -38,7 +38,7 @@ const Footer: React.FC = () => {
                 <Instagram className="h-4 w-4" />
                 <span>Instagram</span>
               </a>
-              <a href="https://linkedin.com" className="flex items-center gap-1.5 text-white text-sm hover:text-gold transition-colors" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.linkedin.com/company/106986356/admin/dashboard/" className="flex items-center gap-1.5 text-white text-sm hover:text-gold transition-colors" target="_blank" rel="noopener noreferrer">
                 <Linkedin className="h-4 w-4" />
                 <span>LinkedIn</span>
               </a>
