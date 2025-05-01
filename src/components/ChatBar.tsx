@@ -1,15 +1,18 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { Send } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const ChatBar: React.FC = () => {
   const [message, setMessage] = useState('');
   const [isChatVisible, setIsChatVisible] = useState(false);
-  const [messages, setMessages] = useState<{ text: string; sender: 'user' | 'system' }[]>([]);
+  const [messages, setMessages] = useState<{ text: string; sender: 'user' | 'system'; id: string }[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [initialMousePos, setInitialMousePos] = useState({ x: 0, y: 0 });
+  const [messageJustSent, setMessageJustSent] = useState(false);
   
+  const { toast } = useToast();
   const chatBarRef = useRef<HTMLDivElement>(null);
   const chatWindowRef = useRef<HTMLDivElement>(null);
   const messageInputRef = useRef<HTMLInputElement>(null);
@@ -94,12 +97,59 @@ const ChatBar: React.FC = () => {
     };
   }, [isDragging, initialMousePos, position]);
   
+  // Generate a unique ID for messages
+  const generateId = () => {
+    return Date.now().toString() + Math.random().toString(36).substring(2);
+  };
+  
+  // Automatically remove messages after 5 seconds
+  useEffect(() => {
+    const messageTimers: { [key: string]: NodeJS.Timeout } = {};
+    
+    messages.forEach(msg => {
+      if (!messageTimers[msg.id]) {
+        messageTimers[msg.id] = setTimeout(() => {
+          setMessages(prev => prev.filter(m => m.id !== msg.id));
+        }, 5000);
+      }
+    });
+    
+    return () => {
+      // Clear all timers on component unmount
+      Object.values(messageTimers).forEach(timer => clearTimeout(timer));
+    };
+  }, [messages]);
+  
+  // Handle chat visibility when a message is sent
+  useEffect(() => {
+    if (messageJustSent) {
+      setIsChatVisible(true);
+      const timer = setTimeout(() => {
+        setMessageJustSent(false);
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [messageJustSent]);
+  
   // Send the message
   const sendMessage = async () => {
     if (!message.trim()) return;
     
+    const messageId = generateId();
+    
     // Add message to chat
-    setMessages(prev => [...prev, { text: message, sender: 'user' }]);
+    setMessages(prev => [...prev, { text: message, sender: 'user', id: messageId }]);
+    
+    // Show a toast notification
+    toast({
+      title: "Message Sent",
+      description: message,
+      duration: 3000
+    });
+    
+    // Set message just sent flag to control visibility
+    setMessageJustSent(true);
     
     try {
       // Send to webhook
@@ -110,16 +160,12 @@ const ChatBar: React.FC = () => {
         },
         body: JSON.stringify({ message }),
       });
-      
-      // Clear input
-      setMessage('');
-      
-      // Optional: Add system response
-      // setMessages(prev => [...prev, { text: 'Message received!', sender: 'system' }]);
-      
     } catch (error) {
       console.error('Error sending message:', error);
     }
+    
+    // Clear input
+    setMessage('');
     
     // Focus back on input
     if (messageInputRef.current) {
@@ -158,12 +204,10 @@ const ChatBar: React.FC = () => {
           bottom: `${window.innerHeight - position.y + 10}px`,
           zIndex: 9998
         }}
-        onMouseEnter={() => setIsChatVisible(true)}
-        onMouseLeave={() => setIsChatVisible(false)}
       >
-        {messages.map((msg, index) => (
+        {messages.map((msg) => (
           <div
-            key={index}
+            key={msg.id}
             style={{
               padding: '8px 12px',
               borderRadius: '8px',
@@ -202,8 +246,8 @@ const ChatBar: React.FC = () => {
         onMouseDown={handleMouseDown}
         onMouseEnter={() => setIsChatVisible(true)}
         onMouseLeave={(e) => {
-          // Only hide if not hovering over chat window
-          if (!chatWindowRef.current?.contains(e.relatedTarget as Node)) {
+          // Only hide if not hovering over chat window and no message just sent
+          if (!chatWindowRef.current?.contains(e.relatedTarget as Node) && !messageJustSent) {
             setIsChatVisible(false);
           }
         }}
