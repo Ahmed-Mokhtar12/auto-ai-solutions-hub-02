@@ -142,11 +142,12 @@ const ChatBar: React.FC = () => {
           width: '300px',
           maxHeight: '400px',
           overflowY: 'auto',
-          backgroundColor: '#ffffff',
-          border: '1px solid #ccc',
+          backgroundColor: 'rgba(0, 0, 0, 0.0)', // Changed to fully transparent
+          backdropFilter: 'blur(5px)', // Added subtle blur for better text readability
+          border: '1px solid rgba(255, 255, 255, 0.2)', // More subtle border
           borderRadius: '8px',
           padding: '10px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)', // Slightly enhanced shadow
           transition: 'opacity 0.3s, transform 0.3s',
           opacity: isChatVisible ? 1 : 0,
           visibility: isChatVisible ? 'visible' : 'hidden',
@@ -167,7 +168,7 @@ const ChatBar: React.FC = () => {
               marginBottom: '8px',
               maxWidth: '80%',
               wordWrap: 'break-word',
-              backgroundColor: msg.sender === 'user' ? '#e6f7ff' : '#f1f1f1',
+              backgroundColor: msg.sender === 'user' ? '#e6f7ff' : 'rgba(241, 241, 241, 0.7)', // Made system message slightly transparent
               color: '#000',
               alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
               marginLeft: msg.sender === 'user' ? 'auto' : '0',
