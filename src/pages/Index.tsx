@@ -6,9 +6,9 @@ import Footer from '@/components/Footer';
 
 export default function Index() {
   return (
-    <div className="min-h-screen bg-navy-900 text-white flex flex-col">
+    <div className="h-screen bg-navy-900 text-white flex flex-col overflow-hidden">
       <Header />
-      <main className="container mx-auto py-8 px-4 flex-grow">
+      <main className="container mx-auto px-4 flex-grow overflow-y-auto">
         <h1 className="text-4xl md:text-5xl font-bold mb-8 text-center">
           AI-Powered <span className="text-gold">Automation</span> Solutions
         </h1>
