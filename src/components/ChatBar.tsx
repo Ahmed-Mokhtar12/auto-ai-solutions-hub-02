@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -15,7 +14,6 @@ const ChatBar: React.FC = () => {
   
   const { toast } = useToast();
   const chatBarRef = useRef<HTMLDivElement>(null);
-  const chatWindowRef = useRef<HTMLDivElement>(null);
   const messageInputRef = useRef<HTMLInputElement>(null);
   
   // Initialize position to bottom right
@@ -212,26 +210,26 @@ const ChatBar: React.FC = () => {
   
   return (
     <>
-      {/* Chat Window - Now with completely transparent background */}
+      {/* Chat Window - completely invisible container with only text visible */}
       <div 
-        ref={chatWindowRef}
         style={{
           position: 'fixed',
           width: '300px',
           maxHeight: '400px',
           overflowY: 'auto',
-          backgroundColor: 'transparent', // Completely transparent background
-          border: 'none', // Remove border
+          backgroundColor: 'transparent', // Transparent background
+          border: 'none', // No border
           borderRadius: '8px',
           padding: '10px',
-          boxShadow: 'none', // Remove shadow
+          boxShadow: 'none', // No shadow
           transition: 'opacity 0.3s, transform 0.3s',
           opacity: isChatVisible ? 1 : 0,
           visibility: isChatVisible ? 'visible' : 'hidden',
           transform: isChatVisible ? 'translateY(0)' : 'translateY(10px)',
           left: `${position.x}px`,
           bottom: `${window.innerHeight - position.y + 10}px`,
-          zIndex: 9998
+          zIndex: 9998,
+          pointerEvents: 'none' // Make sure it doesn't interfere with clicks
         }}
       >
         {messages.slice(-4).map((msg) => (
@@ -243,11 +241,12 @@ const ChatBar: React.FC = () => {
               marginBottom: '8px',
               maxWidth: '80%',
               wordWrap: 'break-word',
-              backgroundColor: 'transparent', // Transparent background for message bubbles
-              color: '#fff', // White text for better visibility on dark backgrounds
+              backgroundColor: 'transparent', // Ensure message background is transparent
+              color: '#fff', // White text for visibility
               alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
               marginLeft: msg.sender === 'user' ? 'auto' : '0',
-              display: 'block'
+              display: 'block',
+              textShadow: '0 1px 2px rgba(0,0,0,0.5)' // Add text shadow to help visibility against varying backgrounds
             }}
           >
             {msg.text}
