@@ -1,4 +1,6 @@
+
 import React, { useRef, useState, useEffect } from 'react';
+import { Send } from 'lucide-react';
 
 const ChatBar: React.FC = () => {
   const [message, setMessage] = useState('');
@@ -142,12 +144,12 @@ const ChatBar: React.FC = () => {
           width: '300px',
           maxHeight: '400px',
           overflowY: 'auto',
-          backgroundColor: 'rgba(0, 0, 0, 0.0)', // Changed to fully transparent
-          backdropFilter: 'blur(5px)', // Added subtle blur for better text readability
-          border: '1px solid rgba(255, 255, 255, 0.2)', // More subtle border
+          backgroundColor: 'rgba(0, 0, 0, 0.0)', // Fully transparent
+          backdropFilter: 'blur(5px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)', 
           borderRadius: '8px',
           padding: '10px',
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)', // Slightly enhanced shadow
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
           transition: 'opacity 0.3s, transform 0.3s',
           opacity: isChatVisible ? 1 : 0,
           visibility: isChatVisible ? 'visible' : 'hidden',
@@ -168,7 +170,7 @@ const ChatBar: React.FC = () => {
               marginBottom: '8px',
               maxWidth: '80%',
               wordWrap: 'break-word',
-              backgroundColor: msg.sender === 'user' ? '#e6f7ff' : 'rgba(241, 241, 241, 0.7)', // Made system message slightly transparent
+              backgroundColor: msg.sender === 'user' ? '#e6f7ff' : 'rgba(241, 241, 241, 0.7)',
               color: '#000',
               alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
               marginLeft: msg.sender === 'user' ? 'auto' : '0',
@@ -188,10 +190,10 @@ const ChatBar: React.FC = () => {
           width: '320px',
           height: '50px',
           display: 'flex',
-          backgroundColor: '#f9f9f9',
-          border: '1px solid #ccc',
+          backgroundColor: '#1A1F2C', // Dark background matching the image
+          border: '1px solid rgba(255, 255, 255, 0.1)', // Subtle border
           borderRadius: '8px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
           left: `${position.x}px`,
           top: `${position.y}px`,
           zIndex: 9999,
@@ -209,35 +211,39 @@ const ChatBar: React.FC = () => {
         <input
           ref={messageInputRef}
           type="text"
-          placeholder="Type your message..."
+          placeholder="Ask me anything about your workflow..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
           style={{
-            width: 'calc(100% - 60px)',
+            width: 'calc(100% - 40px)', // Adjusted for smaller send button
             height: '100%',
-            padding: '0 10px',
+            padding: '0 15px',
             fontSize: '14px',
             border: 'none',
             borderRadius: '8px 0 0 8px',
             outline: 'none',
-            backgroundColor: 'transparent'
+            backgroundColor: 'transparent',
+            color: '#ffffff' // White text
           }}
         />
         <button
           onClick={sendMessage}
           style={{
-            width: '50px',
+            width: '40px',
             height: '100%',
-            backgroundColor: '#007bff',
-            color: '#ffffff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'transparent',
+            color: '#4CAF50', // Green color for the icon
             border: 'none',
             borderRadius: '0 8px 8px 0',
             cursor: 'pointer',
             fontSize: '16px'
           }}
         >
-          →
+          <Send size={18} />
         </button>
       </div>
     </>
