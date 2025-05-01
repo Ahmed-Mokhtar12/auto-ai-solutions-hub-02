@@ -10,6 +10,10 @@ const ChatBar: React.FC = () => {
   const [initialMousePos, setInitialMousePos] = useState({ x: 0, y: 0 });
   const [messageJustSent, setMessageJustSent] = useState(false);
   const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // Webhook URL
+  const webhookUrl = "https://n8n-2seasons-u38985.vm.elestio.app/webhook-test/4d80c078-4949-49af-8c7b-1c9b09e1fe0a";
   
   const chatBarRef = useRef<HTMLDivElement>(null);
   const messageInputRef = useRef<HTMLInputElement>(null);
@@ -140,18 +144,40 @@ const ChatBar: React.FC = () => {
     
     // Set message just sent flag to control visibility
     setMessageJustSent(true);
+    setIsLoading(true);
     
     try {
       // Send to webhook
-      await fetch('https://your.webhook/endpoint', {
+      const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message }),
+        mode: 'no-cors', // Add this to handle CORS
+        body: JSON.stringify({ 
+          message,
+          timestamp: new Date().toISOString(),
+          source: window.location.href
+        }),
       });
+      
+      // Add system message confirming the webhook was called
+      setMessages(prev => [...prev, { 
+        text: "Message sent to automation workflow", 
+        sender: 'system', 
+        id: generateId() 
+      }]);
+      
     } catch (error) {
       console.error('Error sending message:', error);
+      // Add error message to chat
+      setMessages(prev => [...prev, { 
+        text: "Failed to send message to automation service", 
+        sender: 'system', 
+        id: generateId() 
+      }]);
+    } finally {
+      setIsLoading(false);
     }
     
     // Clear input
@@ -284,6 +310,7 @@ const ChatBar: React.FC = () => {
             backgroundColor: 'transparent',
             color: '#ffffff' // White text
           }}
+          disabled={isLoading}
         />
         <button
           onClick={sendMessage}
@@ -294,12 +321,13 @@ const ChatBar: React.FC = () => {
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: 'transparent',
-            color: '#4CAF50', // Green color for the icon
+            color: isLoading ? '#555555' : '#4CAF50', // Dimmed when loading
             border: 'none',
             borderRadius: '0 8px 8px 0',
-            cursor: 'pointer',
+            cursor: isLoading ? 'wait' : 'pointer',
             fontSize: '16px'
           }}
+          disabled={isLoading}
         >
           <Send size={18} />
         </button>
