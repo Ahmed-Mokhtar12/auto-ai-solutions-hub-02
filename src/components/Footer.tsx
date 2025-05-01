@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-navy-800 py-6 mt-12 h-[10vh]">
+    <footer className="bg-navy-800 py-6 mt-12 h-[20vh]">
       <div className="container mx-auto px-4 h-full flex flex-col justify-between">
         <h2 className="text-xl font-bold mb-4 text-center text-gold">Contact Information</h2>
         <Separator className="mb-4 bg-navy-700" />
