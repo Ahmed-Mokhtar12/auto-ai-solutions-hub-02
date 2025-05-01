@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Send } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
 
 const ChatBar: React.FC = () => {
   const [message, setMessage] = useState('');
@@ -12,7 +11,6 @@ const ChatBar: React.FC = () => {
   const [messageJustSent, setMessageJustSent] = useState(false);
   const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
   
-  const { toast } = useToast();
   const chatBarRef = useRef<HTMLDivElement>(null);
   const messageInputRef = useRef<HTMLInputElement>(null);
   
@@ -139,13 +137,6 @@ const ChatBar: React.FC = () => {
     
     // Add message to chat
     setMessages(prev => [...prev, { text: message, sender: 'user', id: messageId }]);
-    
-    // Show a toast notification
-    toast({
-      title: "Message Sent",
-      description: message,
-      duration: 3000
-    });
     
     // Set message just sent flag to control visibility
     setMessageJustSent(true);
