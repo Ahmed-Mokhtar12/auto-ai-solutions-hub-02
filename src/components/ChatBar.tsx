@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -182,7 +181,7 @@ const ChatBar: React.FC = () => {
   
   return (
     <>
-      {/* Chat Window */}
+      {/* Chat Window - Now with completely transparent background */}
       <div 
         ref={chatWindowRef}
         style={{
@@ -190,12 +189,11 @@ const ChatBar: React.FC = () => {
           width: '300px',
           maxHeight: '400px',
           overflowY: 'auto',
-          backgroundColor: 'rgba(0, 0, 0, 0.0)', // Fully transparent
-          backdropFilter: 'blur(5px)',
-          border: '1px solid rgba(255, 255, 255, 0.2)', 
+          backgroundColor: 'transparent', // Completely transparent background
+          border: 'none', // Remove border
           borderRadius: '8px',
           padding: '10px',
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+          boxShadow: 'none', // Remove shadow
           transition: 'opacity 0.3s, transform 0.3s',
           opacity: isChatVisible ? 1 : 0,
           visibility: isChatVisible ? 'visible' : 'hidden',
@@ -214,8 +212,8 @@ const ChatBar: React.FC = () => {
               marginBottom: '8px',
               maxWidth: '80%',
               wordWrap: 'break-word',
-              backgroundColor: msg.sender === 'user' ? '#e6f7ff' : 'rgba(241, 241, 241, 0.7)',
-              color: '#000',
+              backgroundColor: 'transparent', // Transparent background for message bubbles
+              color: '#fff', // White text for better visibility on dark backgrounds
               alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
               marginLeft: msg.sender === 'user' ? 'auto' : '0',
               display: 'block'
@@ -244,13 +242,6 @@ const ChatBar: React.FC = () => {
           cursor: isDragging ? 'grabbing' : 'grab'
         }}
         onMouseDown={handleMouseDown}
-        onMouseEnter={() => setIsChatVisible(true)}
-        onMouseLeave={(e) => {
-          // Only hide if not hovering over chat window and no message just sent
-          if (!chatWindowRef.current?.contains(e.relatedTarget as Node) && !messageJustSent) {
-            setIsChatVisible(false);
-          }
-        }}
       >
         <input
           ref={messageInputRef}
