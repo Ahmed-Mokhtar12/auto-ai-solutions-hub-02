@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -10,6 +11,7 @@ const ChatBar: React.FC = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [initialMousePos, setInitialMousePos] = useState({ x: 0, y: 0 });
   const [messageJustSent, setMessageJustSent] = useState(false);
+  const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
   
   const { toast } = useToast();
   const chatBarRef = useRef<HTMLDivElement>(null);
@@ -178,6 +180,35 @@ const ChatBar: React.FC = () => {
       sendMessage();
     }
   };
+
+  // Handle mouse enter/leave events for chat history visibility
+  const handleMouseEnter = () => {
+    setIsChatVisible(true);
+    
+    // Clear any existing timeout
+    if (hideTimeout) {
+      clearTimeout(hideTimeout);
+      setHideTimeout(null);
+    }
+  };
+  
+  const handleMouseLeave = () => {
+    // Set a timeout to hide chat after 5 seconds
+    const timeout = setTimeout(() => {
+      setIsChatVisible(false);
+    }, 5000);
+    
+    setHideTimeout(timeout);
+  };
+
+  // Clean up timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hideTimeout) {
+        clearTimeout(hideTimeout);
+      }
+    };
+  }, [hideTimeout]);
   
   return (
     <>
@@ -203,7 +234,7 @@ const ChatBar: React.FC = () => {
           zIndex: 9998
         }}
       >
-        {messages.map((msg) => (
+        {messages.slice(-4).map((msg) => (
           <div
             key={msg.id}
             style={{
@@ -242,6 +273,8 @@ const ChatBar: React.FC = () => {
           cursor: isDragging ? 'grabbing' : 'grab'
         }}
         onMouseDown={handleMouseDown}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <input
           ref={messageInputRef}
