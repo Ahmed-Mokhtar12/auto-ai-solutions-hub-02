@@ -16,8 +16,10 @@ interface ShootingStar {
   speed: number;
   opacity: number;
   active: boolean;
-  angle: number; // Adding angle for more natural trajectories
-  tail: number; // Varying tail lengths
+  angle: number;
+  tail: number;
+  headSize: number; // Adding variable head size
+  color: string; // Adding subtle color variation
 }
 
 const StarryBackground: React.FC = () => {
@@ -52,16 +54,19 @@ const StarryBackground: React.FC = () => {
     // Initialize shooting stars
     const initShootingStars = () => {
       shootingStarsRef.current = [];
-      for (let i = 0; i < 3; i++) {
+      // Reduced to just 2 shooting stars to make them feel more special
+      for (let i = 0; i < 2; i++) {
         shootingStarsRef.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height / 3, // Start in top third of screen
-          length: 60 + Math.random() * 120, // Longer tails
-          speed: 2 + Math.random() * 4, // Varying speeds
+          length: 70 + Math.random() * 150, // Even longer tails for more dramatic effect
+          speed: 1.8 + Math.random() * 3.5, // Slightly slower for more majestic movement
           opacity: 0,
           active: false,
-          angle: Math.PI / 4 + (Math.random() * Math.PI / 4), // Diagonal trajectory (45-90 degrees)
-          tail: 0.5 + Math.random() * 0.5 // Tail width variation
+          angle: Math.PI / 6 + (Math.random() * Math.PI / 3), // More varied angles (30-90 degrees)
+          tail: 0.4 + Math.random() * 0.8, // More varied tail width
+          headSize: 1.2 + Math.random() * 1.5, // Variable head size
+          color: `hsl(${200 + Math.random() * 60}, 100%, 90%)` // Subtle blue-white variation
         });
       }
     };
@@ -85,18 +90,20 @@ const StarryBackground: React.FC = () => {
         const randomIndex = Math.floor(Math.random() * inactiveStars.length);
         const star = inactiveStars[randomIndex];
         star.active = true;
-        star.opacity = 0.8 + Math.random() * 0.2; // Slightly varying opacities
-        star.x = Math.random() * canvas.width * 0.8; // Keep away from right edge
-        star.y = Math.random() * (canvas.height / 4); // Start in top quarter for longer visible paths
-        star.angle = Math.PI / 4 + (Math.random() * Math.PI / 4); // Random angle between 45-90 degrees
-        star.tail = 0.5 + Math.random() * 0.5; // Random tail width
+        star.opacity = 0.7 + Math.random() * 0.3; // Varied opacities
+        star.x = Math.random() * canvas.width * 0.7; // Start position adjustment
+        star.y = Math.random() * (canvas.height / 4); // Start in top quarter
+        star.angle = Math.PI / 6 + (Math.random() * Math.PI / 3); // Random angle between 30-90 degrees
+        star.tail = 0.4 + Math.random() * 0.8; // Random tail width
+        star.headSize = 1.2 + Math.random() * 1.5; // Random head size
+        star.color = `hsl(${200 + Math.random() * 60}, 100%, ${85 + Math.random() * 15}%)`; // Subtle color variation
       }
     };
     
-    // Set interval to trigger shooting stars every 8-15 seconds (slightly more frequent)
+    // Set interval to trigger shooting stars much less frequently (15-45 seconds)
     const shootingStarInterval = setInterval(() => {
       triggerShootingStar();
-    }, 8000 + Math.random() * 7000);
+    }, 15000 + Math.random() * 30000); // Random interval between 15-45 seconds
     
     // Animation loop
     const animate = () => {
@@ -126,38 +133,59 @@ const StarryBackground: React.FC = () => {
       // Draw shooting stars
       shootingStarsRef.current.forEach(star => {
         if (star.active) {
-          // Create gradient for the tail
+          // Calculate end point of the shooting star
+          const endX = star.x + Math.cos(star.angle) * star.length;
+          const endY = star.y + Math.sin(star.angle) * star.length;
+          
+          // Create gradient for the tail with custom color
           const gradient = context.createLinearGradient(
             star.x, star.y, 
-            star.x + Math.cos(star.angle) * star.length, 
-            star.y + Math.sin(star.angle) * star.length
+            endX, endY
           );
           
-          gradient.addColorStop(0, `rgba(255, 255, 255, ${star.opacity})`);
+          gradient.addColorStop(0, star.color.replace('90%)', `${star.opacity * 100}%)`));
+          gradient.addColorStop(0.1, star.color.replace('90%)', `${star.opacity * 80}%)`));
+          gradient.addColorStop(0.6, `rgba(255, 255, 255, ${star.opacity * 0.3})`);
           gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
           
+          // Draw the tail with slight curve
           context.strokeStyle = gradient;
           context.lineWidth = 1 + star.tail;
           context.beginPath();
           context.moveTo(star.x, star.y);
-          context.lineTo(
-            star.x + Math.cos(star.angle) * star.length, 
-            star.y + Math.sin(star.angle) * star.length
-          );
+          
+          // Add a slight arc for more natural movement
+          const controlX = star.x + Math.cos(star.angle) * (star.length * 0.5);
+          const controlY = star.y + Math.sin(star.angle) * (star.length * 0.5) + (Math.random() * 5 - 2.5);
+          context.quadraticCurveTo(controlX, controlY, endX, endY);
           context.stroke();
           
-          // Add a small glow at the head
-          context.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+          // Add a glow at the head
+          const gradient2 = context.createRadialGradient(
+            star.x, star.y, 0,
+            star.x, star.y, star.headSize * 4
+          );
+          gradient2.addColorStop(0, star.color.replace('90%)', `${star.opacity * 100}%)`));
+          gradient2.addColorStop(0.5, star.color.replace('90%)', `${star.opacity * 30}%)`));
+          gradient2.addColorStop(1, 'rgba(255, 255, 255, 0)');
+          
+          context.fillStyle = gradient2;
           context.beginPath();
-          context.arc(star.x, star.y, 1 + star.tail, 0, Math.PI * 2);
+          context.arc(star.x, star.y, star.headSize * 2, 0, Math.PI * 2);
+          context.fill();
+          
+          // Brighter core
+          context.fillStyle = star.color.replace('90%)', '100%)');
+          context.beginPath();
+          context.arc(star.x, star.y, star.headSize, 0, Math.PI * 2);
           context.fill();
           
           // Move shooting star along its angle
           star.x += Math.cos(star.angle) * star.speed;
           star.y += Math.sin(star.angle) * star.speed;
           
-          // Fade out gradually - slower fade
-          star.opacity -= 0.008;
+          // Fade out gradually - very slow fade
+          star.opacity -= 0.005; // Slower fade-out for longer lasting effect
           
           // Reset if it moves off screen or fades out
           if (star.opacity <= 0 || star.x < 0 || star.x > canvas.width || star.y > canvas.height) {
