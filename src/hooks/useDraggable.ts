@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef, RefObject } from 'react';
 
 interface Position {
@@ -11,7 +12,7 @@ export const useDraggable = () => {
   const [initialMousePos, setInitialMousePos] = useState<Position>({ x: 0, y: 0 });
   const elementRef = useRef<HTMLDivElement>(null);
 
-  // Initialize position to bottom right
+  // Initialize position to bottom right, 3 inches above footer
   useEffect(() => {
     if (elementRef.current) {
       const viewportWidth = window.innerWidth;
@@ -19,9 +20,10 @@ export const useDraggable = () => {
       const elementWidth = 320; // Default width
       const elementHeight = 50; // Default height
       
+      // Position 3 inches (approximately 288px) above footer
       setPosition({
         x: viewportWidth - elementWidth - 20,
-        y: viewportHeight - elementHeight - 20
+        y: viewportHeight - elementHeight - 288
       });
     }
   }, []);

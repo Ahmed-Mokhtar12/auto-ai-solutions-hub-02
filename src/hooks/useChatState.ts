@@ -5,32 +5,12 @@ import { ChatMessage, generateMessageId } from '@/utils/messageUtils';
 const WEBHOOK_URL = "https://n8n-2seasons-u38985.vm.elestio.app/webhook-test/4d80c078-4949-49af-8c7b-1c9b09e1fe0a";
 
 export const useChatState = () => {
-  // Default position for the chat bar (right side, 1 inch above footer)
-  const defaultPosition = {
-    x: window.innerWidth - 340, // 20px margin from right edge
-    y: window.innerHeight - 120 // approximately 1 inch (96px) above the footer
-  };
-  
   const [message, setMessage] = useState('');
   const [isChatVisible, setIsChatVisible] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [messageJustSent, setMessageJustSent] = useState(false);
   const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [position, setPosition] = useState(defaultPosition);
-
-  // Update position if window resizes
-  useEffect(() => {
-    const handleResize = () => {
-      setPosition({
-        x: window.innerWidth - 340,
-        y: window.innerHeight - 120
-      });
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   // Automatically remove messages after 5 seconds
   useEffect(() => {
@@ -147,8 +127,6 @@ export const useChatState = () => {
     messages,
     isLoading,
     messageJustSent,
-    position,
-    setPosition,
     sendMessage,
     handleVisibility
   };

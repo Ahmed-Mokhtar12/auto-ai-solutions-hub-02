@@ -2,6 +2,7 @@
 import React, { useRef } from 'react';
 import { Send } from 'lucide-react';
 import { useChatState } from '@/hooks/useChatState';
+import { useDraggable } from '@/hooks/useDraggable';
 import ChatMessages from './ChatMessages';
 
 const ChatBar: React.FC = () => {
@@ -14,9 +15,15 @@ const ChatBar: React.FC = () => {
     messages,
     isLoading,
     sendMessage,
-    handleVisibility,
-    position
+    handleVisibility
   } = useChatState();
+  
+  const {
+    elementRef,
+    position,
+    isDragging,
+    handleMouseDown
+  } = useDraggable();
   
   const { handleMouseEnter, handleMouseLeave } = handleVisibility();
   
@@ -47,6 +54,7 @@ const ChatBar: React.FC = () => {
       
       {/* Chat Input Bar */}
       <div 
+        ref={elementRef}
         style={{
           position: 'fixed',
           width: '320px',
@@ -56,11 +64,12 @@ const ChatBar: React.FC = () => {
           border: '1px solid rgba(255, 255, 255, 0.1)',
           borderRadius: '8px',
           boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-          right: '20px',
-          bottom: '120px', // 1 inch (approximately 96px) above footer
+          left: `${position.x}px`,
+          top: `${position.y}px`,
           zIndex: 9999,
-          cursor: 'pointer'
+          cursor: isDragging ? 'grabbing' : 'grab'
         }}
+        onMouseDown={handleMouseDown}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
