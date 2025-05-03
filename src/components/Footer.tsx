@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
         
         <Separator className="my-2 bg-navy-700" />
         <p className="text-center text-xs text-gray-400">
-          © {new Date().getFullYear()} AI Automation Solutions. All rights reserved.
+          © {new Date().getFullYear()} AI-Powered Automation Solutions. All rights reserved.
         </p>
       </div>
     </footer>
