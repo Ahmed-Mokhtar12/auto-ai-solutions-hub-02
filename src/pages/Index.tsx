@@ -18,7 +18,14 @@ export default function Index() {
         </h1>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {/* Content here */}
+          <div className="bg-navy-800 p-6 rounded-lg shadow-lg border border-navy-700">
+            <h2 className="text-2xl font-semibold text-gold mb-4">Our Services</h2>
+            <p className="text-white mb-4">We provide cutting-edge AI automation solutions for businesses of all sizes.</p>
+          </div>
+          <div className="bg-navy-800 p-6 rounded-lg shadow-lg border border-navy-700">
+            <h2 className="text-2xl font-semibold text-gold mb-4">Get Started</h2>
+            <p className="text-white mb-4">Contact us today to learn how AI can transform your business processes.</p>
+          </div>
         </div>
       </main>
       
