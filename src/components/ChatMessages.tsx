@@ -44,12 +44,13 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
             marginBottom: '8px',
             maxWidth: '80%',
             wordWrap: 'break-word',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            backgroundColor: 'rgba(0, 0, 0, 0.1)',
+            backdropFilter: 'blur(4px)',
             color: '#fff',
             alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
             marginLeft: msg.sender === 'user' ? 'auto' : '0',
             display: 'block',
-            textShadow: '0 1px 2px rgba(0,0,0,0.5)'
+            textShadow: '0 1px 2px rgba(0,0,0,0.7)'
           }}
         >
           {msg.text}
