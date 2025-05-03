@@ -7,7 +7,7 @@ import StarryBackground from '@/components/StarryBackground';
 
 export default function Index() {
   return (
-    <div className="h-screen bg-transparent text-white flex flex-col overflow-hidden relative">
+    <div className="min-h-screen flex flex-col relative">
       <StarryBackground />
       <Header />
       <main className="container mx-auto px-4 flex-grow overflow-y-auto relative z-10">
