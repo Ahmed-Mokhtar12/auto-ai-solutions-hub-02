@@ -40,13 +40,12 @@ const StarryBackground: React.FC = () => {
     // Get a random natural star color
     const getStarColor = () => {
       // Natural star colors based on their temperature
-      // Blue/white (hottest), white, yellow, orange, red (coolest)
+      // Blue/white (hottest), white, yellow, orange, blue (coolest)
       const starColors = [
         '#FFFFFF', // White
         '#F5F3CE', // Pale yellow-white
         '#FFE87C', // Yellow
         '#FFA500', // Orange
-        '#FF4500', // Red-orange
         '#B3E5FC', // Light blue
         '#81D4FA', // Sky blue
         '#E1BEE7', // Light purple (some stars appear this way)
@@ -98,14 +97,12 @@ const StarryBackground: React.FC = () => {
       }
     };
     
-    // Get a random meteor color with weighted probabilities
+    // Get a random meteor color with weighted probabilities - only white and light blue
     const getMeteorColor = () => {
       const colors = [
-        { value: '#FFFFFF', weight: 50 },  // White (most common)
-        { value: '#F5F3CE', weight: 20 },  // Pale yellow
-        { value: '#F97316', weight: 15 },  // Bright orange
-        { value: '#0EA5E9', weight: 10 },  // Ocean blue (rare)
-        { value: '#ea384c', weight: 5 }    // Red (very rare)
+        { value: '#FFFFFF', weight: 70 },  // White (most common)
+        { value: '#B3E5FC', weight: 20 },  // Light blue
+        { value: '#81D4FA', weight: 10 },  // Sky blue
       ];
       
       const totalWeight = colors.reduce((acc, color) => acc + color.weight, 0);
@@ -118,7 +115,7 @@ const StarryBackground: React.FC = () => {
         random -= color.weight;
       }
       
-      return colors[0].value; // Default fallback
+      return colors[0].value; // Default fallback to white
     };
     
     // Set canvas to full screen
