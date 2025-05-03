@@ -22,7 +22,6 @@ const StarryBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<Star[]>([]);
   const shootingStarsRef = useRef<ShootingStar[]>([]);
-  const galaxyRef = useRef<{x: number, y: number, size: number}>({x: 0, y: 0, size: 0});
   const frameRef = useRef<number>(0);
   
   useEffect(() => {
@@ -47,26 +46,16 @@ const StarryBackground: React.FC = () => {
         });
       }
     };
-
-    // Initialize galaxy
-    const initGalaxy = () => {
-      // Position galaxy in the top right quadrant
-      galaxyRef.current = {
-        x: canvas.width * 0.75,
-        y: canvas.height * 0.25,
-        size: Math.min(canvas.width, canvas.height) * 0.2 // Galaxy size relative to canvas
-      };
-    };
     
-    // Initialize shooting stars
+    // Initialize shooting stars - reduced to just 2 stars
     const initShootingStars = () => {
       shootingStarsRef.current = [];
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 2; i++) {
         shootingStarsRef.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height / 3, // Start in top third of screen
           length: 50 + Math.random() * 100,
-          speed: 5 + Math.random() * 10,
+          speed: 3 + Math.random() * 5, // Slower speed
           opacity: 0,
           active: false
         });
@@ -79,7 +68,6 @@ const StarryBackground: React.FC = () => {
       canvas.height = window.innerHeight;
       // Re-initialize elements when resizing
       initStars();
-      initGalaxy();
       initShootingStars();
     };
     
@@ -99,49 +87,14 @@ const StarryBackground: React.FC = () => {
       }
     };
     
-    // Set interval to trigger shooting stars every few seconds
+    // Set interval to trigger shooting stars every 10-20 seconds
     const shootingStarInterval = setInterval(() => {
       triggerShootingStar();
-    }, 2000 + Math.random() * 4000); // Random interval between 2-6 seconds
-    
-    // Draw galaxy
-    const drawGalaxy = (context: CanvasRenderingContext2D) => {
-      const { x, y, size } = galaxyRef.current;
-      
-      // Create a radial gradient for the galaxy
-      const gradient = context.createRadialGradient(x, y, size * 0.1, x, y, size);
-      gradient.addColorStop(0, 'rgba(180, 180, 255, 0.5)');
-      gradient.addColorStop(0.3, 'rgba(120, 120, 220, 0.3)');
-      gradient.addColorStop(0.6, 'rgba(80, 80, 180, 0.2)');
-      gradient.addColorStop(1, 'rgba(40, 40, 100, 0)');
-      
-      context.fillStyle = gradient;
-      context.beginPath();
-      context.arc(x, y, size, 0, Math.PI * 2);
-      context.fill();
-      
-      // Add some brighter spots in the galaxy
-      for (let i = 0; i < 30; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const distance = Math.random() * size * 0.8;
-        const spotX = x + Math.cos(angle) * distance;
-        const spotY = y + Math.sin(angle) * distance;
-        const spotSize = 1 + Math.random() * 2;
-        const spotOpacity = 0.2 + Math.random() * 0.7;
-        
-        context.fillStyle = `rgba(220, 220, 255, ${spotOpacity})`;
-        context.beginPath();
-        context.arc(spotX, spotY, spotSize, 0, Math.PI * 2);
-        context.fill();
-      }
-    };
+    }, 10000 + Math.random() * 10000); // Random interval between 10-20 seconds
     
     // Animation loop
     const animate = () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw galaxy
-      drawGalaxy(context);
       
       // Draw stars
       starsRef.current.forEach(star => {
@@ -174,12 +127,12 @@ const StarryBackground: React.FC = () => {
           context.lineTo(star.x + star.length, star.y + star.length);
           context.stroke();
           
-          // Move shooting star
+          // Move shooting star - slower movement
           star.x += star.speed;
           star.y += star.speed;
           
-          // Fade out gradually
-          star.opacity -= 0.02;
+          // Fade out gradually - slower fade
+          star.opacity -= 0.01;
           
           // Reset if it moves off screen or fades out
           if (star.opacity <= 0 || star.x > canvas.width || star.y > canvas.height) {
@@ -192,7 +145,6 @@ const StarryBackground: React.FC = () => {
     };
     
     initStars();
-    initGalaxy();
     initShootingStars();
     animate();
     
