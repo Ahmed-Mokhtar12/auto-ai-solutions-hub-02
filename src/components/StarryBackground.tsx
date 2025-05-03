@@ -7,6 +7,7 @@ interface Star {
   size: number;
   opacity: number;
   speed: number;
+  color: string; // Added color property for stars
 }
 
 interface Meteor {
@@ -35,6 +36,29 @@ const StarryBackground: React.FC = () => {
     
     const context = canvas.getContext('2d');
     if (!context) return;
+
+    // Get a random natural star color
+    const getStarColor = () => {
+      // Natural star colors based on their temperature
+      // Blue/white (hottest), white, yellow, orange, red (coolest)
+      const starColors = [
+        '#FFFFFF', // White
+        '#F5F3CE', // Pale yellow-white
+        '#FFE87C', // Yellow
+        '#FFA500', // Orange
+        '#FF4500', // Red-orange
+        '#B3E5FC', // Light blue
+        '#81D4FA', // Sky blue
+        '#E1BEE7', // Light purple (some stars appear this way)
+      ];
+      
+      // Most stars appear white, so we'll make white more common
+      if (Math.random() < 0.7) {
+        return '#FFFFFF';
+      }
+      
+      return starColors[Math.floor(Math.random() * starColors.length)];
+    };
     
     // Initialize stars
     const initStars = () => {
@@ -47,7 +71,8 @@ const StarryBackground: React.FC = () => {
           y: Math.random() * canvas.height,
           size: Math.random() * 2,
           opacity: Math.random(),
-          speed: 0.05 + Math.random() * 0.1
+          speed: 0.05 + Math.random() * 0.1,
+          color: getStarColor() // Assign color to each star
         });
       }
     };
@@ -150,7 +175,7 @@ const StarryBackground: React.FC = () => {
       
       // Draw stars with slight twinkling
       starsRef.current.forEach(star => {
-        context.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+        context.fillStyle = `${star.color}${Math.floor(star.opacity * 255).toString(16).padStart(2, '0')}`;
         context.beginPath();
         context.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         context.fill();
@@ -166,6 +191,7 @@ const StarryBackground: React.FC = () => {
         if (star.y > canvas.height) {
           star.y = 0;
           star.x = Math.random() * canvas.width;
+          star.color = getStarColor(); // New color when recycling star
         }
       });
       
