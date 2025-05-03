@@ -20,17 +20,6 @@ const StarryBackground: React.FC = () => {
     const context = canvas.getContext('2d');
     if (!context) return;
     
-    // Set canvas to full screen
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      // Re-initialize stars when resizing
-      initStars();
-    };
-    
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-    
     // Initialize stars
     const initStars = () => {
       const starCount = Math.floor((window.innerWidth * window.innerHeight) / 1000);
@@ -46,6 +35,17 @@ const StarryBackground: React.FC = () => {
         });
       }
     };
+    
+    // Set canvas to full screen
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      // Re-initialize stars when resizing
+      initStars();
+    };
+    
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
     
     // Animation loop
     const animate = () => {
