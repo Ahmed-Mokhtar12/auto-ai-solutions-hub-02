@@ -9,7 +9,7 @@ interface Star {
   speed: number;
 }
 
-interface ShootingStar {
+interface Meteor {
   x: number;
   y: number;
   length: number;
@@ -17,15 +17,16 @@ interface ShootingStar {
   opacity: number;
   active: boolean;
   angle: number;
-  tail: number;
-  headSize: number; // Adding variable head size
-  color: string; // Adding subtle color variation
+  tailWidth: number;
+  headSize: number;
+  color: string;
+  trailSegments: { x: number; y: number }[];
 }
 
 const StarryBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<Star[]>([]);
-  const shootingStarsRef = useRef<ShootingStar[]>([]);
+  const meteorsRef = useRef<Meteor[]>([]);
   const frameRef = useRef<number>(0);
   
   useEffect(() => {
@@ -51,24 +52,48 @@ const StarryBackground: React.FC = () => {
       }
     };
     
-    // Initialize shooting stars
-    const initShootingStars = () => {
-      shootingStarsRef.current = [];
-      // Reduced to just 2 shooting stars to make them feel more special
+    // Initialize meteors
+    const initMeteors = () => {
+      meteorsRef.current = [];
+      // Just 2 meteors to make them rare and special
       for (let i = 0; i < 2; i++) {
-        shootingStarsRef.current.push({
+        meteorsRef.current.push({
           x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height / 3, // Start in top third of screen
-          length: 70 + Math.random() * 150, // Even longer tails for more dramatic effect
-          speed: 1.8 + Math.random() * 3.5, // Slightly slower for more majestic movement
+          y: Math.random() * canvas.height / 4, // Start in top quarter of screen
+          length: 80 + Math.random() * 170, // Longer trails for dramatic effect
+          speed: 0.8 + Math.random() * 1.5, // Slower for more natural movement
           opacity: 0,
           active: false,
-          angle: Math.PI / 6 + (Math.random() * Math.PI / 3), // More varied angles (30-90 degrees)
-          tail: 0.4 + Math.random() * 0.8, // More varied tail width
-          headSize: 1.2 + Math.random() * 1.5, // Variable head size
-          color: `hsl(${200 + Math.random() * 60}, 100%, 90%)` // Subtle blue-white variation
+          angle: Math.PI / 6 + (Math.random() * Math.PI / 3), // Angled trajectory (30-90 degrees)
+          tailWidth: 2 + Math.random() * 3.5,
+          headSize: 2 + Math.random() * 2.5,
+          color: getMeteorColor(),
+          trailSegments: [] // Store trail segments for realistic fading effect
         });
       }
+    };
+    
+    // Get a random meteor color with weighted probabilities
+    const getMeteorColor = () => {
+      const colors = [
+        { value: '#FFFFFF', weight: 50 },  // White (most common)
+        { value: '#F5F3CE', weight: 20 },  // Pale yellow
+        { value: '#F97316', weight: 15 },  // Bright orange
+        { value: '#0EA5E9', weight: 10 },  // Ocean blue (rare)
+        { value: '#ea384c', weight: 5 }    // Red (very rare)
+      ];
+      
+      const totalWeight = colors.reduce((acc, color) => acc + color.weight, 0);
+      let random = Math.random() * totalWeight;
+      
+      for (const color of colors) {
+        if (random < color.weight) {
+          return color.value;
+        }
+        random -= color.weight;
+      }
+      
+      return colors[0].value; // Default fallback
     };
     
     // Set canvas to full screen
@@ -77,119 +102,150 @@ const StarryBackground: React.FC = () => {
       canvas.height = window.innerHeight;
       // Re-initialize elements when resizing
       initStars();
-      initShootingStars();
+      initMeteors();
     };
     
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
     
-    // Trigger a shooting star randomly
-    const triggerShootingStar = () => {
-      const inactiveStars = shootingStarsRef.current.filter(star => !star.active);
-      if (inactiveStars.length > 0) {
-        const randomIndex = Math.floor(Math.random() * inactiveStars.length);
-        const star = inactiveStars[randomIndex];
-        star.active = true;
-        star.opacity = 0.7 + Math.random() * 0.3; // Varied opacities
-        star.x = Math.random() * canvas.width * 0.7; // Start position adjustment
-        star.y = Math.random() * (canvas.height / 4); // Start in top quarter
-        star.angle = Math.PI / 6 + (Math.random() * Math.PI / 3); // Random angle between 30-90 degrees
-        star.tail = 0.4 + Math.random() * 0.8; // Random tail width
-        star.headSize = 1.2 + Math.random() * 1.5; // Random head size
-        star.color = `hsl(${200 + Math.random() * 60}, 100%, ${85 + Math.random() * 15}%)`; // Subtle color variation
+    // Trigger a meteor
+    const triggerMeteor = () => {
+      const inactiveMeteors = meteorsRef.current.filter(meteor => !meteor.active);
+      if (inactiveMeteors.length > 0) {
+        const randomIndex = Math.floor(Math.random() * inactiveMeteors.length);
+        const meteor = inactiveMeteors[randomIndex];
+        
+        // Starting position - vary across width but near the top
+        meteor.x = Math.random() * canvas.width * 0.8;
+        meteor.y = -10 - Math.random() * 50; // Start above viewport for more natural entry
+        
+        // Randomize characteristics for variety
+        meteor.active = true;
+        meteor.opacity = 0.7 + Math.random() * 0.3;
+        meteor.angle = Math.PI / 4 + (Math.random() * Math.PI / 2.5); // Steeper angle (45-80 degrees)
+        meteor.tailWidth = 1 + Math.random() * 3;
+        meteor.headSize = 1.5 + Math.random() * 2;
+        meteor.speed = 0.8 + Math.random() * 1.2; // Slower for more majestic movement
+        meteor.color = getMeteorColor();
+        meteor.trailSegments = []; // Clear old trail
+        
+        // Initialize first trail segment
+        meteor.trailSegments.push({
+          x: meteor.x,
+          y: meteor.y
+        });
       }
     };
     
-    // Set interval to trigger shooting stars much less frequently (15-45 seconds)
-    const shootingStarInterval = setInterval(() => {
-      triggerShootingStar();
-    }, 15000 + Math.random() * 30000); // Random interval between 15-45 seconds
+    // Set interval for meteor triggers - much less frequently 
+    const meteorInterval = setInterval(() => {
+      if (Math.random() > 0.2) { // 80% chance to trigger on interval
+        triggerMeteor();
+      }
+    }, 15000 + Math.random() * 30000); // 15-45 seconds interval
     
     // Animation loop
     const animate = () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Draw stars
+      // Draw stars with slight twinkling
       starsRef.current.forEach(star => {
         context.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
         context.beginPath();
         context.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         context.fill();
         
-        // Twinkle effect
+        // Subtle twinkling effect
         star.opacity += Math.random() * 0.02 - 0.01;
         star.opacity = Math.max(0.1, Math.min(1, star.opacity));
         
-        // Slow movement effect
+        // Slow drift effect
         star.y += star.speed;
         
-        // Reset position if star moves off screen
+        // Reset if off screen
         if (star.y > canvas.height) {
           star.y = 0;
           star.x = Math.random() * canvas.width;
         }
       });
       
-      // Draw shooting stars
-      shootingStarsRef.current.forEach(star => {
-        if (star.active) {
-          // Calculate end point of the shooting star
-          const endX = star.x + Math.cos(star.angle) * star.length;
-          const endY = star.y + Math.sin(star.angle) * star.length;
+      // Draw meteors
+      meteorsRef.current.forEach(meteor => {
+        if (meteor.active) {
+          // Add current position to trail segments (limited number for performance)
+          if (meteor.trailSegments.length > 20) {
+            meteor.trailSegments.shift(); // Remove oldest segment
+          }
           
-          // Create gradient for the tail with custom color
-          const gradient = context.createLinearGradient(
-            star.x, star.y, 
-            endX, endY
-          );
+          meteor.trailSegments.push({
+            x: meteor.x,
+            y: meteor.y
+          });
           
-          gradient.addColorStop(0, star.color.replace('90%)', `${star.opacity * 100}%)`));
-          gradient.addColorStop(0.1, star.color.replace('90%)', `${star.opacity * 80}%)`));
-          gradient.addColorStop(0.6, `rgba(255, 255, 255, ${star.opacity * 0.3})`);
-          gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-          
-          // Draw the tail with slight curve
-          context.strokeStyle = gradient;
-          context.lineWidth = 1 + star.tail;
+          // Draw meteor head (bright circle)
+          context.fillStyle = meteor.color;
           context.beginPath();
-          context.moveTo(star.x, star.y);
-          
-          // Add a slight arc for more natural movement
-          const controlX = star.x + Math.cos(star.angle) * (star.length * 0.5);
-          const controlY = star.y + Math.sin(star.angle) * (star.length * 0.5) + (Math.random() * 5 - 2.5);
-          context.quadraticCurveTo(controlX, controlY, endX, endY);
-          context.stroke();
-          
-          // Add a glow at the head
-          const gradient2 = context.createRadialGradient(
-            star.x, star.y, 0,
-            star.x, star.y, star.headSize * 4
-          );
-          gradient2.addColorStop(0, star.color.replace('90%)', `${star.opacity * 100}%)`));
-          gradient2.addColorStop(0.5, star.color.replace('90%)', `${star.opacity * 30}%)`));
-          gradient2.addColorStop(1, 'rgba(255, 255, 255, 0)');
-          
-          context.fillStyle = gradient2;
-          context.beginPath();
-          context.arc(star.x, star.y, star.headSize * 2, 0, Math.PI * 2);
+          context.arc(meteor.x, meteor.y, meteor.headSize, 0, Math.PI * 2);
           context.fill();
           
-          // Brighter core
-          context.fillStyle = star.color.replace('90%)', '100%)');
+          // Draw glow around meteor head
+          const headGlow = context.createRadialGradient(
+            meteor.x, meteor.y, 0,
+            meteor.x, meteor.y, meteor.headSize * 3
+          );
+          headGlow.addColorStop(0, `${meteor.color}`);
+          headGlow.addColorStop(0.5, `${meteor.color}88`);
+          headGlow.addColorStop(1, 'rgba(255, 255, 255, 0)');
+          
+          context.fillStyle = headGlow;
           context.beginPath();
-          context.arc(star.x, star.y, star.headSize, 0, Math.PI * 2);
+          context.arc(meteor.x, meteor.y, meteor.headSize * 3, 0, Math.PI * 2);
           context.fill();
           
-          // Move shooting star along its angle
-          star.x += Math.cos(star.angle) * star.speed;
-          star.y += Math.sin(star.angle) * star.speed;
+          // Draw trail with segments for more natural fadeout
+          if (meteor.trailSegments.length > 1) {
+            for (let i = 1; i < meteor.trailSegments.length; i++) {
+              const currentSegment = meteor.trailSegments[i];
+              const prevSegment = meteor.trailSegments[i - 1];
+              
+              // Calculate segment opacity - fades out toward end of trail
+              const segmentOpacity = (meteor.opacity * (i / meteor.trailSegments.length));
+              const segmentWidth = meteor.tailWidth * (i / meteor.trailSegments.length);
+              
+              // Draw trail segment with gradient
+              const gradient = context.createLinearGradient(
+                prevSegment.x, prevSegment.y,
+                currentSegment.x, currentSegment.y
+              );
+              
+              const baseColor = meteor.color.toLowerCase();
+              
+              gradient.addColorStop(0, `${baseColor}${Math.floor(segmentOpacity * 255).toString(16).padStart(2, '0')}`);
+              gradient.addColorStop(1, `${baseColor}00`);
+              
+              context.strokeStyle = gradient;
+              context.lineWidth = segmentWidth;
+              context.lineCap = 'round';
+              context.beginPath();
+              context.moveTo(prevSegment.x, prevSegment.y);
+              context.lineTo(currentSegment.x, currentSegment.y);
+              context.stroke();
+            }
+          }
           
-          // Fade out gradually - very slow fade
-          star.opacity -= 0.005; // Slower fade-out for longer lasting effect
+          // Move meteor
+          meteor.x += Math.cos(meteor.angle) * meteor.speed;
+          meteor.y += Math.sin(meteor.angle) * meteor.speed;
+          
+          // Very subtle fade for long-lasting effect
+          meteor.opacity -= 0.003;
           
           // Reset if it moves off screen or fades out
-          if (star.opacity <= 0 || star.x < 0 || star.x > canvas.width || star.y > canvas.height) {
-            star.active = false;
+          if (meteor.opacity <= 0 || 
+              meteor.x < -100 || 
+              meteor.x > canvas.width + 100 || 
+              meteor.y > canvas.height + 100) {
+            meteor.active = false;
           }
         }
       });
@@ -198,12 +254,12 @@ const StarryBackground: React.FC = () => {
     };
     
     initStars();
-    initShootingStars();
+    initMeteors();
     animate();
     
     return () => {
       window.removeEventListener('resize', resizeCanvas);
-      clearInterval(shootingStarInterval);
+      clearInterval(meteorInterval);
       cancelAnimationFrame(frameRef.current);
     };
   }, []);
