@@ -31,7 +31,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
         transform: isChatVisible ? 'translateY(0)' : 'translateY(10px)',
         left: `${position.x}px`,
         bottom: `${window.innerHeight - position.y + 10}px`,
-        zIndex: 9998,
+        zIndex: 9999,
         pointerEvents: 'none'
       }}
     >
@@ -44,7 +44,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
             marginBottom: '8px',
             maxWidth: '80%',
             wordWrap: 'break-word',
-            backgroundColor: 'transparent',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
             color: '#fff',
             alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
             marginLeft: msg.sender === 'user' ? 'auto' : '0',
