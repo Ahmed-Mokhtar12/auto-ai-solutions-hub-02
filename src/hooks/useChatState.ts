@@ -65,7 +65,7 @@ export const useChatState = () => {
     
     try {
       // Send to webhook
-      const response = await fetch(WEBHOOK_URL, {
+      await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,16 +78,11 @@ export const useChatState = () => {
         }),
       });
       
-      // Add system message confirming the webhook was called
-      setMessages(prev => [...prev, { 
-        text: "Message sent to automation workflow", 
-        sender: 'system', 
-        id: generateMessageId() 
-      }]);
+      // System message has been removed - no longer adding the confirmation message
       
     } catch (error) {
       console.error('Error sending message:', error);
-      // Add error message to chat
+      // Add error message to chat only if there's an actual error
       setMessages(prev => [...prev, { 
         text: "Failed to send message to automation service", 
         sender: 'system', 
@@ -136,3 +131,4 @@ export const useChatState = () => {
     handleVisibility
   };
 };
+
