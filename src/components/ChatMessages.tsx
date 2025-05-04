@@ -20,11 +20,11 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
         width: '300px',
         maxHeight: '400px',
         overflowY: 'auto',
-        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        border: '1px solid rgba(255, 255, 255, 0.2)',
         borderRadius: '8px',
         padding: '10px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
         transition: 'opacity 0.3s, transform 0.3s',
         opacity: isChatVisible ? 1 : 0,
         visibility: isChatVisible ? 'visible' : 'hidden',
@@ -32,25 +32,26 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
         left: `${position.x}px`,
         bottom: `${window.innerHeight - position.y + 10}px`,
         zIndex: 9999,
-        pointerEvents: 'none'
+        backdropFilter: 'blur(5px)'
       }}
     >
-      {messages.slice(-4).map((msg) => (
+      {messages.slice(-5).map((msg) => (
         <div
           key={msg.id}
           style={{
             padding: '8px 12px',
             borderRadius: '8px',
             marginBottom: '8px',
-            maxWidth: '80%',
+            maxWidth: '90%',
             wordWrap: 'break-word',
-            backgroundColor: msg.sender === 'user' ? 'rgba(0, 100, 255, 0.4)' : 'rgba(50, 205, 50, 0.4)',
+            backgroundColor: msg.sender === 'user' ? 'rgba(0, 100, 255, 0.5)' : 'rgba(50, 205, 50, 0.5)',
             backdropFilter: 'blur(4px)',
             color: '#fff',
             alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
             marginLeft: msg.sender === 'user' ? 'auto' : '0',
             display: 'block',
-            textShadow: '0 1px 2px rgba(0,0,0,0.7)'
+            textShadow: '0 1px 2px rgba(0,0,0,0.7)',
+            lineHeight: '1.4'
           }}
         >
           {msg.text}

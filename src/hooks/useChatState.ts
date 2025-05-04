@@ -77,7 +77,7 @@ export const useChatState = () => {
         id: thinkingId 
       }]);
       
-      // Send to webhook with mode: 'cors' to allow receiving the response
+      // Send to webhook and allow CORS
       const response = await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: {
@@ -100,10 +100,14 @@ export const useChatState = () => {
           const data = await response.json();
           console.log("Received response from N8N:", data);
           
+          // Extract the response from the actual format returned by N8N
+          // Based on logs, N8N is returning { output: "..." } instead of { response: "..." }
+          const responseText = data.output || data.response || "I received your message but couldn't generate a proper response.";
+          
           // Add the response message from N8N
           const responseId = generateMessageId();
           setMessages(prev => [...prev, { 
-            text: data.response || "I received your message but couldn't generate a proper response.", 
+            text: responseText, 
             sender: 'system', 
             id: responseId 
           }]);
