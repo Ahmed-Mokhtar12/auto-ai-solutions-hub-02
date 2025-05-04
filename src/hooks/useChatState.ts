@@ -1,5 +1,7 @@
+
 import { useState, useEffect } from 'react';
 import { ChatMessage, generateMessageId } from '@/utils/messageUtils';
+import { useToast } from '@/hooks/use-toast';
 
 const WEBHOOK_URL = "https://n8n-2seasons-u38985.vm.elestio.app/webhook-test/Website";
 
@@ -10,6 +12,7 @@ export const useChatState = () => {
   const [messageJustSent, setMessageJustSent] = useState(false);
   const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   // Automatically remove messages after 5 seconds
   useEffect(() => {
@@ -77,7 +80,21 @@ export const useChatState = () => {
         }),
       });
       
-      // System message has been removed - no longer adding the confirmation message
+      // Add automatic response message
+      setTimeout(() => {
+        const responseId = generateMessageId();
+        setMessages(prev => [...prev, { 
+          text: `Thank you for your message: "${message}". We'll get back to you soon!`, 
+          sender: 'system', 
+          id: responseId 
+        }]);
+      }, 1000);
+
+      // Show toast notification
+      toast({
+        title: "Message sent",
+        description: "Your message has been sent successfully!",
+      });
       
     } catch (error) {
       console.error('Error sending message:', error);
@@ -87,6 +104,12 @@ export const useChatState = () => {
         sender: 'system', 
         id: generateMessageId() 
       }]);
+      
+      toast({
+        title: "Error",
+        description: "Failed to send your message. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
