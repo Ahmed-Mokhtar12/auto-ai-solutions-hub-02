@@ -66,13 +66,23 @@ export const useChatState = () => {
     setIsLoading(true);
     
     try {
-      // Send to webhook
-      await fetch(WEBHOOK_URL, {
+      // Send to webhook and wait for response
+      console.log("Sending message to N8N webhook:", message);
+      
+      // Add a "thinking" message that will be replaced with the actual response
+      const thinkingId = generateMessageId();
+      setMessages(prev => [...prev, { 
+        text: "Thinking...", 
+        sender: 'system', 
+        id: thinkingId 
+      }]);
+      
+      // Send to webhook with mode: 'cors' to allow receiving the response
+      const response = await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        mode: 'no-cors', // Add this to handle CORS
         body: JSON.stringify({ 
           message,
           timestamp: new Date().toISOString(),
@@ -80,34 +90,69 @@ export const useChatState = () => {
         }),
       });
       
-      // Add automatic response message
-      setTimeout(() => {
-        const responseId = generateMessageId();
+      // Remove thinking message
+      setMessages(prev => prev.filter(m => m.id !== thinkingId));
+      
+      // Check if response is valid
+      if (response.ok) {
+        try {
+          // Try parsing the response as JSON
+          const data = await response.json();
+          console.log("Received response from N8N:", data);
+          
+          // Add the response message from N8N
+          const responseId = generateMessageId();
+          setMessages(prev => [...prev, { 
+            text: data.response || "I received your message but couldn't generate a proper response.", 
+            sender: 'system', 
+            id: responseId 
+          }]);
+          
+          toast({
+            title: "Response received",
+            description: "N8N AI agent has responded to your message!",
+          });
+        } catch (parseError) {
+          console.error("Error parsing response:", parseError);
+          // If we can't parse as JSON, try getting the text
+          const textResponse = await response.text();
+          console.log("Received text response:", textResponse);
+          
+          const responseId = generateMessageId();
+          setMessages(prev => [...prev, { 
+            text: textResponse || "Received a response but couldn't parse it properly.", 
+            sender: 'system', 
+            id: responseId 
+          }]);
+        }
+      } else {
+        console.error("Error response from webhook:", response.status);
+        // Add error message
         setMessages(prev => [...prev, { 
-          text: `Thank you for your message: "${message}". We'll get back to you soon!`, 
+          text: `Error from N8N webhook (Status: ${response.status})`, 
           sender: 'system', 
-          id: responseId 
+          id: generateMessageId() 
         }]);
-      }, 1000);
-
-      // Show toast notification
-      toast({
-        title: "Message sent",
-        description: "Your message has been sent successfully!",
-      });
+        
+        toast({
+          title: "Error",
+          description: `Failed to get a proper response from N8N (Status: ${response.status})`,
+          variant: "destructive",
+        });
+      }
       
     } catch (error) {
-      console.error('Error sending message:', error);
-      // Add error message to chat only if there's an actual error
+      console.error('Error sending message or receiving response:', error);
+      // Add error message to chat
       setMessages(prev => [...prev, { 
-        text: "Failed to send message to automation service", 
+        text: "Failed to connect with N8N workflow. Please check your network and try again.", 
         sender: 'system', 
         id: generateMessageId() 
       }]);
       
       toast({
         title: "Error",
-        description: "Failed to send your message. Please try again.",
+        description: "Failed to connect with N8N workflow.",
         variant: "destructive",
       });
     } finally {
