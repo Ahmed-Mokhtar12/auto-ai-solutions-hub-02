@@ -81,40 +81,53 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
       onClick={(e) => e.stopPropagation()} // Prevent propagation to any parent handlers
     >
       {messages.length === 0 ? (
-        <div className="text-gray-400 text-sm px-2 py-4 text-center">
-          No messages yet. Start chatting!
-        </div>
+        <MessageEmptyState />
       ) : (
         messages.map((msg) => (
-          <div
-            key={msg.id}
-            className="animate-fade-in"
-            style={{
-              padding: '10px 14px',
-              borderRadius: '12px',
-              marginBottom: '10px',
-              maxWidth: '90%',
-              wordWrap: 'break-word',
-              backgroundColor: msg.sender === 'user' 
-                ? 'rgba(0, 122, 255, 0.35)' 
-                : 'rgba(50, 205, 50, 0.35)',
-              backdropFilter: 'blur(4px)',
-              color: '#fff',
-              alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-              marginLeft: msg.sender === 'user' ? 'auto' : '0',
-              display: 'block',
-              textShadow: '0 1px 2px rgba(0,0,0,0.5)', // Add shadow to text only
-              lineHeight: '1.5',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.15)'
-            }}
-            role={msg.sender === 'user' ? 'note' : 'status'}
-          >
-            {msg.text}
-          </div>
+          <ChatMessageItem key={msg.id} message={msg} />
         ))
       )}
     </div>
   );
 };
+
+interface ChatMessageItemProps {
+  message: ChatMessage;
+}
+
+const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => {
+  return (
+    <div
+      className="animate-fade-in"
+      style={{
+        padding: '10px 14px',
+        borderRadius: '12px',
+        marginBottom: '10px',
+        maxWidth: '90%',
+        wordWrap: 'break-word',
+        backgroundColor: message.sender === 'user' 
+          ? 'rgba(0, 122, 255, 0.35)' 
+          : 'rgba(50, 205, 50, 0.35)',
+        backdropFilter: 'blur(4px)',
+        color: '#fff',
+        alignSelf: message.sender === 'user' ? 'flex-end' : 'flex-start',
+        marginLeft: message.sender === 'user' ? 'auto' : '0',
+        display: 'block',
+        textShadow: '0 1px 2px rgba(0,0,0,0.5)', // Add shadow to text only
+        lineHeight: '1.5',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.15)'
+      }}
+      role={message.sender === 'user' ? 'note' : 'status'}
+    >
+      {message.text}
+    </div>
+  );
+};
+
+const MessageEmptyState: React.FC = () => (
+  <div className="text-gray-400 text-sm px-2 py-4 text-center">
+    No messages yet. Start chatting!
+  </div>
+);
 
 export default ChatMessages;
