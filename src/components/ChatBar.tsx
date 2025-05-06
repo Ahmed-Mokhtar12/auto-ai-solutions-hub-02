@@ -94,7 +94,7 @@ const ChatBar: React.FC = () => {
         position={position} 
       />
       
-      {/* Chat Input Bar */}
+      {/* Chat Input Bar - Main draggable element */}
       <div 
         ref={elementRef}
         className={`animate-fade-in ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
@@ -121,6 +121,7 @@ const ChatBar: React.FC = () => {
             : 'background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease, opacity 0.3s ease',
           transform: isHovering && !isDragging ? 'scale(1.02)' : 'scale(1)',
           willChange: 'transform, left, top, opacity',
+          touchAction: 'none' // Critical for preventing default touch actions
         }}
         onMouseDown={handleMouseDown}
         onMouseEnter={() => {
@@ -157,7 +158,13 @@ const ChatBar: React.FC = () => {
           }}
           disabled={isLoading}
           onClick={(e) => e.stopPropagation()} // Prevent dragging when clicking input
-          onMouseDown={(e) => e.stopPropagation()} // Critical fix: prevent mousedown from being captured
+          onMouseDown={(e) => {
+            e.stopPropagation(); // Critical fix: prevent mousedown from being captured by parent
+            e.preventDefault(); // Prevent any default behavior
+          }}
+          onTouchStart={(e) => {
+            e.stopPropagation(); // Critical fix: prevent touchstart from being captured by parent
+          }}
           aria-label="Chat message input"
         />
         <button
@@ -165,7 +172,13 @@ const ChatBar: React.FC = () => {
             e.stopPropagation(); // Prevent dragging when clicking button
             handleSend();
           }}
-          onMouseDown={(e) => e.stopPropagation()} // Critical fix: prevent mousedown from being captured
+          onMouseDown={(e) => {
+            e.stopPropagation(); // Critical fix: prevent mousedown from being captured by parent
+            e.preventDefault(); // Prevent any default behavior
+          }}
+          onTouchStart={(e) => {
+            e.stopPropagation(); // Critical fix: prevent touchstart from being captured by parent
+          }}
           style={{
             width: '40px',
             height: '100%',

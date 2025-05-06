@@ -64,7 +64,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
         borderRadius: '16px',
         padding: '12px',
         boxShadow: '0 8px 20px rgba(0, 0, 0, 0.35), 0 0 8px rgba(156, 139, 255, 0.2)',
-        transition: 'opacity 0.3s ease, transform 0.3s ease, visibility 0.3s',
+        transition: 'all 0.25s ease',
         opacity: isChatVisible ? 1 : 0,
         visibility: isChatVisible ? 'visible' : 'hidden',
         transform: isChatVisible ? 'translateY(0) scale(1)' : 'translateY(10px) scale(0.98)',
@@ -73,11 +73,12 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
         zIndex: 9998, // Just below the chat bar
         backdropFilter: 'blur(8px)',
         pointerEvents: isChatVisible ? 'auto' : 'none', // Only allow interaction when visible
-        willChange: 'transform, opacity'
+        willChange: 'transform, opacity, left, bottom'
       }}
       role="log"
       aria-live="polite"
       aria-label="Chat messages"
+      onClick={(e) => e.stopPropagation()} // Prevent propagation to any parent handlers
     >
       {messages.length === 0 ? (
         <div className="text-gray-400 text-sm px-2 py-4 text-center">

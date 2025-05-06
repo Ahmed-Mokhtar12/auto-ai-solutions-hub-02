@@ -33,9 +33,9 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
   // Handle mouse events for dragging
   const handleMouseDown = (e: React.MouseEvent) => {
     if (elementRef.current) {
-      // Prevent default behavior to avoid text selection while dragging
+      // Always prevent default and stop propagation
       e.preventDefault();
-      e.stopPropagation(); // Stop event propagation to prevent other handlers from interfering
+      e.stopPropagation();
       
       setIsDragging(true);
       
@@ -53,7 +53,8 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
 
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging) {
-      e.preventDefault(); // Prevent text selection or other default behaviors
+      e.preventDefault();
+      e.stopPropagation();
       
       // Calculate new position
       const x = e.clientX - offset.current.x;
@@ -71,7 +72,8 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
   };
 
   const handleMouseUp = (e: MouseEvent) => {
-    e.preventDefault(); // Prevent any default behavior
+    e.preventDefault();
+    e.stopPropagation();
     setIsDragging(false);
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
@@ -108,47 +110,53 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
     const element = elementRef.current;
     
     const handleTouchStart = (e: TouchEvent) => {
-      if (element && e.touches.length === 1) { // Ensure single touch
-        e.preventDefault();
-        const touch = e.touches[0];
-        setIsDragging(true);
-        
-        offset.current = {
-          x: touch.clientX - position.x,
-          y: touch.clientY - position.y
-        };
-        
-        document.addEventListener('touchmove', handleTouchMove, { passive: false });
-        document.addEventListener('touchend', handleTouchEnd);
-      }
+      if (!element || e.touches.length !== 1) return;
+      
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const touch = e.touches[0];
+      setIsDragging(true);
+      
+      offset.current = {
+        x: touch.clientX - position.x,
+        y: touch.clientY - position.y
+      };
+      
+      document.addEventListener('touchmove', handleTouchMove, { passive: false });
+      document.addEventListener('touchend', handleTouchEnd);
     };
     
     const handleTouchMove = (e: TouchEvent) => {
-      if (isDragging && e.touches.length === 1) {
-        e.preventDefault();
-        const touch = e.touches[0];
-        
-        const x = touch.clientX - offset.current.x;
-        const y = touch.clientY - offset.current.y;
-        
-        const maxX = window.innerWidth - (element?.offsetWidth || 0);
-        const maxY = window.innerHeight - (element?.offsetHeight || 0);
-        
-        setPosition({
-          x: Math.max(0, Math.min(x, maxX)),
-          y: Math.max(0, Math.min(y, maxY))
-        });
-      }
+      if (!isDragging || e.touches.length !== 1) return;
+      
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const touch = e.touches[0];
+      
+      const x = touch.clientX - offset.current.x;
+      const y = touch.clientY - offset.current.y;
+      
+      const maxX = window.innerWidth - (element?.offsetWidth || 0);
+      const maxY = window.innerHeight - (element?.offsetHeight || 0);
+      
+      setPosition({
+        x: Math.max(0, Math.min(x, maxX)),
+        y: Math.max(0, Math.min(y, maxY))
+      });
     };
     
-    const handleTouchEnd = () => {
+    const handleTouchEnd = (e: TouchEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
       setIsDragging(false);
       document.removeEventListener('touchmove', handleTouchMove);
       document.removeEventListener('touchend', handleTouchEnd);
     };
     
-    // Add touch event listeners directly to the element, not the document
     if (element) {
+      // Directly add the touch events to the element for better mobile handling
       element.addEventListener('touchstart', handleTouchStart, { passive: false });
     }
     
