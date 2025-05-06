@@ -9,24 +9,28 @@ interface Position {
 
 interface UseDraggableOptions {
   initialPosition?: Position;
+  autoHideOnScroll?: boolean;
 }
 
 export const useDraggable = (options: UseDraggableOptions = {}) => {
   const isMobile = useIsMobile();
   
-  // Default position: bottom right with some margin
+  // Default position: horizontally centered, 2cm above footer
   const defaultPosition = { 
-    x: typeof window !== 'undefined' ? window.innerWidth - (isMobile ? 300 : 350) : 20, 
-    y: typeof window !== 'undefined' ? window.innerHeight - (isMobile ? 100 : 120) : 400
+    x: typeof window !== 'undefined' ? (window.innerWidth / 2) - (isMobile ? 140 : 160) : 20, 
+    y: typeof window !== 'undefined' ? window.innerHeight - 100 : 400 // ~2cm above footer
   };
   
-  const { initialPosition = defaultPosition } = options;
+  const { initialPosition = defaultPosition, autoHideOnScroll = true } = options;
   
   const [position, setPosition] = useState<Position>(initialPosition);
   const [isDragging, setIsDragging] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const elementRef = useRef<HTMLDivElement | null>(null);
   const offset = useRef<Position>({ x: 0, y: 0 });
+  const lastScrollPosition = useRef<number>(0);
 
+  // Handle mouse events for dragging
   const handleMouseDown = (e: React.MouseEvent) => {
     if (elementRef.current) {
       // Prevent default behavior to avoid text selection while dragging
@@ -72,6 +76,32 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
   };
+
+  // Handle scroll events for auto-hide functionality
+  useEffect(() => {
+    if (!autoHideOnScroll) return;
+
+    const handleScroll = () => {
+      const currentScrollPos = window.scrollY;
+      
+      // Determine if user is scrolling up or down
+      if (currentScrollPos > lastScrollPosition.current + 10) {
+        // Scrolling down - hide the chat bar
+        setIsVisible(false);
+      } else if (currentScrollPos < lastScrollPosition.current - 10) {
+        // Scrolling up - show the chat bar
+        setIsVisible(true);
+      }
+      
+      lastScrollPosition.current = currentScrollPos;
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [autoHideOnScroll]);
 
   // Handle touch events for mobile
   useEffect(() => {
@@ -147,10 +177,10 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
           if (rect.left < 0 || rect.top < 0 || 
               rect.right > window.innerWidth || rect.bottom > window.innerHeight) {
             
-            // Position it at the bottom-right by default
+            // Position it centered horizontally, 2cm above footer
             setPosition({
-              x: window.innerWidth - (isMobile ? 300 : 350),
-              y: window.innerHeight - (isMobile ? 100 : 120)
+              x: (window.innerWidth / 2) - (isMobile ? 140 : 160),
+              y: window.innerHeight - 100 // ~2cm above footer
             });
           }
         }
@@ -172,5 +202,5 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
     };
   }, [isDragging, position, isMobile]);
 
-  return { elementRef, position, isDragging, handleMouseDown };
+  return { elementRef, position, isDragging, isVisible, handleMouseDown };
 };

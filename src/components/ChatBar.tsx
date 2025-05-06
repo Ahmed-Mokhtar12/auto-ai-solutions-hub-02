@@ -40,18 +40,16 @@ const ChatBar: React.FC = () => {
     handleVisibility
   } = useChatState();
   
-  // Initialize useDraggable with bottom-right default position
-  const defaultPosition = {
-    x: typeof window !== 'undefined' ? window.innerWidth - (isMobile ? 280 : 320) - 20 : 20,
-    y: typeof window !== 'undefined' ? window.innerHeight - 80 : 400
-  };
-  
+  // Initialize useDraggable with centered position above footer
   const {
     elementRef,
     position,
     isDragging,
+    isVisible,
     handleMouseDown
-  } = useDraggable({ initialPosition: defaultPosition });
+  } = useDraggable({ 
+    autoHideOnScroll: true 
+  });
   
   const { handleMouseEnter, handleMouseLeave } = handleVisibility();
   
@@ -99,14 +97,14 @@ const ChatBar: React.FC = () => {
       {/* Chat Input Bar */}
       <div 
         ref={elementRef}
-        className="animate-fade-in"
+        className={`animate-fade-in ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         style={{
           position: 'fixed',
           width: isMobile ? 'min(280px, 90%)' : 'min(320px, 90%)',
           height: '50px',
           display: 'flex',
           alignItems: 'center',
-          backgroundColor: '#1f1f2e',
+          backgroundColor: 'rgba(31, 31, 46, 0)',
           backdropFilter: 'blur(8px)',
           border: '1px solid rgba(255, 255, 255, 0.15)',
           borderRadius: '16px',
@@ -120,9 +118,9 @@ const ChatBar: React.FC = () => {
           cursor: isDragging ? 'grabbing' : 'grab',
           transition: isDragging 
             ? 'none' 
-            : 'background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease',
+            : 'background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease, opacity 0.3s ease',
           transform: isHovering && !isDragging ? 'scale(1.02)' : 'scale(1)',
-          willChange: 'transform, left, top',
+          willChange: 'transform, left, top, opacity',
         }}
         onMouseDown={handleMouseDown}
         onMouseEnter={() => {
@@ -133,6 +131,8 @@ const ChatBar: React.FC = () => {
           handleHover(false);
           handleMouseLeave();
         }}
+        aria-label="Chat assistant"
+        role="region"
       >
         <input
           ref={messageInputRef}
@@ -150,13 +150,15 @@ const ChatBar: React.FC = () => {
             border: 'none',
             borderRadius: '12px 0 0 12px',
             outline: 'none',
-            backgroundColor: 'transparent',
+            backgroundColor: 'rgba(31, 31, 46, 0.75)',
             color: '#ffffff',
-            cursor: 'text' // Always show text cursor in the input field
+            cursor: 'text', // Always show text cursor in the input field
+            textShadow: '0 1px 2px rgba(0,0,0,0.5)' // Add text shadow for better visibility
           }}
           disabled={isLoading}
           onClick={(e) => e.stopPropagation()} // Prevent dragging when clicking input
           onMouseDown={(e) => e.stopPropagation()} // Critical fix: prevent mousedown from being captured
+          aria-label="Chat message input"
         />
         <button
           onClick={(e) => {
@@ -170,16 +172,18 @@ const ChatBar: React.FC = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: 'transparent',
+            backgroundColor: 'rgba(31, 31, 46, 0.75)',
             color: isLoading ? '#555555' : '#4CAF50',
             border: 'none',
             borderRadius: '0 12px 12px 0',
             cursor: isLoading ? 'wait' : 'pointer',
             fontSize: '16px',
             transition: 'color 0.2s ease, transform 0.2s ease',
-            transform: message.length > 0 ? 'scale(1.1)' : 'scale(1)'
+            transform: message.length > 0 ? 'scale(1.1)' : 'scale(1)',
+            textShadow: '0 1px 2px rgba(0,0,0,0.5)' // Add text shadow for better visibility
           }}
           disabled={isLoading}
+          aria-label="Send message"
         >
           <Send size={18} />
         </button>

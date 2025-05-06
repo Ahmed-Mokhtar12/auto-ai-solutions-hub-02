@@ -59,7 +59,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
         width: isMobile ? '260px' : '300px',
         maxHeight: '400px',
         overflowY: 'auto',
-        backgroundColor: 'rgba(31, 31, 46, 0.95)',
+        backgroundColor: 'rgba(31, 31, 46, 0.75)', // Semi-transparent background
         border: '1px solid rgba(255, 255, 255, 0.15)',
         borderRadius: '16px',
         padding: '12px',
@@ -75,6 +75,9 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
         pointerEvents: isChatVisible ? 'auto' : 'none', // Only allow interaction when visible
         willChange: 'transform, opacity'
       }}
+      role="log"
+      aria-live="polite"
+      aria-label="Chat messages"
     >
       {messages.length === 0 ? (
         <div className="text-gray-400 text-sm px-2 py-4 text-center">
@@ -99,10 +102,11 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
               alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
               marginLeft: msg.sender === 'user' ? 'auto' : '0',
               display: 'block',
-              textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+              textShadow: '0 1px 2px rgba(0,0,0,0.5)', // Add shadow to text only
               lineHeight: '1.5',
               boxShadow: '0 2px 4px rgba(0,0,0,0.15)'
             }}
+            role={msg.sender === 'user' ? 'note' : 'status'}
           >
             {msg.text}
           </div>
