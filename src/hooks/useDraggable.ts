@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 
 interface Position {
@@ -10,10 +11,10 @@ interface UseDraggableOptions {
 }
 
 export const useDraggable = (options: UseDraggableOptions = {}) => {
-  // Default position is at the bottom center, with a guaranteed initial position
+  // Default position is at the bottom center, adjust to be slightly higher
   const defaultPosition = { 
     x: typeof window !== 'undefined' ? window.innerWidth / 2 - 160 : 20, 
-    y: typeof window !== 'undefined' ? window.innerHeight - 130 : 500 
+    y: typeof window !== 'undefined' ? window.innerHeight - 90 : 500 
   };
   
   const { initialPosition = defaultPosition } = options;
@@ -78,6 +79,15 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
     };
     
     window.addEventListener('resize', handleResize);
+    
+    // Ensure the chat bar is positioned correctly on mount
+    if (elementRef.current) {
+      const maxX = window.innerWidth - elementRef.current.offsetWidth;
+      setPosition(prev => ({
+        ...prev,
+        x: Math.min(prev.x, maxX)
+      }));
+    }
     
     // Clean up event listeners when component unmounts
     return () => {
