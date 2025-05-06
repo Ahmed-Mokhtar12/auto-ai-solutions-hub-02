@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 import { useIsMobile } from './use-mobile';
 
@@ -31,6 +32,7 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
       // Prevent default behavior to avoid text selection while dragging
       e.preventDefault();
       e.stopPropagation(); // Stop event propagation to prevent other handlers from interfering
+      
       setIsDragging(true);
       
       // Calculate the offset between mouse position and element position
@@ -76,7 +78,7 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
     const element = elementRef.current;
     
     const handleTouchStart = (e: TouchEvent) => {
-      if (element) {
+      if (element && e.touches.length === 1) { // Ensure single touch
         e.preventDefault();
         const touch = e.touches[0];
         setIsDragging(true);
@@ -92,7 +94,7 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
     };
     
     const handleTouchMove = (e: TouchEvent) => {
-      if (isDragging) {
+      if (isDragging && e.touches.length === 1) {
         e.preventDefault();
         const touch = e.touches[0];
         
@@ -144,6 +146,8 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
           // If the chat bar is outside the viewport, reposition it
           if (rect.left < 0 || rect.top < 0 || 
               rect.right > window.innerWidth || rect.bottom > window.innerHeight) {
+            
+            // Position it at the bottom-right by default
             setPosition({
               x: window.innerWidth - (isMobile ? 300 : 350),
               y: window.innerHeight - (isMobile ? 100 : 120)

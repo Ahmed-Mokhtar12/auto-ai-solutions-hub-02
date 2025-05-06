@@ -40,13 +40,18 @@ const ChatBar: React.FC = () => {
     handleVisibility
   } = useChatState();
   
-  // Initialize useDraggable
+  // Initialize useDraggable with bottom-right default position
+  const defaultPosition = {
+    x: typeof window !== 'undefined' ? window.innerWidth - (isMobile ? 280 : 320) - 20 : 20,
+    y: typeof window !== 'undefined' ? window.innerHeight - 80 : 400
+  };
+  
   const {
     elementRef,
     position,
     isDragging,
     handleMouseDown
-  } = useDraggable();
+  } = useDraggable({ initialPosition: defaultPosition });
   
   const { handleMouseEnter, handleMouseLeave } = handleVisibility();
   
@@ -97,17 +102,18 @@ const ChatBar: React.FC = () => {
         className="animate-fade-in"
         style={{
           position: 'fixed',
-          width: isMobile ? '280px' : '320px',
+          width: isMobile ? 'min(280px, 90%)' : 'min(320px, 90%)',
           height: '50px',
           display: 'flex',
           alignItems: 'center',
-          backgroundColor: isHovering ? 'rgba(26, 31, 44, 0.85)' : 'rgba(26, 31, 44, 0.7)',
+          backgroundColor: '#1f1f2e',
           backdropFilter: 'blur(8px)',
           border: '1px solid rgba(255, 255, 255, 0.15)',
-          borderRadius: '12px',
+          borderRadius: '16px',
+          padding: '10px',
           boxShadow: isHovering 
-            ? '0 6px 16px rgba(0, 0, 0, 0.3), 0 0 8px rgba(156, 139, 255, 0.2)' 
-            : '0 4px 12px rgba(0, 0, 0, 0.2)',
+            ? '0 8px 20px rgba(0, 0, 0, 0.35), 0 0 10px rgba(156, 139, 255, 0.2)' 
+            : '0 4px 15px rgba(0, 0, 0, 0.25)',
           left: `${position.x}px`,
           top: `${position.y}px`,
           zIndex: 9999,
@@ -116,7 +122,7 @@ const ChatBar: React.FC = () => {
             ? 'none' 
             : 'background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease',
           transform: isHovering && !isDragging ? 'scale(1.02)' : 'scale(1)',
-          willChange: 'transform, opacity',
+          willChange: 'transform, left, top',
         }}
         onMouseDown={handleMouseDown}
         onMouseEnter={() => {
