@@ -132,12 +132,14 @@ const ChatBar: React.FC = () => {
           }}
           disabled={isLoading}
           onClick={(e) => e.stopPropagation()} // Prevent dragging when clicking input
+          onMouseDown={(e) => e.stopPropagation()} // Critical fix: prevent mousedown from being captured
         />
         <button
           onClick={(e) => {
             e.stopPropagation(); // Prevent dragging when clicking button
             handleSend();
           }}
+          onMouseDown={(e) => e.stopPropagation()} // Critical fix: prevent mousedown from being captured
           style={{
             width: '40px',
             height: '100%',

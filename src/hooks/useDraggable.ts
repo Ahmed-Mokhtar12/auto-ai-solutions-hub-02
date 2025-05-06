@@ -45,6 +45,8 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
 
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging) {
+      e.preventDefault(); // Prevent text selection or other default behaviors
+      
       // Calculate new position
       const x = e.clientX - offset.current.x;
       const y = e.clientY - offset.current.y;
@@ -60,7 +62,8 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
     }
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (e: MouseEvent) => {
+    e.preventDefault(); // Prevent any default behavior
     setIsDragging(false);
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
