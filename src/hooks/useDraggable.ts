@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 
 interface Position {
@@ -26,6 +27,8 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
   // Keep existing functionality for the draggable element
   const handleMouseDown = (e: React.MouseEvent) => {
     if (elementRef.current) {
+      // Prevent default behavior to avoid text selection while dragging
+      e.preventDefault();
       setIsDragging(true);
       
       // Calculate the offset between mouse position and element position

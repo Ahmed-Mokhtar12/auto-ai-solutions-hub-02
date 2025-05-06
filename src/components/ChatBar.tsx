@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { useChatState } from '@/hooks/useChatState';
@@ -73,7 +74,7 @@ const ChatBar: React.FC = () => {
   
   return (
     <>
-      {/* Chat Messages Display - Updated to ensure proper positioning */}
+      {/* Chat Messages Display */}
       <ChatMessages 
         messages={messages} 
         isChatVisible={isChatVisible || isHovering} 
@@ -97,7 +98,8 @@ const ChatBar: React.FC = () => {
           top: `${position.y}px`,
           zIndex: 9999,
           cursor: isDragging ? 'grabbing' : 'grab',
-          transition: 'background-color 0.3s ease'
+          transition: isDragging ? 'none' : 'background-color 0.3s ease',
+          transform: 'translate(0, 0)', // Add transform to improve GPU rendering
         }}
         onMouseDown={handleMouseDown}
         onMouseEnter={() => {
@@ -125,12 +127,17 @@ const ChatBar: React.FC = () => {
             borderRadius: '8px 0 0 8px',
             outline: 'none',
             backgroundColor: 'transparent',
-            color: '#ffffff'
+            color: '#ffffff',
+            cursor: 'text' // Always show text cursor in the input field
           }}
           disabled={isLoading}
+          onClick={(e) => e.stopPropagation()} // Prevent dragging when clicking input
         />
         <button
-          onClick={handleSend}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent dragging when clicking button
+            handleSend();
+          }}
           style={{
             width: '40px',
             height: '100%',
