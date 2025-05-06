@@ -41,6 +41,7 @@ const ChatBar: React.FC = () => {
   
   // Handle send button click
   const handleSend = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation(); // Prevent dragging when clicking button
     sendMessage();
     // Focus back on input
@@ -65,6 +66,15 @@ const ChatBar: React.FC = () => {
     }
   }, [isHovering, setIsChatVisible]);
   
+  // Focus input when chat becomes visible
+  useEffect(() => {
+    if (isChatVisible && messageInputRef.current) {
+      setTimeout(() => {
+        messageInputRef.current?.focus();
+      }, 100);
+    }
+  }, [isChatVisible]);
+  
   return (
     <>
       {/* Chat Messages Display */}
@@ -75,7 +85,14 @@ const ChatBar: React.FC = () => {
       />
       
       {/* Chat Input Bar - Main draggable element */}
-      <div ref={elementRef}>
+      <div 
+        ref={elementRef}
+        onClick={() => {
+          if (messageInputRef.current) {
+            messageInputRef.current.focus();
+          }
+        }}
+      >
         <ChatContainer
           position={position}
           isDragging={isDragging}
