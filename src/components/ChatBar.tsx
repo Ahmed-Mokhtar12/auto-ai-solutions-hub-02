@@ -2,7 +2,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { useChatState } from '@/hooks/useChatState';
-import { useDraggable } from '@/hooks/useDraggable';
+import { useDraggable } from '@/hooks/draggable'; // Updated import path
 import { useIsMobile } from '@/hooks/use-mobile';
 import ChatMessages from './ChatMessages';
 
