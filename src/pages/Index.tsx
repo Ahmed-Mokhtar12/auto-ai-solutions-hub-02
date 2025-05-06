@@ -31,6 +31,10 @@ export default function Index() {
               <h2 className="text-lg font-semibold text-gold mb-2">Our Solutions</h2>
               <p className="text-white mb-2 text-sm">We offer tailored AI solutions including Email Automation, WhatsApp Bots, Hotel Concierge AI, and more.</p>
             </div>
+            
+            {/* Adding significant vertical space between cards when in mobile view */}
+            <div className="md:hidden h-32"></div>
+            
             <div className="bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700">
               <h2 className="text-lg font-semibold text-gold mb-2">Free Consultation</h2>
               <p className="text-white mb-2 text-sm">Book a free session today to learn how our AI experts can automate and enhance your business operations.</p>
