@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { useChatState } from '@/hooks/useChatState';
@@ -43,7 +44,7 @@ const ChatBar: React.FC = () => {
     position,
     isDragging,
     handleMouseDown
-  } = useDraggable({ initialPosition: { x: window.innerWidth / 2 - 160, y: window.innerHeight - 130 } });
+  } = useDraggable();
   
   const { handleMouseEnter, handleMouseLeave } = handleVisibility();
   

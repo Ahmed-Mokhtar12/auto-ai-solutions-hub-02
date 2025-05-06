@@ -10,7 +10,13 @@ interface UseDraggableOptions {
 }
 
 export const useDraggable = (options: UseDraggableOptions = {}) => {
-  const { initialPosition = { x: 20, y: window.innerHeight - 70 } } = options;
+  // Default position is at the bottom center, with a guaranteed initial position
+  const defaultPosition = { 
+    x: typeof window !== 'undefined' ? window.innerWidth / 2 - 160 : 20, 
+    y: typeof window !== 'undefined' ? window.innerHeight - 130 : 500 
+  };
+  
+  const { initialPosition = defaultPosition } = options;
   
   const [position, setPosition] = useState<Position>(initialPosition);
   const [isDragging, setIsDragging] = useState(false);
@@ -57,11 +63,27 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
     document.removeEventListener('mouseup', handleMouseUp);
   };
 
-  // Clean up event listeners when component unmounts
+  // Add resize handler to keep ChatBar in view when window is resized
   useEffect(() => {
+    const handleResize = () => {
+      if (elementRef.current) {
+        const maxX = window.innerWidth - elementRef.current.offsetWidth;
+        const maxY = window.innerHeight - elementRef.current.offsetHeight;
+        
+        setPosition(prev => ({
+          x: Math.max(0, Math.min(prev.x, maxX)),
+          y: Math.max(0, Math.min(prev.y, maxY))
+        }));
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    // Clean up event listeners when component unmounts
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 

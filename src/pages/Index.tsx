@@ -51,5 +51,6 @@ export default function Index() {
       </main>
       
       <Footer />
+      <ChatBar /> {/* Make sure ChatBar is included here */}
     </div>;
 }
