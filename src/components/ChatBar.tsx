@@ -50,7 +50,7 @@ const ChatBar: React.FC = () => {
     }
   };
 
-  // Handle hover state - ensure chat stays visible when hovering
+  // Handle hover state with smooth transitions
   const handleHover = (hovering: boolean) => {
     setIsHovering(hovering);
     if (hovering) {
