@@ -13,9 +13,12 @@ export const usePosition = (elementRef: React.RefObject<HTMLElement>, initialPos
         const maxX = window.innerWidth - elementRef.current.offsetWidth;
         const maxY = window.innerHeight - elementRef.current.offsetHeight;
         
+        // Position chat bar above the footer
+        const newY = window.innerHeight - 120; // Position 120px from bottom, above footer
+        
         setPosition(prev => ({
           x: Math.max(0, Math.min(prev.x, maxX)),
-          y: Math.max(0, Math.min(prev.y, maxY))
+          y: Math.min(newY, maxY)
         }));
       }
     };
@@ -23,21 +26,15 @@ export const usePosition = (elementRef: React.RefObject<HTMLElement>, initialPos
     window.addEventListener('resize', handleResize);
     
     // Initial positioning check - make sure the element is visible on first load
+    // and positioned above the footer
     const initializePosition = () => {
       setTimeout(() => {
         if (elementRef.current) {
-          const rect = elementRef.current.getBoundingClientRect();
-          
-          // If the element is outside the viewport, reposition it
-          if (rect.left < 0 || rect.top < 0 || 
-              rect.right > window.innerWidth || rect.bottom > window.innerHeight) {
-            
-            // Position it centered horizontally, 2cm above footer
-            setPosition({
-              x: (window.innerWidth / 2) - (isMobile ? 140 : 160),
-              y: window.innerHeight - 100 // ~2cm above footer
-            });
-          }
+          // Position it centered horizontally, above footer
+          setPosition({
+            x: (window.innerWidth / 2) - (isMobile ? 175 : 200), // Adjust for wider bar
+            y: window.innerHeight - 120 // ~120px above footer
+          });
         }
       }, 100);
     };

@@ -9,10 +9,10 @@ import { useDragEvents } from './useDragEvents';
 export const useDraggable = (options: UseDraggableOptions = {}) => {
   const isMobile = useIsMobile();
   
-  // Default position: horizontally centered, 2cm above footer
+  // Default position: horizontally centered, above footer
   const defaultPosition = { 
-    x: typeof window !== 'undefined' ? (window.innerWidth / 2) - (isMobile ? 140 : 160) : 20, 
-    y: typeof window !== 'undefined' ? window.innerHeight - 100 : 400 // ~2cm above footer
+    x: typeof window !== 'undefined' ? (window.innerWidth / 2) - (isMobile ? 175 : 200) : 20, // Adjust for wider bar
+    y: typeof window !== 'undefined' ? window.innerHeight - 120 : 400 // ~120px above footer
   };
   
   const { initialPosition = defaultPosition, autoHideOnScroll = true } = options;

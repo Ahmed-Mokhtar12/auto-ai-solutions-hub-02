@@ -33,7 +33,7 @@ const MessageContainer: React.FC<MessageContainerProps> = ({
       )}
       style={{
         position: 'fixed',
-        width: isMobile ? '260px' : '300px',
+        width: isMobile ? '350px' : '400px', // Match chat bar width
         maxHeight: '400px',
         overflowY: 'auto',
         backgroundColor: 'rgba(31, 31, 46, 0.75)',

@@ -26,7 +26,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
       className={`animate-fade-in ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
       style={{
         position: 'fixed',
-        width: isMobile ? 'min(280px, 90%)' : 'min(320px, 90%)',
+        width: isMobile ? 'min(350px, 95%)' : 'min(400px, 95%)', // Increased width
         height: '50px',
         display: 'flex',
         alignItems: 'center',
