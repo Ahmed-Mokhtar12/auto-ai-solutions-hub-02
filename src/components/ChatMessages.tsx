@@ -56,13 +56,13 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
         borderRadius: '8px',
         padding: '10px',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
-        transition: 'opacity 0.3s, transform 0.3s',
+        transition: 'opacity 0.3s, transform 0.3s, visibility 0.3s',
         opacity: isChatVisible ? 1 : 0,
         visibility: isChatVisible ? 'visible' : 'hidden',
         transform: isChatVisible ? 'translateY(0)' : 'translateY(10px)',
         left: messagesPosition.left,
         bottom: messagesPosition.bottom,
-        zIndex: 9999,
+        zIndex: 9998, // Just below the chat bar
         backdropFilter: 'blur(5px)',
         pointerEvents: isChatVisible ? 'auto' : 'none' // Only allow interaction when visible
       }}

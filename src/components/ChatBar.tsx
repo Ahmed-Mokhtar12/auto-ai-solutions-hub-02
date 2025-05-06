@@ -72,6 +72,14 @@ const ChatBar: React.FC = () => {
     }
   };
   
+  // Reset hover timeout to prevent chat from disappearing while user is interacting
+  useEffect(() => {
+    // Force chat visible when hovering
+    if (isHovering) {
+      setIsChatVisible(true);
+    }
+  }, [isHovering, setIsChatVisible]);
+  
   return (
     <>
       {/* Chat Messages Display */}
