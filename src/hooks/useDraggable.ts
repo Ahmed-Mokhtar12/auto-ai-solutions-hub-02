@@ -117,7 +117,7 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
       document.removeEventListener('touchend', handleTouchEnd);
     };
     
-    // Add touch event listeners
+    // Add touch event listeners directly to the element, not the document
     if (element) {
       element.addEventListener('touchstart', handleTouchStart, { passive: false });
     }
