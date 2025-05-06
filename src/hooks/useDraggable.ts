@@ -1,5 +1,5 @@
-
 import { useRef, useState, useEffect } from 'react';
+import { useIsMobile } from './use-mobile';
 
 interface Position {
   x: number;
@@ -11,11 +11,12 @@ interface UseDraggableOptions {
 }
 
 export const useDraggable = (options: UseDraggableOptions = {}) => {
-  // Fixed default position to be more visible on the screen
-  // Positioning at bottom right with some margin
+  const isMobile = useIsMobile();
+  
+  // Default position: bottom right with some margin
   const defaultPosition = { 
-    x: typeof window !== 'undefined' ? window.innerWidth - 350 : 20, 
-    y: typeof window !== 'undefined' ? window.innerHeight - 120 : 400
+    x: typeof window !== 'undefined' ? window.innerWidth - (isMobile ? 300 : 350) : 20, 
+    y: typeof window !== 'undefined' ? window.innerHeight - (isMobile ? 100 : 120) : 400
   };
   
   const { initialPosition = defaultPosition } = options;
@@ -70,8 +71,56 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
     document.removeEventListener('mouseup', handleMouseUp);
   };
 
-  // Add resize handler to keep ChatBar in view when window is resized
+  // Handle touch events for mobile
   useEffect(() => {
+    const element = elementRef.current;
+    
+    const handleTouchStart = (e: TouchEvent) => {
+      if (element) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        setIsDragging(true);
+        
+        offset.current = {
+          x: touch.clientX - position.x,
+          y: touch.clientY - position.y
+        };
+        
+        document.addEventListener('touchmove', handleTouchMove, { passive: false });
+        document.addEventListener('touchend', handleTouchEnd);
+      }
+    };
+    
+    const handleTouchMove = (e: TouchEvent) => {
+      if (isDragging) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        
+        const x = touch.clientX - offset.current.x;
+        const y = touch.clientY - offset.current.y;
+        
+        const maxX = window.innerWidth - (element?.offsetWidth || 0);
+        const maxY = window.innerHeight - (element?.offsetHeight || 0);
+        
+        setPosition({
+          x: Math.max(0, Math.min(x, maxX)),
+          y: Math.max(0, Math.min(y, maxY))
+        });
+      }
+    };
+    
+    const handleTouchEnd = () => {
+      setIsDragging(false);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+    };
+    
+    // Add touch event listeners
+    if (element) {
+      element.addEventListener('touchstart', handleTouchStart, { passive: false });
+    }
+    
+    // Add resize handler to keep the chat bar in view when window is resized
     const handleResize = () => {
       if (elementRef.current) {
         const maxX = window.innerWidth - elementRef.current.offsetWidth;
@@ -86,15 +135,6 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
     
     window.addEventListener('resize', handleResize);
     
-    // Ensure the chat bar is positioned correctly on mount
-    if (elementRef.current) {
-      const maxX = window.innerWidth - elementRef.current.offsetWidth;
-      setPosition(prev => ({
-        ...prev,
-        x: Math.min(prev.x, maxX)
-      }));
-    }
-
     // Initial positioning check - make sure the bar is visible on first load
     const initializePosition = () => {
       setTimeout(() => {
@@ -105,8 +145,8 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
           if (rect.left < 0 || rect.top < 0 || 
               rect.right > window.innerWidth || rect.bottom > window.innerHeight) {
             setPosition({
-              x: window.innerWidth - 350,
-              y: window.innerHeight - 120
+              x: window.innerWidth - (isMobile ? 300 : 350),
+              y: window.innerHeight - (isMobile ? 100 : 120)
             });
           }
         }
@@ -120,8 +160,13 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
       window.removeEventListener('resize', handleResize);
+      if (element) {
+        element.removeEventListener('touchstart', handleTouchStart);
+      }
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
     };
-  }, []);
+  }, [isDragging, position, isMobile]);
 
   return { elementRef, position, isDragging, handleMouseDown };
 };

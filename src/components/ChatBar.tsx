@@ -3,12 +3,14 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { useChatState } from '@/hooks/useChatState';
 import { useDraggable } from '@/hooks/useDraggable';
+import { useIsMobile } from '@/hooks/use-mobile';
 import ChatMessages from './ChatMessages';
 
 const ChatBar: React.FC = () => {
   const messageInputRef = useRef<HTMLInputElement>(null);
   const [isHovering, setIsHovering] = useState(false);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const isMobile = useIsMobile();
   
   const placeholders = [
     "Ask me anything about your workflow...",
@@ -38,7 +40,7 @@ const ChatBar: React.FC = () => {
     handleVisibility
   } = useChatState();
   
-  // Initialize useDraggable with a better default position
+  // Initialize useDraggable
   const {
     elementRef,
     position,
@@ -92,23 +94,29 @@ const ChatBar: React.FC = () => {
       {/* Chat Input Bar */}
       <div 
         ref={elementRef}
+        className="animate-fade-in"
         style={{
           position: 'fixed',
-          width: '320px',
+          width: isMobile ? '280px' : '320px',
           height: '50px',
           display: 'flex',
           alignItems: 'center',
-          backgroundColor: isHovering ? 'rgba(26, 31, 44, 0.8)' : 'rgba(26, 31, 44, 0.6)',
+          backgroundColor: isHovering ? 'rgba(26, 31, 44, 0.85)' : 'rgba(26, 31, 44, 0.7)',
           backdropFilter: 'blur(8px)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          borderRadius: '8px',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          borderRadius: '12px',
+          boxShadow: isHovering 
+            ? '0 6px 16px rgba(0, 0, 0, 0.3), 0 0 8px rgba(156, 139, 255, 0.2)' 
+            : '0 4px 12px rgba(0, 0, 0, 0.2)',
           left: `${position.x}px`,
           top: `${position.y}px`,
           zIndex: 9999,
           cursor: isDragging ? 'grabbing' : 'grab',
-          transition: isDragging ? 'none' : 'background-color 0.3s ease, box-shadow 0.3s ease',
-          transform: 'translate(0, 0)', // Improve GPU rendering
+          transition: isDragging 
+            ? 'none' 
+            : 'background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease',
+          transform: isHovering && !isDragging ? 'scale(1.02)' : 'scale(1)',
+          willChange: 'transform, opacity',
         }}
         onMouseDown={handleMouseDown}
         onMouseEnter={() => {
@@ -132,8 +140,9 @@ const ChatBar: React.FC = () => {
             height: '100%',
             padding: '0 15px',
             fontSize: '14px',
+            fontWeight: 400,
             border: 'none',
-            borderRadius: '8px 0 0 8px',
+            borderRadius: '12px 0 0 12px',
             outline: 'none',
             backgroundColor: 'transparent',
             color: '#ffffff',
@@ -158,9 +167,11 @@ const ChatBar: React.FC = () => {
             backgroundColor: 'transparent',
             color: isLoading ? '#555555' : '#4CAF50',
             border: 'none',
-            borderRadius: '0 8px 8px 0',
+            borderRadius: '0 12px 12px 0',
             cursor: isLoading ? 'wait' : 'pointer',
-            fontSize: '16px'
+            fontSize: '16px',
+            transition: 'color 0.2s ease, transform 0.2s ease',
+            transform: message.length > 0 ? 'scale(1.1)' : 'scale(1)'
           }}
           disabled={isLoading}
         >
