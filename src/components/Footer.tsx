@@ -14,14 +14,14 @@ const Footer: React.FC = () => {
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
               <Mail className="text-gold h-4 w-4" />
-              <a href="mailto:Ahmed.mokhtar12@gmail.com" className="text-white text-sm hover:text-gold transition-colors">
-                Ahmed.mokhtar12@gmail.com
+              <a href="mailto:info@autoaihub.com" className="text-white text-sm hover:text-gold transition-colors">
+                info@autoaihub.com
               </a>
             </div>
             
             <div className="flex items-center gap-2">
               <Phone className="text-gold h-4 w-4" />
-              <a href="tel:009715913426" className="text-white text-sm hover:text-gold transition-colors">
+              <a href="tel:+971591342" className="text-white text-sm hover:text-gold transition-colors">
                 +971 591 3426
               </a>
             </div>
@@ -51,8 +51,18 @@ const Footer: React.FC = () => {
         </div>
         
         <Separator className="my-2 bg-navy-700" />
+        
+        <div className="flex flex-wrap justify-center gap-4 text-xs text-gray-400 mb-2">
+          <a href="#" className="hover:text-gold transition-colors">Privacy Policy</a>
+          <span>|</span>
+          <a href="#" className="hover:text-gold transition-colors">Terms of Service</a>
+        </div>
+        
         <p className="text-center text-xs text-gray-400">
           © {new Date().getFullYear()} AI-Powered Automation Solutions. All rights reserved.
+        </p>
+        <p className="text-center text-xs text-gray-500 mt-1">
+          Proudly built by Ahmed Mokhtar | Powered by Lovable & Vibe Coding
         </p>
       </div>
     </footer>
