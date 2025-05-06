@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import { ChatMessage, generateMessageId } from '@/utils/messageUtils';
 import { useToast } from '@/hooks/use-toast';
 
-const WEBHOOK_URL = "https://n8n-2seasons-u38985.vm.elestio.app/webhook-test/Website";
+const WEBHOOK_URL = "https://n8n-2seasons-u38985.vm.elestio.app/webhook/Website";
 
 export const useChatState = () => {
   const [message, setMessage] = useState('');
@@ -101,7 +100,6 @@ export const useChatState = () => {
           console.log("Received response from N8N:", data);
           
           // Extract the response from the actual format returned by N8N
-          // Based on logs, N8N is returning { output: "..." } instead of { response: "..." }
           const responseText = data.output || data.response || "I received your message but couldn't generate a proper response.";
           
           // Add the response message from N8N
@@ -118,20 +116,9 @@ export const useChatState = () => {
           });
         } catch (parseError) {
           console.error("Error parsing response:", parseError);
-          // If we can't parse as JSON, try getting the text
-          const textResponse = await response.text();
-          console.log("Received text response:", textResponse);
-          
-          const responseId = generateMessageId();
-          setMessages(prev => [...prev, { 
-            text: textResponse || "Received a response but couldn't parse it properly.", 
-            sender: 'system', 
-            id: responseId 
-          }]);
         }
       } else {
         console.error("Error response from webhook:", response.status);
-        // Add error message
         setMessages(prev => [...prev, { 
           text: `Error from N8N webhook (Status: ${response.status})`, 
           sender: 'system', 
@@ -147,7 +134,6 @@ export const useChatState = () => {
       
     } catch (error) {
       console.error('Error sending message or receiving response:', error);
-      // Add error message to chat
       setMessages(prev => [...prev, { 
         text: "Failed to connect with N8N workflow. Please check your network and try again.", 
         sender: 'system', 
