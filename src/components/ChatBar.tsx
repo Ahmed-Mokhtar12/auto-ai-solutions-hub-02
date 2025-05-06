@@ -1,5 +1,5 @@
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Send } from 'lucide-react';
 import { useChatState } from '@/hooks/useChatState';
 import { useDraggable } from '@/hooks/useDraggable';
@@ -7,11 +7,13 @@ import ChatMessages from './ChatMessages';
 
 const ChatBar: React.FC = () => {
   const messageInputRef = useRef<HTMLInputElement>(null);
+  const [isHovering, setIsHovering] = useState(false);
   
   const {
     message,
     setMessage,
     isChatVisible,
+    setIsChatVisible,
     messages,
     isLoading,
     sendMessage,
@@ -42,13 +44,21 @@ const ChatBar: React.FC = () => {
       messageInputRef.current.focus();
     }
   };
+
+  // Handle hover state
+  const handleHover = (hovering: boolean) => {
+    setIsHovering(hovering);
+    if (hovering) {
+      setIsChatVisible(true);
+    }
+  };
   
   return (
     <>
       {/* Chat Messages Display */}
       <ChatMessages 
         messages={messages} 
-        isChatVisible={isChatVisible} 
+        isChatVisible={isChatVisible || isHovering} 
         position={position} 
       />
       
@@ -60,7 +70,7 @@ const ChatBar: React.FC = () => {
           width: '320px',
           height: '50px',
           display: 'flex',
-          backgroundColor: 'rgba(26, 31, 44, 0.6)',
+          backgroundColor: isHovering ? 'rgba(26, 31, 44, 0.8)' : 'rgba(26, 31, 44, 0.6)',
           backdropFilter: 'blur(8px)',
           border: '1px solid rgba(255, 255, 255, 0.1)',
           borderRadius: '8px',
@@ -68,11 +78,18 @@ const ChatBar: React.FC = () => {
           left: `${position.x}px`,
           top: `${position.y}px`,
           zIndex: 9999,
-          cursor: isDragging ? 'grabbing' : 'grab'
+          cursor: isDragging ? 'grabbing' : 'grab',
+          transition: 'background-color 0.3s ease'
         }}
         onMouseDown={handleMouseDown}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        onMouseEnter={() => {
+          handleHover(true);
+          handleMouseEnter();
+        }}
+        onMouseLeave={() => {
+          handleHover(false);
+          handleMouseLeave();
+        }}
       >
         <input
           ref={messageInputRef}

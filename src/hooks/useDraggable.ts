@@ -1,5 +1,4 @@
-
-import { useState, useEffect, useRef, RefObject } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface Position {
   x: number;
@@ -12,20 +11,28 @@ export const useDraggable = () => {
   const [initialMousePos, setInitialMousePos] = useState<Position>({ x: 0, y: 0 });
   const elementRef = useRef<HTMLDivElement>(null);
 
-  // Initialize position to bottom right, 3 inches above footer
+  // Initialize position to the middle of the screen, between services section and footer
   useEffect(() => {
-    if (elementRef.current) {
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
-      const elementWidth = 320; // Default width
-      const elementHeight = 50; // Default height
-      
-      // Position 3 inches (approximately 288px) above footer
-      setPosition({
-        x: viewportWidth - elementWidth - 20,
-        y: viewportHeight - elementHeight - 288
-      });
-    }
+    const positionInMiddle = () => {
+      if (elementRef.current) {
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        const elementWidth = 320; // Default width
+        
+        // Calculate position to be in the middle horizontally and at about 70% of the screen height
+        setPosition({
+          x: (viewportWidth - elementWidth) / 2,
+          y: Math.floor(viewportHeight * 0.7)
+        });
+      }
+    };
+    
+    positionInMiddle();
+    
+    // Also reposition if the window resizes
+    window.addEventListener('resize', positionInMiddle);
+    
+    return () => window.removeEventListener('resize', positionInMiddle);
   }, []);
 
   // Handle resize events to keep the element inside viewport

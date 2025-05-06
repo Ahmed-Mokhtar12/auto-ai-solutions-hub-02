@@ -32,7 +32,8 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
         left: `${position.x}px`,
         bottom: `${window.innerHeight - position.y + 10}px`,
         zIndex: 9999,
-        backdropFilter: 'blur(5px)'
+        backdropFilter: 'blur(5px)',
+        pointerEvents: 'auto' // Allow interaction with the messages
       }}
     >
       {messages.slice(-5).map((msg) => (
