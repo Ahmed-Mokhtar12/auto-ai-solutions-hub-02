@@ -97,16 +97,17 @@ const ChatBar: React.FC = () => {
           width: '320px',
           height: '50px',
           display: 'flex',
+          alignItems: 'center',
           backgroundColor: isHovering ? 'rgba(26, 31, 44, 0.8)' : 'rgba(26, 31, 44, 0.6)',
           backdropFilter: 'blur(8px)',
           border: '1px solid rgba(255, 255, 255, 0.1)',
           borderRadius: '8px',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
           left: `${position.x}px`,
           top: `${position.y}px`,
           zIndex: 9999,
           cursor: isDragging ? 'grabbing' : 'grab',
-          transition: isDragging ? 'none' : 'background-color 0.3s ease',
+          transition: isDragging ? 'none' : 'background-color 0.3s ease, box-shadow 0.3s ease',
           transform: 'translate(0, 0)', // Improve GPU rendering
         }}
         onMouseDown={handleMouseDown}

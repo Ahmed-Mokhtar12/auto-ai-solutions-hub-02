@@ -25,17 +25,18 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
   // Calculate position for the chat messages container
   // Ensure it stays within viewport bounds
   const getMessagesPosition = () => {
-    // Base positioning - show above the chat bar
+    // Position the message container above the chat bar
     let bottom = window.innerHeight - position.y + 10;
     let left = position.x;
     
-    // Adjust if too close to screen edges
+    // If too close to right edge, adjust leftward
     if (left + 300 > window.innerWidth) {
       left = window.innerWidth - 310;
     }
     
-    if (bottom + 400 > window.innerHeight) {
-      bottom = window.innerHeight - 410;
+    // If too close to top edge, show below chat bar instead
+    if (bottom > window.innerHeight - 100) {
+      bottom = 60; // Show below the chat bar instead
     }
     
     return { bottom: `${bottom}px`, left: `${left}px` };
@@ -51,7 +52,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
         width: '300px',
         maxHeight: '400px',
         overflowY: 'auto',
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
         border: '1px solid rgba(255, 255, 255, 0.2)',
         borderRadius: '8px',
         padding: '10px',
@@ -66,13 +67,14 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
         backdropFilter: 'blur(5px)',
         pointerEvents: isChatVisible ? 'auto' : 'none' // Only allow interaction when visible
       }}
+      className="animate-fade-in"
     >
       {messages.length === 0 ? (
         <div className="text-gray-400 text-sm px-2 py-4 text-center">
           No messages yet. Start chatting!
         </div>
       ) : (
-        messages.slice(-5).map((msg) => (
+        messages.map((msg) => (
           <div
             key={msg.id}
             style={{
@@ -88,7 +90,8 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
               marginLeft: msg.sender === 'user' ? 'auto' : '0',
               display: 'block',
               textShadow: '0 1px 2px rgba(0,0,0,0.7)',
-              lineHeight: '1.4'
+              lineHeight: '1.4',
+              animation: 'fade-in 0.3s ease-out'
             }}
           >
             {msg.text}

@@ -11,10 +11,11 @@ interface UseDraggableOptions {
 }
 
 export const useDraggable = (options: UseDraggableOptions = {}) => {
-  // Updated default position to be centered horizontally and higher than contact info by ~3cm (113px)
+  // Fixed default position to be more visible on the screen
+  // Positioning at bottom right with some margin
   const defaultPosition = { 
-    x: typeof window !== 'undefined' ? window.innerWidth / 2 - 160 : 20, 
-    y: typeof window !== 'undefined' ? window.innerHeight - 220 : 400 // Raised by approximately 3cm
+    x: typeof window !== 'undefined' ? window.innerWidth - 350 : 20, 
+    y: typeof window !== 'undefined' ? window.innerHeight - 120 : 400
   };
   
   const { initialPosition = defaultPosition } = options;
@@ -93,6 +94,26 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
         x: Math.min(prev.x, maxX)
       }));
     }
+
+    // Initial positioning check - make sure the bar is visible on first load
+    const initializePosition = () => {
+      setTimeout(() => {
+        if (elementRef.current) {
+          const rect = elementRef.current.getBoundingClientRect();
+          
+          // If the chat bar is outside the viewport, reposition it
+          if (rect.left < 0 || rect.top < 0 || 
+              rect.right > window.innerWidth || rect.bottom > window.innerHeight) {
+            setPosition({
+              x: window.innerWidth - 350,
+              y: window.innerHeight - 120
+            });
+          }
+        }
+      }, 100);
+    };
+    
+    initializePosition();
     
     // Clean up event listeners when component unmounts
     return () => {
