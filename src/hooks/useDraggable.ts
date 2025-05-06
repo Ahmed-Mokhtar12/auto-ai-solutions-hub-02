@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 
 interface Position {
@@ -11,10 +10,10 @@ interface UseDraggableOptions {
 }
 
 export const useDraggable = (options: UseDraggableOptions = {}) => {
-  // Default position is at the bottom center, adjust to be slightly higher
+  // Updated default position to be centered horizontally and higher than contact info by ~3cm (113px)
   const defaultPosition = { 
     x: typeof window !== 'undefined' ? window.innerWidth / 2 - 160 : 20, 
-    y: typeof window !== 'undefined' ? window.innerHeight - 90 : 500 
+    y: typeof window !== 'undefined' ? window.innerHeight - 220 : 400 // Raised by approximately 3cm
   };
   
   const { initialPosition = defaultPosition } = options;

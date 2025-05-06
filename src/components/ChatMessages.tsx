@@ -13,6 +13,27 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
   isChatVisible, 
   position 
 }) => {
+  // Calculate position for the chat messages container
+  // Ensure it stays within viewport bounds
+  const getMessagesPosition = () => {
+    // Base positioning - show above the chat bar
+    let bottom = window.innerHeight - position.y + 10;
+    let left = position.x;
+    
+    // Adjust if too close to screen edges
+    if (left + 300 > window.innerWidth) {
+      left = window.innerWidth - 310;
+    }
+    
+    if (bottom + 400 > window.innerHeight) {
+      bottom = window.innerHeight - 410;
+    }
+    
+    return { bottom: `${bottom}px`, left: `${left}px` };
+  };
+  
+  const messagesPosition = getMessagesPosition();
+  
   return (
     <div 
       style={{
@@ -29,35 +50,41 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
         opacity: isChatVisible ? 1 : 0,
         visibility: isChatVisible ? 'visible' : 'hidden',
         transform: isChatVisible ? 'translateY(0)' : 'translateY(10px)',
-        left: `${position.x}px`,
-        bottom: `${window.innerHeight - position.y + 10}px`,
+        left: messagesPosition.left,
+        bottom: messagesPosition.bottom,
         zIndex: 9999,
         backdropFilter: 'blur(5px)',
-        pointerEvents: 'auto' // Allow interaction with the messages
+        pointerEvents: isChatVisible ? 'auto' : 'none' // Only allow interaction when visible
       }}
     >
-      {messages.slice(-5).map((msg) => (
-        <div
-          key={msg.id}
-          style={{
-            padding: '8px 12px',
-            borderRadius: '8px',
-            marginBottom: '8px',
-            maxWidth: '90%',
-            wordWrap: 'break-word',
-            backgroundColor: msg.sender === 'user' ? 'rgba(0, 100, 255, 0.5)' : 'rgba(50, 205, 50, 0.5)',
-            backdropFilter: 'blur(4px)',
-            color: '#fff',
-            alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-            marginLeft: msg.sender === 'user' ? 'auto' : '0',
-            display: 'block',
-            textShadow: '0 1px 2px rgba(0,0,0,0.7)',
-            lineHeight: '1.4'
-          }}
-        >
-          {msg.text}
+      {messages.length === 0 ? (
+        <div className="text-gray-400 text-sm px-2 py-4 text-center">
+          No messages yet. Start chatting!
         </div>
-      ))}
+      ) : (
+        messages.slice(-5).map((msg) => (
+          <div
+            key={msg.id}
+            style={{
+              padding: '8px 12px',
+              borderRadius: '8px',
+              marginBottom: '8px',
+              maxWidth: '90%',
+              wordWrap: 'break-word',
+              backgroundColor: msg.sender === 'user' ? 'rgba(0, 100, 255, 0.5)' : 'rgba(50, 205, 50, 0.5)',
+              backdropFilter: 'blur(4px)',
+              color: '#fff',
+              alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
+              marginLeft: msg.sender === 'user' ? 'auto' : '0',
+              display: 'block',
+              textShadow: '0 1px 2px rgba(0,0,0,0.7)',
+              lineHeight: '1.4'
+            }}
+          >
+            {msg.text}
+          </div>
+        ))
+      )}
     </div>
   );
 };

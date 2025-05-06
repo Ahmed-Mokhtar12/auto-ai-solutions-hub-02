@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { useChatState } from '@/hooks/useChatState';
@@ -64,7 +63,7 @@ const ChatBar: React.FC = () => {
     }
   };
 
-  // Handle hover state
+  // Handle hover state - ensure chat stays visible when hovering
   const handleHover = (hovering: boolean) => {
     setIsHovering(hovering);
     if (hovering) {
@@ -74,7 +73,7 @@ const ChatBar: React.FC = () => {
   
   return (
     <>
-      {/* Chat Messages Display */}
+      {/* Chat Messages Display - Updated to ensure proper positioning */}
       <ChatMessages 
         messages={messages} 
         isChatVisible={isChatVisible || isHovering} 
