@@ -104,7 +104,7 @@ const ChatBar: React.FC = () => {
           height: '50px',
           display: 'flex',
           alignItems: 'center',
-          backgroundColor: 'rgba(31, 31, 46, 0)',
+          backgroundColor: 'rgba(31, 31, 46, 0)', // Fully transparent background
           backdropFilter: 'blur(8px)',
           border: '1px solid rgba(255, 255, 255, 0.15)',
           borderRadius: '16px',
