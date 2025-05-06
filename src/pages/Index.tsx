@@ -24,11 +24,11 @@ export default function Index() {
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          <div className="bg-navy-800 p-6 rounded-lg shadow-lg border border-navy-700">
+          <div className="bg-navy-800 p-6 rounded-lg shadow-lg border border-navy-700 px-[20px] py-[20px]">
             <h2 className="text-2xl font-semibold text-gold mb-4">Our Solutions</h2>
             <p className="text-white mb-4">We offer tailored AI solutions including Email Automation, WhatsApp Bots, Hotel Concierge AI, and more.</p>
           </div>
-          <div className="bg-navy-800 p-6 rounded-lg shadow-lg border border-navy-700">
+          <div className="bg-navy-800 p-6 rounded-lg shadow-lg border border-navy-700 py-[20px] px-[20px]">
             <h2 className="text-2xl font-semibold text-gold mb-4">Free Consultation</h2>
             <p className="text-white mb-4">Book a free session today to learn how our AI experts can automate and enhance your business operations.</p>
             <Button onClick={handleBookSession} className="gold-btn">
