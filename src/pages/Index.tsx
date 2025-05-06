@@ -11,6 +11,7 @@ export default function Index() {
     // Open WhatsApp with predefined message
     window.open('https://wa.me/009715913426?text=I%20would%20like%20to%20book%20a%20free%20consultation%20session', '_blank');
   };
+  
   return <div className="min-h-screen flex flex-col relative overflow-hidden">
       <StarryBackground />
       <Header />
@@ -32,8 +33,8 @@ export default function Index() {
               <p className="text-white mb-2 text-sm">We offer tailored AI solutions including Email Automation, WhatsApp Bots, Hotel Concierge AI, and more.</p>
             </div>
             
-            {/* Adding significant vertical space between cards when in mobile view */}
-            <div className="md:hidden h-32"></div>
+            {/* Adding significant vertical space between cards when in mobile view - matching ChatBar height (50px) */}
+            <div className="md:hidden h-[50px]"></div>
             
             <div className="bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700">
               <h2 className="text-lg font-semibold text-gold mb-2">Free Consultation</h2>
@@ -43,10 +44,12 @@ export default function Index() {
               </Button>
             </div>
           </div>
+          
+          {/* Adding space between content and footer to position ChatBar */}
+          <div className="h-[80px] mt-10"></div>
         </div>
       </main>
       
       <Footer />
-      <ChatBar />
     </div>;
 }
