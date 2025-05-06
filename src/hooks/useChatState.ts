@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import { ChatMessage, generateMessageId } from '@/utils/messageUtils';
 import { useToast } from '@/hooks/use-toast';
 
-const WEBHOOK_URL = "https://n8n-2seasons-u38985.vm.elestio.app/webhook-test/Website";
+const WEBHOOK_URL = "https://n8n-2seasons-u38985.vm.elestio.app/webhook/Website";
 
 export const useChatState = () => {
   const [message, setMessage] = useState('');
