@@ -28,3 +28,20 @@ export interface ChatBarProps {
     handleMouseLeave: () => void;
   };
 }
+
+export interface MessageContainerProps {
+  children: React.ReactNode;
+  isChatVisible: boolean;
+  position: { left: string; bottom: string };
+  isMobile: boolean;
+}
+
+export interface ChatMessageItemProps {
+  message: ChatMessage;
+}
+
+interface ChatMessage {
+  id: string;
+  text: string;
+  sender: 'user' | 'system';
+}
