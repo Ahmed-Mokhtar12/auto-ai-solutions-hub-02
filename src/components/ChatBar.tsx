@@ -55,7 +55,7 @@ const ChatBar: React.FC = () => {
     }
   };
 
-  // Focus input after sending a message
+  // Handle send button click
   const handleSend = () => {
     sendMessage();
     // Focus back on input

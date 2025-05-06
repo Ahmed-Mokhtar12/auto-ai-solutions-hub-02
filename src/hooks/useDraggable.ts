@@ -1,3 +1,4 @@
+
 import { useRef, useState, useEffect } from 'react';
 
 interface Position {
@@ -23,11 +24,11 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
   const elementRef = useRef<HTMLDivElement | null>(null);
   const offset = useRef<Position>({ x: 0, y: 0 });
 
-  // Fix dragging functionality
   const handleMouseDown = (e: React.MouseEvent) => {
     if (elementRef.current) {
       // Prevent default behavior to avoid text selection while dragging
       e.preventDefault();
+      e.stopPropagation(); // Stop event propagation to prevent other handlers from interfering
       setIsDragging(true);
       
       // Calculate the offset between mouse position and element position
@@ -36,7 +37,7 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
         y: e.clientY - position.y
       };
       
-      // Add event listeners for mouse move and mouse up
+      // Add event listeners for mouse move and mouse up to document level
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
     }

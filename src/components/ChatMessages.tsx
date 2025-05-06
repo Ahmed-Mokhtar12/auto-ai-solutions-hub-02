@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ChatMessage } from '@/utils/messageUtils';
 
 interface ChatMessagesProps {
@@ -13,6 +13,15 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
   isChatVisible, 
   position 
 }) => {
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to bottom when new messages arrive
+  useEffect(() => {
+    if (messagesContainerRef.current && isChatVisible) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  }, [messages, isChatVisible]);
+
   // Calculate position for the chat messages container
   // Ensure it stays within viewport bounds
   const getMessagesPosition = () => {
@@ -36,6 +45,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
   
   return (
     <div 
+      ref={messagesContainerRef}
       style={{
         position: 'fixed',
         width: '300px',
