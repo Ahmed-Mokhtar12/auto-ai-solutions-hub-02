@@ -77,12 +77,16 @@ export const useChatState = () => {
         id: thinkingId 
       }]);
       
-      // Send to webhook and allow CORS
+      // Enhanced fetch with CORS handling and more options
+      console.log("Attempting to connect to N8N webhook with URL:", WEBHOOK_URL);
       const response = await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json, text/plain, */*',
         },
+        mode: 'cors', // Explicitly request CORS
+        credentials: 'omit', // Don't send credentials
         body: JSON.stringify({ 
           message,
           timestamp: new Date().toISOString(),
@@ -90,7 +94,8 @@ export const useChatState = () => {
         }),
       });
       
-      console.log("Raw response from N8N:", response);
+      console.log("Raw response status from N8N:", response.status, response.statusText);
+      console.log("Response headers:", [...response.headers.entries()]);
       
       // Remove thinking message
       setMessages(prev => prev.filter(m => m.id !== thinkingId));
@@ -98,42 +103,59 @@ export const useChatState = () => {
       // Check if response is valid
       if (response.ok) {
         try {
-          // Try parsing the response as JSON
-          const data = await response.json();
-          console.log("Received JSON response from N8N:", data);
+          // Try to get the response content type
+          const contentType = response.headers.get('content-type');
+          console.log("Response content type:", contentType);
           
-          // Extract the response text directly from the data object
-          let responseText = "I received your message but couldn't generate a proper response.";
-          
-          // Try different possible response formats from N8N
-          if (data && typeof data === 'object') {
-            if (data.output) {
-              responseText = data.output;
-            } else if (data.response) {
-              responseText = data.response;
-            } else if (data.text) {
-              responseText = data.text;
-            } else if (data.message) {
-              responseText = data.message;
-            } else if (data.result) {
-              responseText = data.result;
-            } else if (typeof data === 'string') {
-              responseText = data;
-            } else {
-              // If no recognizable format is found, stringify the data
-              responseText = "Received: " + JSON.stringify(data);
+          if (contentType && contentType.includes('application/json')) {
+            // Parse as JSON if content type is JSON
+            const data = await response.json();
+            console.log("Received JSON response from N8N:", data);
+            
+            // Extract the response text directly from the data object
+            let responseText = "I received your message but couldn't generate a proper response.";
+            
+            // Try different possible response formats from N8N
+            if (data && typeof data === 'object') {
+              if (data.output) {
+                responseText = data.output;
+              } else if (data.response) {
+                responseText = data.response;
+              } else if (data.text) {
+                responseText = data.text;
+              } else if (data.message) {
+                responseText = data.message;
+              } else if (data.result) {
+                responseText = data.result;
+              } else if (typeof data === 'string') {
+                responseText = data;
+              } else {
+                // If no recognizable format is found, stringify the data
+                responseText = "Received: " + JSON.stringify(data);
+              }
             }
+            
+            console.log("Extracted response text:", responseText);
+            
+            // Add the response message from N8N
+            const responseId = generateMessageId();
+            setMessages(prev => [...prev, { 
+              text: responseText, 
+              sender: 'system', 
+              id: responseId 
+            }]);
+          } else {
+            // If not JSON, get as text
+            const textResponse = await response.text();
+            console.log("Text response from N8N:", textResponse);
+            
+            const responseId = generateMessageId();
+            setMessages(prev => [...prev, { 
+              text: textResponse || "Received a text response from N8N.", 
+              sender: 'system', 
+              id: responseId 
+            }]);
           }
-          
-          console.log("Extracted response text:", responseText);
-          
-          // Add the response message from N8N
-          const responseId = generateMessageId();
-          setMessages(prev => [...prev, { 
-            text: responseText, 
-            sender: 'system', 
-            id: responseId 
-          }]);
           
           toast({
             title: "Response received",
@@ -142,24 +164,49 @@ export const useChatState = () => {
         } catch (parseError) {
           console.error("Error parsing response:", parseError);
           
-          // If JSON parsing fails, try to get text response
-          const textResponse = await response.text();
-          console.log("Text response from N8N:", textResponse);
-          
-          const responseId = generateMessageId();
-          setMessages(prev => [...prev, { 
-            text: textResponse || "Received a response but couldn't parse it properly.", 
-            sender: 'system', 
-            id: responseId 
-          }]);
+          // If parsing fails, try to get text response
+          try {
+            const textResponse = await response.text();
+            console.log("Text response from N8N after parse error:", textResponse);
+            
+            const responseId = generateMessageId();
+            setMessages(prev => [...prev, { 
+              text: textResponse || "Received a response but couldn't parse it properly.", 
+              sender: 'system', 
+              id: responseId 
+            }]);
+          } catch (textError) {
+            console.error("Error getting text response:", textError);
+            
+            setMessages(prev => [...prev, { 
+              text: "Received a response from N8N but couldn't read its contents.", 
+              sender: 'system', 
+              id: generateMessageId() 
+            }]);
+          }
         }
       } else {
-        console.error("Error response from webhook:", response.status);
-        setMessages(prev => [...prev, { 
-          text: `Error from N8N webhook (Status: ${response.status})`, 
-          sender: 'system', 
-          id: generateMessageId() 
-        }]);
+        console.error("Error response from webhook:", response.status, response.statusText);
+        
+        // Try to get error details if available
+        try {
+          const errorText = await response.text();
+          console.error("Error response body:", errorText);
+          
+          setMessages(prev => [...prev, { 
+            text: `Error from N8N webhook (Status: ${response.status}): ${errorText || 'No details available'}`, 
+            sender: 'system', 
+            id: generateMessageId() 
+          }]);
+        } catch (e) {
+          console.error("Couldn't read error response:", e);
+          
+          setMessages(prev => [...prev, { 
+            text: `Error from N8N webhook (Status: ${response.status})`, 
+            sender: 'system', 
+            id: generateMessageId() 
+          }]);
+        }
         
         toast({
           title: "Error",
@@ -170,15 +217,23 @@ export const useChatState = () => {
       
     } catch (error) {
       console.error('Error sending message or receiving response:', error);
+      
+      // More detailed error information
+      const errorMessage = error instanceof Error ? 
+        `${error.name}: ${error.message}` : 
+        'Unknown error occurred';
+      
+      console.error('Detailed error:', errorMessage);
+      
       setMessages(prev => [...prev, { 
-        text: "Failed to connect with N8N workflow. Please check your network and try again.", 
+        text: `Failed to connect with N8N workflow: ${errorMessage}. Please check your network and try again.`, 
         sender: 'system', 
         id: generateMessageId() 
       }]);
       
       toast({
-        title: "Error",
-        description: "Failed to connect with N8N workflow.",
+        title: "Connection Error",
+        description: "Failed to connect with N8N workflow. Check console for details.",
         variant: "destructive",
       });
     } finally {
