@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { ChatMessage, generateMessageId } from '@/utils/messageUtils';
 import { useToast } from '@/hooks/use-toast';
@@ -89,6 +90,8 @@ export const useChatState = () => {
         }),
       });
       
+      console.log("Raw response from N8N:", response);
+      
       // Remove thinking message
       setMessages(prev => prev.filter(m => m.id !== thinkingId));
       
@@ -97,10 +100,32 @@ export const useChatState = () => {
         try {
           // Try parsing the response as JSON
           const data = await response.json();
-          console.log("Received response from N8N:", data);
+          console.log("Received JSON response from N8N:", data);
           
-          // Extract the response from the actual format returned by N8N
-          const responseText = data.output || data.response || "I received your message but couldn't generate a proper response.";
+          // Extract the response text directly from the data object
+          let responseText = "I received your message but couldn't generate a proper response.";
+          
+          // Try different possible response formats from N8N
+          if (data && typeof data === 'object') {
+            if (data.output) {
+              responseText = data.output;
+            } else if (data.response) {
+              responseText = data.response;
+            } else if (data.text) {
+              responseText = data.text;
+            } else if (data.message) {
+              responseText = data.message;
+            } else if (data.result) {
+              responseText = data.result;
+            } else if (typeof data === 'string') {
+              responseText = data;
+            } else {
+              // If no recognizable format is found, stringify the data
+              responseText = "Received: " + JSON.stringify(data);
+            }
+          }
+          
+          console.log("Extracted response text:", responseText);
           
           // Add the response message from N8N
           const responseId = generateMessageId();
@@ -116,6 +141,17 @@ export const useChatState = () => {
           });
         } catch (parseError) {
           console.error("Error parsing response:", parseError);
+          
+          // If JSON parsing fails, try to get text response
+          const textResponse = await response.text();
+          console.log("Text response from N8N:", textResponse);
+          
+          const responseId = generateMessageId();
+          setMessages(prev => [...prev, { 
+            text: textResponse || "Received a response but couldn't parse it properly.", 
+            sender: 'system', 
+            id: responseId 
+          }]);
         }
       } else {
         console.error("Error response from webhook:", response.status);
