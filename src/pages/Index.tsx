@@ -1,19 +1,15 @@
-
 import React from 'react';
 import Header from "@/components/Header";
 import ChatBar from '@/components/ChatBar';
 import Footer from '@/components/Footer';
 import StarryBackground from '@/components/StarryBackground';
 import { Button } from '@/components/ui/button';
-
 export default function Index() {
   const handleBookSession = () => {
     // Open WhatsApp with predefined message
     window.open('https://wa.me/009715913426?text=I%20would%20like%20to%20book%20a%20free%20consultation%20session', '_blank');
   };
-
-  return (
-    <div className="min-h-screen flex flex-col relative">
+  return <div className="min-h-screen flex flex-col relative">
       <StarryBackground />
       <Header />
       <main className="container mx-auto px-4 flex-grow overflow-y-auto relative z-10">
@@ -23,7 +19,7 @@ export default function Index() {
           <span className="text-white"> Solutions</span>
         </h1>
         
-        <p className="text-center text-white text-lg mb-12 max-w-2xl mx-auto opacity-90">
+        <p className="text-center text-white mb-12 max-w-2xl mx-auto opacity-90 text-base font-light">
           Streamline your business operations using cutting-edge AI workflows tailored to your needs.
         </p>
         
@@ -44,6 +40,5 @@ export default function Index() {
       
       <Footer />
       <ChatBar />
-    </div>
-  );
+    </div>;
 }
