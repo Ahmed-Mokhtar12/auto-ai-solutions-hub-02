@@ -99,7 +99,7 @@ const ChatBar: React.FC = () => {
           zIndex: 9999,
           cursor: isDragging ? 'grabbing' : 'grab',
           transition: isDragging ? 'none' : 'background-color 0.3s ease',
-          transform: 'translate(0, 0)', // Add transform to improve GPU rendering
+          transform: 'translate(0, 0)', // Improve GPU rendering
         }}
         onMouseDown={handleMouseDown}
         onMouseEnter={() => {

@@ -1,4 +1,3 @@
-
 import { useRef, useState, useEffect } from 'react';
 
 interface Position {
@@ -24,7 +23,7 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
   const elementRef = useRef<HTMLDivElement | null>(null);
   const offset = useRef<Position>({ x: 0, y: 0 });
 
-  // Keep existing functionality for the draggable element
+  // Fix dragging functionality
   const handleMouseDown = (e: React.MouseEvent) => {
     if (elementRef.current) {
       // Prevent default behavior to avoid text selection while dragging
