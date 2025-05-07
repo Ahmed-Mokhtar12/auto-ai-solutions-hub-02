@@ -42,16 +42,14 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         border: '1px solid rgba(255, 255, 255, 0.15)',
         borderRadius: '16px',
         padding: '10px',
-        boxShadow: isHovering 
-          ? '0 8px 20px rgba(0, 0, 0, 0.35), 0 0 10px rgba(156, 139, 255, 0.2)' 
-          : '0 4px 15px rgba(0, 0, 0, 0.25)',
+        boxShadow: 'none', // Remove any shadow
         left: `${position.x}px`,
         top: `${position.y}px`,
         zIndex: 9999,
         cursor: isDragging ? 'grabbing' : 'grab',
         transition: isDragging 
           ? 'none' // No transition during dragging for immediate feedback
-          : 'background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease, opacity 0.3s ease',
+          : 'background-color 0.3s ease, transform 0.2s ease, opacity 0.3s ease',
         transform: isHovering && !isDragging ? 'scale(1.02)' : 'scale(1)',
         willChange: 'transform, left, top, opacity',
         touchAction: 'none',

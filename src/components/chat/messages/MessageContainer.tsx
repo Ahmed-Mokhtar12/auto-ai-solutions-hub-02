@@ -46,7 +46,7 @@ const MessageContainer: React.FC<MessageContainerProps> = ({
         border: '1px solid rgba(255, 255, 255, 0.05)', // Very subtle border
         borderRadius: '16px',
         padding: '12px',
-        boxShadow: 'none', // Remove shadow for full transparency
+        boxShadow: 'none', // Ensure no shadow
         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         opacity: isChatVisible ? 1 : 0,
         visibility: isChatVisible ? 'visible' : 'hidden',
@@ -54,7 +54,7 @@ const MessageContainer: React.FC<MessageContainerProps> = ({
         left: messagePosition.left,
         bottom: messagePosition.bottom,
         zIndex: 9998,
-        backdropFilter: 'blur(0px)', // Remove blur for full transparency
+        backdropFilter: 'blur(0px)', // No blur for full transparency
         pointerEvents: isChatVisible ? 'auto' : 'none',
         willChange: 'transform, opacity, left, bottom'
       }}
