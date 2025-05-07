@@ -34,6 +34,7 @@ export const useVisibility = () => {
       setIsChatHistoryVisible(true); // Show history when message is sent
       setIsUserInteracting(true);
       
+      // Reset the messageJustSent flag after a delay but keep everything visible
       const timer = setTimeout(() => {
         setMessageJustSent(false);
       }, AUTO_HIDE_DELAY);
@@ -69,13 +70,11 @@ export const useVisibility = () => {
     const handleMouseLeave = () => {
       setIsUserInteracting(false);
       
-      // Keep the chat bar visible always, only hide history after delay
-      // We don't set a timeout for hiding the chat bar itself
-      
-      // Set a timeout to hide chat history after delay
+      // Always keep the chat bar visible, never hide it
+      // We only set a timeout to hide chat history after delay
       const historyTimeout = setTimeout(() => {
         setIsChatHistoryVisible(false);
-      }, AUTO_HIDE_DELAY * 2); // Double the delay for better user experience
+      }, AUTO_HIDE_DELAY * 3); // Triple the delay for better user experience
       
       setHistoryHideTimeout(historyTimeout);
     };
