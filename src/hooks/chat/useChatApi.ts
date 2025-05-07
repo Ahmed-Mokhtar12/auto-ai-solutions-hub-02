@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { WEBHOOK_URL } from './constants';
@@ -29,8 +28,8 @@ export const useChatApi = (
     setMessageJustSent(true);
     setIsLoading(true);
     
-    // Add a "thinking" message that will be replaced with the actual response
-    const thinkingId = addSystemMessage("Thinking...");
+    // Add a "processing" message that will be replaced with the actual response
+    const thinkingId = addSystemMessage("Processing your automation request...");
     
     try {
       // Send to webhook and wait for response
