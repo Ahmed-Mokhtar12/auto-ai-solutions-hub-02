@@ -42,11 +42,11 @@ const MessageContainer: React.FC<MessageContainerProps> = ({
         width: isMobile ? '350px' : '400px', // Match chat bar width
         maxHeight: '400px',
         overflowY: 'auto',
-        backgroundColor: 'rgba(31, 31, 46, 0.25)', // Reduced opacity for more transparency
-        border: '1px solid rgba(255, 255, 255, 0.1)', // Subtle border
+        backgroundColor: 'rgba(0, 0, 0, 0)', // Completely transparent background
+        border: '1px solid rgba(255, 255, 255, 0.05)', // Very subtle border
         borderRadius: '16px',
         padding: '12px',
-        boxShadow: '0 8px 20px rgba(0, 0, 0, 0.25)', // Reduced shadow opacity
+        boxShadow: 'none', // Remove shadow for full transparency
         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         opacity: isChatVisible ? 1 : 0,
         visibility: isChatVisible ? 'visible' : 'hidden',
@@ -54,7 +54,7 @@ const MessageContainer: React.FC<MessageContainerProps> = ({
         left: messagePosition.left,
         bottom: messagePosition.bottom,
         zIndex: 9998,
-        backdropFilter: 'blur(12px)', // Increased blur for better readability with transparency
+        backdropFilter: 'blur(0px)', // Remove blur for full transparency
         pointerEvents: isChatVisible ? 'auto' : 'none',
         willChange: 'transform, opacity, left, bottom'
       }}
