@@ -1,13 +1,14 @@
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { useChatState } from '@/hooks/chat'; 
 import { useDraggable } from '@/hooks/draggable';
 import { useIsMobile } from '@/hooks/use-mobile';
-import ChatMessages from './ChatMessages';
-import ChatInput from './chat/ChatInput';
-import SendButton from './chat/SendButton';
-import ChatContainer from './chat/ChatContainer';
 import { usePlaceholderRotation } from './chat/PlaceholderManager';
+import { useSendMessage } from '@/hooks/chat/useSendMessage';
+import { useInputInteraction } from '@/hooks/chat/useInputInteraction';
+import ChatInputArea from './chat/ChatInputArea';
+import ChatMessagesWindow from './chat/ChatMessagesWindow';
+import ChatContainer from './chat/ChatContainer';
 
 const ChatBar: React.FC = () => {
   const messageInputRef = useRef<HTMLInputElement>(null);
@@ -26,11 +27,11 @@ const ChatBar: React.FC = () => {
     isLoading,
     isUserInteracting,
     setIsUserInteracting,
-    sendMessage,
+    sendMessage: sendToApi,
     handleVisibility
   } = useChatState();
   
-  // Initialize useDraggable with centered position above footer
+  // Initialize draggable behavior
   const {
     elementRef,
     position,
@@ -41,22 +42,38 @@ const ChatBar: React.FC = () => {
     autoHideOnScroll: true 
   });
   
+  // Handle visibility events
   const { handleMouseEnter, handleMouseLeave } = handleVisibility();
+  
+  // Use our custom hook for sending messages
+  const { sendMessage } = useSendMessage({
+    message,
+    setMessage,
+    isLoading,
+    sendToApi
+  });
+  
+  // Use custom hook for input interactions
+  useInputInteraction({
+    messageInputRef,
+    elementRef,
+    setIsUserInteracting,
+    setIsChatHistoryVisible,
+    isChatVisible,
+    isHovering
+  });
   
   // Handle send button click
   const handleSend = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation(); // Prevent dragging when clicking button
     
-    // Only send if not currently loading a response
     if (!isLoading) {
       sendMessage();
     }
     
     // Focus back on input
-    if (messageInputRef.current) {
-      messageInputRef.current.focus();
-    }
+    messageInputRef.current?.focus();
   };
 
   // Handle hover state with smooth transitions
@@ -81,80 +98,27 @@ const ChatBar: React.FC = () => {
     handleMouseLeave();
     setIsHovering(false);
   };
-  
-  // Reset hover timeout to prevent chat from disappearing while user is interacting
-  useEffect(() => {
-    // Force chat visible when hovering or user is interacting
+
+  // Ensure chat visible when hovering or user is interacting
+  React.useEffect(() => {
     if (isHovering || isUserInteracting) {
       setIsChatVisible(true);
       setIsChatHistoryVisible(true); // Ensure history is visible during interaction
     }
   }, [isHovering, isUserInteracting, setIsChatVisible, setIsChatHistoryVisible]);
   
-  // Focus input when chat becomes visible
-  useEffect(() => {
-    if (isChatVisible && messageInputRef.current) {
-      setTimeout(() => {
-        messageInputRef.current?.focus();
-      }, 100);
-    }
-  }, [isChatVisible]);
-
-  // Set up chat input focus and blur events
-  useEffect(() => {
-    const inputElement = messageInputRef.current;
-    
-    const handleFocus = () => {
-      setIsUserInteracting(true);
-      setIsChatHistoryVisible(true); // Show history when input is focused
-    };
-    
-    const handleBlur = () => {
-      // Don't immediately turn off interaction on blur
-      // as user might be clicking elsewhere in chat
-      setTimeout(() => {
-        if (!isHovering) {
-          setIsUserInteracting(false);
-        }
-      }, 100);
-    };
-    
-    // Handle clicks on the chat bar to show history
-    const handleChatBarClick = () => {
-      setIsChatHistoryVisible(true);
-      setIsUserInteracting(true);
-    };
-    
-    if (inputElement) {
-      inputElement.addEventListener('focus', handleFocus);
-      inputElement.addEventListener('blur', handleBlur);
-    }
-    
-    // Add click handler to the chat bar element
-    if (elementRef.current) {
-      elementRef.current.addEventListener('click', handleChatBarClick);
-    }
-    
-    return () => {
-      if (inputElement) {
-        inputElement.removeEventListener('focus', handleFocus);
-        inputElement.removeEventListener('blur', handleBlur);
-      }
-      if (elementRef.current) {
-        elementRef.current.removeEventListener('click', handleChatBarClick);
-      }
-    };
-  }, [setIsUserInteracting, isHovering, setIsChatHistoryVisible, elementRef]);
-  
   return (
     <>
-      {/* Chat Messages Display */}
-      <ChatMessages 
-        messages={messages} 
-        isChatVisible={isChatHistoryVisible || isHovering || isUserInteracting} 
+      {/* Chat Messages Window Component */}
+      <ChatMessagesWindow
+        messages={messages}
+        isChatVisible={isChatVisible}
+        isChatHistoryVisible={isChatHistoryVisible}
         position={position}
-        onMouseEnter={handleChatMessagesMouseEnter}
-        onMouseLeave={handleChatMessagesMouseLeave}
+        isHovering={isHovering}
+        isUserInteracting={isUserInteracting}
+        handleChatMessagesMouseEnter={handleChatMessagesMouseEnter}
+        handleChatMessagesMouseLeave={handleChatMessagesMouseLeave}
       />
       
       {/* Chat Input Bar - Main draggable element */}
@@ -164,9 +128,7 @@ const ChatBar: React.FC = () => {
           e.stopPropagation();
           // Show chat history when chatbar is clicked
           setIsChatHistoryVisible(true);
-          if (messageInputRef.current) {
-            messageInputRef.current.focus();
-          }
+          messageInputRef.current?.focus();
         }}
       >
         <ChatContainer
@@ -180,18 +142,14 @@ const ChatBar: React.FC = () => {
           onHoverChange={handleHover}
           handleVisibilityEvents={{ handleMouseEnter, handleMouseLeave }}
         >
-          <ChatInput
+          <ChatInputArea 
             message={message}
             setMessage={setMessage}
             isLoading={isLoading}
-            onSend={sendMessage}
+            onSend={handleSend}
+            sendMessage={sendMessage}
             placeholderText={currentPlaceholder}
-            inputRef={messageInputRef}
-          />
-          <SendButton 
-            onClick={handleSend}
-            isLoading={isLoading}
-            message={message}
+            messageInputRef={messageInputRef}
           />
         </ChatContainer>
       </div>
