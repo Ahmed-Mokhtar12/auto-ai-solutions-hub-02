@@ -1,31 +1,15 @@
-
 import { useState, useEffect } from 'react';
 import { ChatMessage, generateMessageId } from '@/utils/messageUtils';
 
 /**
- * Hook for managing chat message state and auto-removal
+ * Hook for managing chat message state with persistent history
  */
 export const useMessages = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   
-  // Automatically remove messages after 5 seconds
-  useEffect(() => {
-    const messageTimers: { [key: string]: NodeJS.Timeout } = {};
-    
-    messages.forEach(msg => {
-      if (!messageTimers[msg.id]) {
-        messageTimers[msg.id] = setTimeout(() => {
-          setMessages(prev => prev.filter(m => m.id !== msg.id));
-        }, 5000);
-      }
-    });
-    
-    return () => {
-      // Clear all timers on component unmount
-      Object.values(messageTimers).forEach(timer => clearTimeout(timer));
-    };
-  }, [messages]);
-
+  // We're removing the auto-removal of messages after 5 seconds
+  // to keep chat history persistent between interactions
+  
   /**
    * Add a user message to the chat
    */

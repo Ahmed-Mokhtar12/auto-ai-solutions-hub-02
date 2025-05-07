@@ -21,6 +21,7 @@ const ChatBar: React.FC = () => {
     isChatVisible,
     setIsChatVisible,
     isChatHistoryVisible,
+    setIsChatHistoryVisible,
     messages,
     isLoading,
     isUserInteracting,
@@ -59,6 +60,7 @@ const ChatBar: React.FC = () => {
     if (hovering) {
       setIsChatVisible(true);
       setIsUserInteracting(true);
+      setIsChatHistoryVisible(true); // Always show history on hover
     }
   };
   
@@ -67,6 +69,7 @@ const ChatBar: React.FC = () => {
     handleMouseEnter();
     setIsHovering(true);
     setIsUserInteracting(true);
+    setIsChatHistoryVisible(true); // Always show history on mouse enter
   };
   
   const handleChatMessagesMouseLeave = () => {
@@ -79,8 +82,9 @@ const ChatBar: React.FC = () => {
     // Force chat visible when hovering or user is interacting
     if (isHovering || isUserInteracting) {
       setIsChatVisible(true);
+      setIsChatHistoryVisible(true); // Ensure history is visible during interaction
     }
-  }, [isHovering, isUserInteracting, setIsChatVisible]);
+  }, [isHovering, isUserInteracting, setIsChatVisible, setIsChatHistoryVisible]);
   
   // Focus input when chat becomes visible
   useEffect(() => {
@@ -97,6 +101,7 @@ const ChatBar: React.FC = () => {
     
     const handleFocus = () => {
       setIsUserInteracting(true);
+      setIsChatHistoryVisible(true); // Show history when input is focused
     };
     
     const handleBlur = () => {
@@ -109,9 +114,20 @@ const ChatBar: React.FC = () => {
       }, 100);
     };
     
+    // Handle clicks on the chat bar to show history
+    const handleChatBarClick = () => {
+      setIsChatHistoryVisible(true);
+      setIsUserInteracting(true);
+    };
+    
     if (inputElement) {
       inputElement.addEventListener('focus', handleFocus);
       inputElement.addEventListener('blur', handleBlur);
+    }
+    
+    // Add click handler to the chat bar element
+    if (elementRef.current) {
+      elementRef.current.addEventListener('click', handleChatBarClick);
     }
     
     return () => {
@@ -119,8 +135,11 @@ const ChatBar: React.FC = () => {
         inputElement.removeEventListener('focus', handleFocus);
         inputElement.removeEventListener('blur', handleBlur);
       }
+      if (elementRef.current) {
+        elementRef.current.removeEventListener('click', handleChatBarClick);
+      }
     };
-  }, [setIsUserInteracting, isHovering]);
+  }, [setIsUserInteracting, isHovering, setIsChatHistoryVisible, elementRef]);
   
   return (
     <>
@@ -138,6 +157,8 @@ const ChatBar: React.FC = () => {
         ref={elementRef}
         onClick={(e) => {
           e.stopPropagation();
+          // Show chat history when chatbar is clicked
+          setIsChatHistoryVisible(true);
           if (messageInputRef.current) {
             messageInputRef.current.focus();
           }
