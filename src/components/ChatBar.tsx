@@ -21,6 +21,7 @@ const ChatBar: React.FC = () => {
     isChatVisible,
     setIsChatVisible,
     isChatHistoryVisible,
+    setIsChatHistoryVisible,
     messages,
     isLoading,
     sendMessage,
@@ -59,6 +60,17 @@ const ChatBar: React.FC = () => {
     }
   };
   
+  // Handle mouse events for the chat messages window
+  const handleChatMessagesMouseEnter = () => {
+    handleMouseEnter();
+    setIsHovering(true);
+  };
+  
+  const handleChatMessagesMouseLeave = () => {
+    handleMouseLeave();
+    setIsHovering(false);
+  };
+  
   // Reset hover timeout to prevent chat from disappearing while user is interacting
   useEffect(() => {
     // Force chat visible when hovering
@@ -82,7 +94,9 @@ const ChatBar: React.FC = () => {
       <ChatMessages 
         messages={messages} 
         isChatVisible={isChatHistoryVisible || isHovering} 
-        position={position} 
+        position={position}
+        onMouseEnter={handleChatMessagesMouseEnter}
+        onMouseLeave={handleChatMessagesMouseLeave}
       />
       
       {/* Chat Input Bar - Main draggable element */}

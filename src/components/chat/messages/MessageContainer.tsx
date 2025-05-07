@@ -5,15 +5,19 @@ import { cn } from '@/lib/utils';
 interface MessageContainerProps {
   children: React.ReactNode;
   isChatVisible: boolean;
-  position: { left: string; bottom: string };  // Changed from Position type
+  position: { left: string; bottom: string };
   isMobile?: boolean;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 const MessageContainer: React.FC<MessageContainerProps> = ({ 
   children, 
   isChatVisible, 
   position,
-  isMobile = false
+  isMobile = false,
+  onMouseEnter,
+  onMouseLeave
 }) => {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
@@ -62,6 +66,8 @@ const MessageContainer: React.FC<MessageContainerProps> = ({
       aria-live="polite"
       aria-label="Chat messages"
       onClick={(e) => e.stopPropagation()}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       {children}
     </div>

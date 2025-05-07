@@ -11,7 +11,7 @@ export const useVisibility = () => {
   const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
   const [isChatHistoryVisible, setIsChatHistoryVisible] = useState(false);
   const [historyHideTimeout, setHistoryHideTimeout] = useState<NodeJS.Timeout | null>(null);
-
+  
   // Handle chat visibility when a message is sent
   useEffect(() => {
     if (messageJustSent) {
@@ -40,16 +40,16 @@ export const useVisibility = () => {
 
   const handleVisibility = () => {
     const handleMouseEnter = () => {
+      // Show both chat bar and history when user interacts
       setIsChatVisible(true);
-      setIsChatHistoryVisible(true); // Show history on mouse enter
+      setIsChatHistoryVisible(true);
       
-      // Clear any existing timeout
+      // Clear any existing timeouts
       if (hideTimeout) {
         clearTimeout(hideTimeout);
         setHideTimeout(null);
       }
       
-      // Clear history hide timeout as well
       if (historyHideTimeout) {
         clearTimeout(historyHideTimeout);
         setHistoryHideTimeout(null);
@@ -57,6 +57,9 @@ export const useVisibility = () => {
     };
     
     const handleMouseLeave = () => {
+      // We only start the timeout for hiding UI when user's mouse leaves
+      // both the chat bar and the chat messages
+      
       // Set a timeout to hide chat after delay
       const timeout = setTimeout(() => {
         setIsChatVisible(false);

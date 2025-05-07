@@ -10,12 +10,16 @@ interface ChatMessagesProps {
   messages: ChatMessage[];
   isChatVisible: boolean;
   position: { x: number; y: number };
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 const ChatMessages: React.FC<ChatMessagesProps> = ({ 
   messages, 
   isChatVisible, 
-  position 
+  position,
+  onMouseEnter,
+  onMouseLeave
 }) => {
   const isMobile = useIsMobile();
 
@@ -46,6 +50,8 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
       isChatVisible={isChatVisible}
       position={messagesPosition}
       isMobile={isMobile}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       {messages.length === 0 ? (
         <MessageEmptyState />
