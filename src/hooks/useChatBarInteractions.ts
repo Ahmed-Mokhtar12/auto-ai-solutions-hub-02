@@ -1,7 +1,5 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { useChatState } from '@/hooks/chat';
-import { handleVisibility } from '@/hooks/chat/useVisibility';
 
 export const useChatBarInteractions = () => {
   const messageInputRef = useRef<HTMLInputElement>(null);
