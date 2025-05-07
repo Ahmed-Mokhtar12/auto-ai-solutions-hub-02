@@ -37,8 +37,8 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         height: '50px',
         display: 'flex',
         alignItems: 'center',
-        backgroundColor: isHovering ? 'rgba(31, 31, 46, 0.7)' : 'rgba(31, 31, 46, 0)', // Reduced opacity for more transparency
-        backdropFilter: 'blur(8px)',
+        backgroundColor: 'transparent', // Always transparent background
+        backdropFilter: isHovering ? 'blur(8px)' : 'none', // Apply blur only on hover
         border: '1px solid rgba(255, 255, 255, 0.15)',
         borderRadius: '16px',
         padding: '10px',
