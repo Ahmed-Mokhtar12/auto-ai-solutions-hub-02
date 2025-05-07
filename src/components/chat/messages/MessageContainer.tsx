@@ -32,47 +32,40 @@ const MessageContainer: React.FC<MessageContainerProps> = memo(({
 
   return (
     <div 
+      ref={messagesContainerRef}
       className={cn(
-        "fixed rounded-lg border border-white/10 shadow-lg",
+        "hide-scrollbar",
         isChatVisible ? "animate-enter" : "animate-exit"
       )}
       style={{
         position: 'fixed',
-        width: isMobile ? '350px' : '400px',
-        height: '220px', // Exactly 15cm
-        maxHeight: '220px', // Ensure it doesn't exceed this height
-        left: position.left,
-        bottom: `calc(${position.bottom} + 0.5cm)`, // Position exactly 0.5cm above chat bar
-        backgroundColor: 'rgba(0, 0, 0, 0)', // Completely transparent
-        backdropFilter: 'blur(8px)', // Keep blur for readability of text
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        borderRadius: '12px',
-        padding: '10px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)', // Lighter shadow
+        width: isMobile ? '350px' : '400px', // Match chat bar width
+        maxHeight: '400px',
+        overflowY: 'auto',
+        backgroundColor: 'rgba(0, 0, 0, 0)', // Completely transparent background
+        border: '1px solid rgba(255, 255, 255, 0.05)', // Very subtle border
+        borderRadius: '16px',
+        padding: '12px',
+        boxShadow: 'none', // Ensure no shadow
         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         opacity: isChatVisible ? 1 : 0,
         visibility: isChatVisible ? 'visible' : 'hidden',
         transform: isChatVisible ? 'translateY(0) scale(1)' : 'translateY(10px) scale(0.98)',
+        left: position.left,
+        bottom: position.bottom,
         zIndex: 9998,
+        backdropFilter: 'blur(0px)', // No blur for full transparency
         pointerEvents: isChatVisible ? 'auto' : 'none',
-        willChange: 'transform, opacity, left, bottom',
-        overflowY: 'hidden', // Hide native overflow
+        willChange: 'transform, opacity, left, bottom'
       }}
-      onClick={(e) => e.stopPropagation()}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
       role="log"
       aria-live="polite"
       aria-label="Chat messages"
+      onClick={(e) => e.stopPropagation()}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
-      <ScrollArea className="h-full w-full pr-2">
-        <div 
-          ref={messagesContainerRef}
-          className="h-full flex flex-col space-y-2"
-        >
-          {children}
-        </div>
-      </ScrollArea>
+      {children}
     </div>
   );
 });
