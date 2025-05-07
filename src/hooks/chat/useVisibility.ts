@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { AUTO_HIDE_DELAY } from './constants';
 
@@ -11,6 +10,7 @@ export const useVisibility = () => {
   const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
   const [isChatHistoryVisible, setIsChatHistoryVisible] = useState(false);
   const [historyHideTimeout, setHistoryHideTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [isUserInteracting, setIsUserInteracting] = useState(false);
   
   // Clear all active timeouts
   const clearAllTimeouts = useCallback(() => {
@@ -30,6 +30,7 @@ export const useVisibility = () => {
     if (messageJustSent) {
       setIsChatVisible(true);
       setIsChatHistoryVisible(true); // Show history when message is sent
+      setIsUserInteracting(true);
       
       const timer = setTimeout(() => {
         setMessageJustSent(false);
@@ -38,6 +39,16 @@ export const useVisibility = () => {
       return () => clearTimeout(timer);
     }
   }, [messageJustSent]);
+
+  // Effect to manage visibility based on user interaction
+  useEffect(() => {
+    if (isUserInteracting) {
+      // When user is interacting, keep chat visible and clear any hide timeouts
+      setIsChatVisible(true);
+      setIsChatHistoryVisible(true);
+      clearAllTimeouts();
+    }
+  }, [isUserInteracting, clearAllTimeouts]);
 
   // Clean up timeout on unmount
   useEffect(() => {
@@ -49,10 +60,13 @@ export const useVisibility = () => {
       // Show both chat bar and history when user interacts
       setIsChatVisible(true);
       setIsChatHistoryVisible(true);
+      setIsUserInteracting(true);
       clearAllTimeouts();
     };
     
     const handleMouseLeave = () => {
+      setIsUserInteracting(false);
+      
       // Set a timeout to hide chat after delay
       const timeout = setTimeout(() => {
         setIsChatVisible(false);
@@ -77,6 +91,8 @@ export const useVisibility = () => {
     setMessageJustSent,
     isChatHistoryVisible,
     setIsChatHistoryVisible,
+    isUserInteracting,
+    setIsUserInteracting,
     handleVisibility
   };
 };

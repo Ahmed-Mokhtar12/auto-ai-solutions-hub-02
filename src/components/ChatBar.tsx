@@ -21,9 +21,10 @@ const ChatBar: React.FC = () => {
     isChatVisible,
     setIsChatVisible,
     isChatHistoryVisible,
-    setIsChatHistoryVisible,
     messages,
     isLoading,
+    isUserInteracting,
+    setIsUserInteracting,
     sendMessage,
     handleVisibility
   } = useChatState();
@@ -57,6 +58,7 @@ const ChatBar: React.FC = () => {
     setIsHovering(hovering);
     if (hovering) {
       setIsChatVisible(true);
+      setIsUserInteracting(true);
     }
   };
   
@@ -64,6 +66,7 @@ const ChatBar: React.FC = () => {
   const handleChatMessagesMouseEnter = () => {
     handleMouseEnter();
     setIsHovering(true);
+    setIsUserInteracting(true);
   };
   
   const handleChatMessagesMouseLeave = () => {
@@ -73,11 +76,11 @@ const ChatBar: React.FC = () => {
   
   // Reset hover timeout to prevent chat from disappearing while user is interacting
   useEffect(() => {
-    // Force chat visible when hovering
-    if (isHovering) {
+    // Force chat visible when hovering or user is interacting
+    if (isHovering || isUserInteracting) {
       setIsChatVisible(true);
     }
-  }, [isHovering, setIsChatVisible]);
+  }, [isHovering, isUserInteracting, setIsChatVisible]);
   
   // Focus input when chat becomes visible
   useEffect(() => {
@@ -87,13 +90,44 @@ const ChatBar: React.FC = () => {
       }, 100);
     }
   }, [isChatVisible]);
+
+  // Set up chat input focus and blur events
+  useEffect(() => {
+    const inputElement = messageInputRef.current;
+    
+    const handleFocus = () => {
+      setIsUserInteracting(true);
+    };
+    
+    const handleBlur = () => {
+      // Don't immediately turn off interaction on blur
+      // as user might be clicking elsewhere in chat
+      setTimeout(() => {
+        if (!isHovering) {
+          setIsUserInteracting(false);
+        }
+      }, 100);
+    };
+    
+    if (inputElement) {
+      inputElement.addEventListener('focus', handleFocus);
+      inputElement.addEventListener('blur', handleBlur);
+    }
+    
+    return () => {
+      if (inputElement) {
+        inputElement.removeEventListener('focus', handleFocus);
+        inputElement.removeEventListener('blur', handleBlur);
+      }
+    };
+  }, [setIsUserInteracting, isHovering]);
   
   return (
     <>
       {/* Chat Messages Display */}
       <ChatMessages 
         messages={messages} 
-        isChatVisible={isChatHistoryVisible || isHovering} 
+        isChatVisible={isChatHistoryVisible || isHovering || isUserInteracting} 
         position={position}
         onMouseEnter={handleChatMessagesMouseEnter}
         onMouseLeave={handleChatMessagesMouseLeave}
