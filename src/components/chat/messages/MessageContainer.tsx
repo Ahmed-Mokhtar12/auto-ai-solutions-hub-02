@@ -40,8 +40,7 @@ const MessageContainer: React.FC<MessageContainerProps> = memo(({
       style={{
         position: 'fixed',
         width: isMobile ? '350px' : '400px', // Match chat bar width
-        maxHeight: '15cm', // Changed from 400px to 15cm
-        height: '15cm', // Adding explicit height property
+        height: '15cm', // Fixed height of 15cm from bottom of the window
         overflowY: 'auto',
         backgroundColor: 'rgba(0, 0, 0, 0)', // Completely transparent background
         border: '1px solid rgba(255, 255, 255, 0.05)', // Very subtle border
@@ -53,7 +52,7 @@ const MessageContainer: React.FC<MessageContainerProps> = memo(({
         visibility: isChatVisible ? 'visible' : 'hidden',
         transform: isChatVisible ? 'translateY(0) scale(1)' : 'translateY(10px) scale(0.98)',
         left: position.left,
-        bottom: position.bottom,
+        bottom: `calc(${position.bottom} + 0.5cm)`, // Position 0.5cm above the chat bar
         zIndex: 9998,
         backdropFilter: 'blur(0px)', // No blur for full transparency
         pointerEvents: isChatVisible ? 'auto' : 'none',
