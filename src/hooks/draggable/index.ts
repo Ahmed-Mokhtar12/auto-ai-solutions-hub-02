@@ -1,10 +1,9 @@
 
 import { useRef } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { UseDraggableOptions, Position } from './types';
+import { UseDraggableOptions } from './types';
 import { useAutoHide } from './useAutoHide';
-import { usePosition } from './usePosition';
-import { useDragEvents } from './useDragEvents';
+import { useDrag } from './useDrag';
 
 export const useDraggable = (options: UseDraggableOptions = {}) => {
   const isMobile = useIsMobile();
@@ -18,11 +17,11 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
   const { initialPosition = defaultPosition, autoHideOnScroll = true } = options;
   
   const elementRef = useRef<HTMLDivElement | null>(null);
+  const elementSize = { width: isMobile ? 350 : 400, height: 50 }; // Match component dimensions
   
   // Use the extracted hooks
   const isVisible = useAutoHide(autoHideOnScroll);
-  const { position, setPosition } = usePosition(elementRef, initialPosition);
-  const { isDragging, handleMouseDown } = useDragEvents(elementRef, position, setPosition);
+  const { position, isDragging, handleMouseDown } = useDrag(initialPosition, elementSize);
 
   return { 
     elementRef, 

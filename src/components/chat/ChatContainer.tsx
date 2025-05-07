@@ -48,9 +48,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         transform: isHovering && !isDragging ? 'scale(1.02)' : 'scale(1)',
         willChange: 'transform, left, top, opacity',
         touchAction: 'none',
-        userSelect: 'none' // Prevent text selection during drag
+        userSelect: 'none', // Prevent text selection during drag
+        WebkitUserSelect: 'none', // For Safari support
       }}
       onMouseDown={handleMouseDown}
+      onTouchStart={handleMouseDown}
       onMouseEnter={() => {
         onHoverChange(true);
         handleVisibilityEvents.handleMouseEnter();

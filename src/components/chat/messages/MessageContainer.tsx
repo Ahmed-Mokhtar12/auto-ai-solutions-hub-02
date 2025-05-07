@@ -1,19 +1,20 @@
 
 import React, { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
+import { Position } from '@/hooks/draggable/types';
 
 interface MessageContainerProps {
   children: React.ReactNode;
   isChatVisible: boolean;
-  position: { left: string; bottom: string };
-  isMobile: boolean;
+  position: Position;
+  isMobile?: boolean;
 }
 
 const MessageContainer: React.FC<MessageContainerProps> = ({ 
   children, 
   isChatVisible, 
   position,
-  isMobile 
+  isMobile = false
 }) => {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
@@ -23,6 +24,12 @@ const MessageContainer: React.FC<MessageContainerProps> = ({
       messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
     }
   }, [children, isChatVisible]);
+
+  // Calculate position based on chat bar position
+  const messagePosition = {
+    left: `${position.x}px`,
+    bottom: `${window.innerHeight - position.y + 10}px` // 10px buffer
+  };
 
   return (
     <div 
@@ -45,8 +52,8 @@ const MessageContainer: React.FC<MessageContainerProps> = ({
         opacity: isChatVisible ? 1 : 0,
         visibility: isChatVisible ? 'visible' : 'hidden',
         transform: isChatVisible ? 'translateY(0) scale(1)' : 'translateY(10px) scale(0.98)',
-        left: position.left,
-        bottom: position.bottom,
+        left: messagePosition.left,
+        bottom: messagePosition.bottom,
         zIndex: 9998,
         backdropFilter: 'blur(8px)',
         pointerEvents: isChatVisible ? 'auto' : 'none',

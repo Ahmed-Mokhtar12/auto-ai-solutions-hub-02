@@ -87,7 +87,8 @@ const ChatBar: React.FC = () => {
       {/* Chat Input Bar - Main draggable element */}
       <div 
         ref={elementRef}
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           if (messageInputRef.current) {
             messageInputRef.current.focus();
           }
