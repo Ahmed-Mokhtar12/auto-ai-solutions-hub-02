@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+
+import { useState, useEffect } from 'react';
 import { AUTO_HIDE_DELAY } from './constants';
 
 /**
@@ -10,7 +11,6 @@ export const useVisibility = () => {
   const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
   const [isChatHistoryVisible, setIsChatHistoryVisible] = useState(false);
   const [historyHideTimeout, setHistoryHideTimeout] = useState<NodeJS.Timeout | null>(null);
-  const [isUserInteracting, setIsUserInteracting] = useState(false);
   
   // Handle chat visibility when a message is sent
   useEffect(() => {
@@ -25,26 +25,6 @@ export const useVisibility = () => {
       return () => clearTimeout(timer);
     }
   }, [messageJustSent]);
-
-  // Keep chat visible during user interaction
-  useEffect(() => {
-    if (isUserInteracting) {
-      // Clear any existing timeouts when user is interacting
-      if (hideTimeout) {
-        clearTimeout(hideTimeout);
-        setHideTimeout(null);
-      }
-      
-      if (historyHideTimeout) {
-        clearTimeout(historyHideTimeout);
-        setHistoryHideTimeout(null);
-      }
-      
-      // Make sure chat is visible during interaction
-      setIsChatVisible(true);
-      setIsChatHistoryVisible(true);
-    }
-  }, [isUserInteracting, hideTimeout, historyHideTimeout]);
 
   // Clean up timeout on unmount
   useEffect(() => {
@@ -63,7 +43,6 @@ export const useVisibility = () => {
       // Show both chat bar and history when user interacts
       setIsChatVisible(true);
       setIsChatHistoryVisible(true);
-      setIsUserInteracting(true);
       
       // Clear any existing timeouts
       if (hideTimeout) {
@@ -78,8 +57,8 @@ export const useVisibility = () => {
     };
     
     const handleMouseLeave = () => {
-      // User is no longer interacting
-      setIsUserInteracting(false);
+      // We only start the timeout for hiding UI when user's mouse leaves
+      // both the chat bar and the chat messages
       
       // Set a timeout to hide chat after delay
       const timeout = setTimeout(() => {
@@ -105,8 +84,6 @@ export const useVisibility = () => {
     setMessageJustSent,
     isChatHistoryVisible,
     setIsChatHistoryVisible,
-    isUserInteracting,
-    setIsUserInteracting,
     handleVisibility
   };
 };

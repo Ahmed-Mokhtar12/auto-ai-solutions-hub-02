@@ -38,7 +38,7 @@ const MessageContainer: React.FC<MessageContainerProps> = ({
     <div 
       ref={messagesContainerRef}
       className={cn(
-        "scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent chat-interactive-element",
+        "scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent",
         isChatVisible ? "animate-enter" : "animate-exit"
       )}
       style={{
