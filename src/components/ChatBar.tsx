@@ -47,7 +47,12 @@ const ChatBar: React.FC = () => {
   const handleSend = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation(); // Prevent dragging when clicking button
-    sendMessage();
+    
+    // Only send if not currently loading a response
+    if (!isLoading) {
+      sendMessage();
+    }
+    
     // Focus back on input
     if (messageInputRef.current) {
       messageInputRef.current.focus();

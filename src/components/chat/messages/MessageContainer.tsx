@@ -1,6 +1,7 @@
 
 import React, { useEffect, useRef, memo } from 'react';
 import { cn } from '@/lib/utils';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface MessageContainerProps {
   children: React.ReactNode;
@@ -33,7 +34,7 @@ const MessageContainer: React.FC<MessageContainerProps> = memo(({
     <div 
       ref={messagesContainerRef}
       className={cn(
-        "scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent",
+        "hide-scrollbar",
         isChatVisible ? "animate-enter" : "animate-exit"
       )}
       style={{

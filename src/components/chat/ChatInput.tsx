@@ -12,7 +12,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   inputRef
 }) => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !isLoading && message.trim()) {
+    if (e.key === 'Enter' && message.trim()) {
       e.preventDefault();
       onSend();
     }
@@ -22,11 +22,10 @@ const ChatInput: React.FC<ChatInputProps> = ({
     <Input
       ref={inputRef}
       type="text"
-      placeholder={placeholderText}
+      placeholder={isLoading ? "AI is thinking... you can still type" : placeholderText}
       value={message}
       onChange={(e) => setMessage(e.target.value)}
       onKeyDown={handleKeyDown}
-      disabled={isLoading}
       className="rounded-r-none rounded-l-xl border-none bg-background/75 backdrop-blur-md text-foreground flex-1 shadow-inner focus-visible:ring-offset-0"
       aria-label="Chat message input"
     />
