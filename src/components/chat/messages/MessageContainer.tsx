@@ -40,8 +40,7 @@ const MessageContainer: React.FC<MessageContainerProps> = memo(({
       style={{
         position: 'fixed',
         width: isMobile ? '350px' : '400px', // Match chat bar width
-        height: '15cm', // Set the height to exactly 15cm
-        maxHeight: '15cm', // Also set maxHeight to 15cm for consistency
+        maxHeight: '400px',
         overflowY: 'auto',
         backgroundColor: 'rgba(0, 0, 0, 0)', // Completely transparent background
         border: '1px solid rgba(255, 255, 255, 0.05)', // Very subtle border
