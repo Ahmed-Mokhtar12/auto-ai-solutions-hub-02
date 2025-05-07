@@ -1,12 +1,10 @@
-
 import React, { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { Position } from '@/hooks/draggable/types';
 
 interface MessageContainerProps {
   children: React.ReactNode;
   isChatVisible: boolean;
-  position: Position;
+  position: { left: string; bottom: string };  // Changed from Position type
   isMobile?: boolean;
 }
 
@@ -27,8 +25,8 @@ const MessageContainer: React.FC<MessageContainerProps> = ({
 
   // Calculate position based on chat bar position
   const messagePosition = {
-    left: `${position.x}px`,
-    bottom: `${window.innerHeight - position.y + 10}px` // 10px buffer
+    left: `${position.left}`,
+    bottom: `${position.bottom}`
   };
 
   return (

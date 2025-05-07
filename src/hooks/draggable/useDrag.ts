@@ -22,7 +22,7 @@ export function useDrag(
     setPosition({ x: newX, y: newY });
   }, [elementSize]);
 
-  const handleMouseDown = useCallback((e: MouseEvent | TouchEvent) => {
+  const handleMouseDown = useCallback((e: MouseEvent | TouchEvent | React.MouseEvent | React.TouchEvent) => {
     setIsDragging(true);
     e.preventDefault();
   }, []);
@@ -61,7 +61,9 @@ export function useDrag(
   return {
     position,
     isDragging,
-    handleMouseDown: (e: React.MouseEvent | React.TouchEvent) =>
-      handleMouseDown(e.nativeEvent)
+    handleMouseDown: (e: React.MouseEvent | React.TouchEvent) => {
+      // Make sure we can handle both React events and native events
+      handleMouseDown(e.nativeEvent || e);
+    }
   };
 }

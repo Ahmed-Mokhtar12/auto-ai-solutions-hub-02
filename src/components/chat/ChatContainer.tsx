@@ -21,6 +21,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
 }) => {
   const isMobile = useIsMobile();
 
+  // Handle both mouse and touch events properly
+  const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
+    handleMouseDown(e);
+  };
+
   return (
     <div 
       className={`animate-fade-in ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
@@ -51,8 +56,8 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         userSelect: 'none', // Prevent text selection during drag
         WebkitUserSelect: 'none', // For Safari support
       }}
-      onMouseDown={handleMouseDown}
-      onTouchStart={handleMouseDown}
+      onMouseDown={handleDragStart}
+      onTouchStart={handleDragStart}
       onMouseEnter={() => {
         onHoverChange(true);
         handleVisibilityEvents.handleMouseEnter();
