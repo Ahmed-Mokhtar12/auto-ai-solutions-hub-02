@@ -28,8 +28,8 @@ export default function Index() {
           </p>
           
           <div className="flex flex-col md:flex-row justify-between gap-5 mx-auto mb-6">
-            {/* Free Consultation section - positioned to the left with smaller size */}
-            <div className="md:ml-[3.75rem] w-full md:w-[35%] bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700">
+            {/* Free Consultation section - positioned with 15cm width and 5cm side margins */}
+            <div className="w-[15cm] mx-auto md:mx-[5cm] w-full md:w-auto bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700">
               <h2 className="text-lg font-semibold text-gold mb-2">Free Consultation</h2>
               <p className="text-white mb-2 text-sm">Book a free session today to learn how our AI experts can automate and enhance your business operations.</p>
               <Button onClick={handleBookSession} className="gold-btn text-sm">
@@ -37,8 +37,8 @@ export default function Index() {
               </Button>
             </div>
             
-            {/* Our Solutions section - positioned to the right with smaller size */}
-            <div className="mt-5 md:mt-0 md:mr-[3.75rem] w-full md:w-[35%] bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700">
+            {/* Our Solutions section - positioned with 15cm width and 5cm side margins */}
+            <div className="mt-5 md:mt-0 w-[15cm] mx-auto md:mx-[5cm] w-full md:w-auto bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700">
               <h2 className="text-lg font-semibold text-gold mb-2">Our Solutions</h2>
               <p className="text-white mb-2 text-sm">We offer tailored AI solutions including Email Automation, WhatsApp Bots, Hotel Concierge AI, and more.</p>
             </div>
