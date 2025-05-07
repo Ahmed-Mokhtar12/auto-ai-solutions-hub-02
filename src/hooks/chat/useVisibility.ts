@@ -9,11 +9,16 @@ export const useVisibility = () => {
   const [isChatVisible, setIsChatVisible] = useState(false);
   const [messageJustSent, setMessageJustSent] = useState(false);
   const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [isChatHistoryVisible, setIsChatHistoryVisible] = useState(false);
+  const [historyHideTimeout, setHistoryHideTimeout] = useState<NodeJS.Timeout | null>(null);
 
   // Handle chat visibility when a message is sent
   useEffect(() => {
     if (messageJustSent) {
       setIsChatVisible(true);
+      // When a message is sent, show chat history as well
+      setIsChatHistoryVisible(true);
+      
       const timer = setTimeout(() => {
         setMessageJustSent(false);
       }, AUTO_HIDE_DELAY);
@@ -22,23 +27,33 @@ export const useVisibility = () => {
     }
   }, [messageJustSent]);
 
-  // Clean up timeout on unmount
+  // Clean up timeouts on unmount
   useEffect(() => {
     return () => {
       if (hideTimeout) {
         clearTimeout(hideTimeout);
       }
+      if (historyHideTimeout) {
+        clearTimeout(historyHideTimeout);
+      }
     };
-  }, [hideTimeout]);
+  }, [hideTimeout, historyHideTimeout]);
 
   const handleVisibility = () => {
     const handleMouseEnter = () => {
       setIsChatVisible(true);
+      setIsChatHistoryVisible(true);
       
-      // Clear any existing timeout
+      // Clear any existing timeouts
       if (hideTimeout) {
         clearTimeout(hideTimeout);
         setHideTimeout(null);
+      }
+      
+      // Clear any history hide timeout
+      if (historyHideTimeout) {
+        clearTimeout(historyHideTimeout);
+        setHistoryHideTimeout(null);
       }
     };
     
@@ -48,7 +63,13 @@ export const useVisibility = () => {
         setIsChatVisible(false);
       }, AUTO_HIDE_DELAY);
       
+      // Set a timeout to hide chat history after the same delay
+      const historyTimeout = setTimeout(() => {
+        setIsChatHistoryVisible(false);
+      }, AUTO_HIDE_DELAY);
+      
       setHideTimeout(timeout);
+      setHistoryHideTimeout(historyTimeout);
     };
 
     return { handleMouseEnter, handleMouseLeave };
@@ -59,6 +80,8 @@ export const useVisibility = () => {
     setIsChatVisible,
     messageJustSent,
     setMessageJustSent,
+    isChatHistoryVisible,
+    setIsChatHistoryVisible,
     handleVisibility
   };
 };
