@@ -22,6 +22,8 @@ const ChatBar: React.FC = () => {
     setIsChatVisible,
     isChatHistoryVisible,
     setIsChatHistoryVisible,
+    isUserInteracting,
+    setIsUserInteracting,
     messages,
     isLoading,
     sendMessage,
@@ -57,6 +59,12 @@ const ChatBar: React.FC = () => {
     setIsHovering(hovering);
     if (hovering) {
       setIsChatVisible(true);
+      setIsUserInteracting(true);
+    } else {
+      // Only set to false if mouse leaves both components
+      if (!isUserInteracting) {
+        setIsUserInteracting(false);
+      }
     }
   };
   
@@ -64,20 +72,45 @@ const ChatBar: React.FC = () => {
   const handleChatMessagesMouseEnter = () => {
     handleMouseEnter();
     setIsHovering(true);
+    setIsUserInteracting(true);
   };
   
   const handleChatMessagesMouseLeave = () => {
     handleMouseLeave();
     setIsHovering(false);
+    // We delay setting isUserInteracting to false 
+    // to allow for mouse movement between chat elements
+    setTimeout(() => {
+      // Check if mouse is over any chat element before setting to false
+      const chatElements = document.querySelectorAll('.chat-interactive-element');
+      let isOverChatElement = false;
+      
+      chatElements.forEach(element => {
+        const rect = element.getBoundingClientRect();
+        if (
+          event.clientX >= rect.left &&
+          event.clientX <= rect.right &&
+          event.clientY >= rect.top &&
+          event.clientY <= rect.bottom
+        ) {
+          isOverChatElement = true;
+        }
+      });
+      
+      if (!isOverChatElement) {
+        setIsUserInteracting(false);
+      }
+    }, 100);
   };
   
   // Reset hover timeout to prevent chat from disappearing while user is interacting
   useEffect(() => {
-    // Force chat visible when hovering
-    if (isHovering) {
+    // Force chat visible when hovering or user is interacting
+    if (isHovering || isUserInteracting) {
       setIsChatVisible(true);
+      setIsChatHistoryVisible(true);
     }
-  }, [isHovering, setIsChatVisible]);
+  }, [isHovering, isUserInteracting, setIsChatVisible, setIsChatHistoryVisible]);
   
   // Focus input when chat becomes visible
   useEffect(() => {
@@ -93,7 +126,7 @@ const ChatBar: React.FC = () => {
       {/* Chat Messages Display */}
       <ChatMessages 
         messages={messages} 
-        isChatVisible={isChatHistoryVisible || isHovering} 
+        isChatVisible={isChatHistoryVisible || isHovering || isUserInteracting} 
         position={position}
         onMouseEnter={handleChatMessagesMouseEnter}
         onMouseLeave={handleChatMessagesMouseLeave}
@@ -108,6 +141,7 @@ const ChatBar: React.FC = () => {
             messageInputRef.current.focus();
           }
         }}
+        className="chat-interactive-element"
       >
         <ChatContainer
           position={position}
