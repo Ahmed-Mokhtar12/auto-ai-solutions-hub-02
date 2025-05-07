@@ -26,11 +26,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
       className={`animate-fade-in ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
       style={{
         position: 'fixed',
-        width: isMobile ? 'min(350px, 95%)' : 'min(400px, 95%)', // Increased width
+        width: isMobile ? 'min(350px, 95%)' : 'min(400px, 95%)',
         height: '50px',
         display: 'flex',
         alignItems: 'center',
-        backgroundColor: isHovering ? 'rgba(31, 31, 46, 0.9)' : 'rgba(31, 31, 46, 0)', // Background transitions to solid on hover
+        backgroundColor: isHovering ? 'rgba(31, 31, 46, 0.9)' : 'rgba(31, 31, 46, 0)',
         backdropFilter: 'blur(8px)',
         border: '1px solid rgba(255, 255, 255, 0.15)',
         borderRadius: '16px',
@@ -43,11 +43,12 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
         zIndex: 9999,
         cursor: isDragging ? 'grabbing' : 'grab',
         transition: isDragging 
-          ? 'none' 
+          ? 'none' // No transition during dragging for immediate feedback
           : 'background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease, opacity 0.3s ease',
         transform: isHovering && !isDragging ? 'scale(1.02)' : 'scale(1)',
         willChange: 'transform, left, top, opacity',
-        touchAction: 'none' // Critical for preventing default touch actions
+        touchAction: 'none',
+        userSelect: 'none' // Prevent text selection during drag
       }}
       onMouseDown={handleMouseDown}
       onMouseEnter={() => {

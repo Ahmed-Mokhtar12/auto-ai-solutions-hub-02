@@ -13,7 +13,6 @@ export const useDragEvents = (
   // Handle mouse events for dragging
   const handleMouseDown = (e: React.MouseEvent) => {
     if (elementRef.current) {
-      // Always prevent default and stop propagation
       e.preventDefault();
       e.stopPropagation();
       
@@ -32,9 +31,8 @@ export const useDragEvents = (
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging) {
         e.preventDefault();
-        e.stopPropagation();
         
-        // Calculate new position
+        // Calculate new position directly from mouse coordinates
         const x = e.clientX - offset.current.x;
         const y = e.clientY - offset.current.y;
         
@@ -42,6 +40,7 @@ export const useDragEvents = (
         const maxX = window.innerWidth - (elementRef.current?.offsetWidth || 0);
         const maxY = window.innerHeight - (elementRef.current?.offsetHeight || 0);
         
+        // Update position immediately without any delays
         setPosition({
           x: Math.max(0, Math.min(x, maxX)),
           y: Math.max(0, Math.min(y, maxY))
@@ -49,14 +48,13 @@ export const useDragEvents = (
       }
     };
 
-    const handleMouseUp = (e: MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
+    const handleMouseUp = () => {
       setIsDragging(false);
     };
     
     if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove);
+      // Add event listeners to the document level for smoother tracking
+      document.addEventListener('mousemove', handleMouseMove, { passive: false });
       document.addEventListener('mouseup', handleMouseUp);
     }
     
@@ -64,9 +62,9 @@ export const useDragEvents = (
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, elementRef, setPosition]);
+  }, [isDragging, elementRef, position, setPosition]);
 
-  // Handle touch events for mobile
+  // Touch event handling for mobile devices
   useEffect(() => {
     const element = elementRef.current;
     
@@ -74,11 +72,9 @@ export const useDragEvents = (
       if (!element || e.touches.length !== 1) return;
       
       e.preventDefault();
-      e.stopPropagation();
-      
-      const touch = e.touches[0];
       setIsDragging(true);
       
+      const touch = e.touches[0];
       offset.current = {
         x: touch.clientX - position.x,
         y: touch.clientY - position.y
@@ -89,10 +85,10 @@ export const useDragEvents = (
       if (!isDragging || e.touches.length !== 1) return;
       
       e.preventDefault();
-      e.stopPropagation();
       
       const touch = e.touches[0];
       
+      // Direct calculation from touch position for smoother movement
       const x = touch.clientX - offset.current.x;
       const y = touch.clientY - offset.current.y;
       
@@ -105,9 +101,7 @@ export const useDragEvents = (
       });
     };
     
-    const handleTouchEnd = (e: TouchEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
+    const handleTouchEnd = () => {
       setIsDragging(false);
     };
     
@@ -130,11 +124,9 @@ export const useDragEvents = (
       if (!element || e.touches.length !== 1) return;
       
       e.preventDefault();
-      e.stopPropagation();
-      
-      const touch = e.touches[0];
       setIsDragging(true);
       
+      const touch = e.touches[0];
       offset.current = {
         x: touch.clientX - position.x,
         y: touch.clientY - position.y
@@ -142,7 +134,6 @@ export const useDragEvents = (
     };
     
     if (element) {
-      // Directly add the touch events to the element for better mobile handling
       element.addEventListener('touchstart', handleTouchStart, { passive: false });
     }
     
