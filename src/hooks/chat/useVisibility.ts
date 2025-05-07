@@ -5,10 +5,12 @@ import { AUTO_HIDE_DELAY } from './constants';
  * Hook for managing chat visibility states
  */
 export const useVisibility = () => {
-  const [isChatVisible, setIsChatVisible] = useState(false);
+  // Initialize isChatVisible to true so the chat bar is always visible
+  const [isChatVisible, setIsChatVisible] = useState(true);
   const [messageJustSent, setMessageJustSent] = useState(false);
   const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
-  const [isChatHistoryVisible, setIsChatHistoryVisible] = useState(false);
+  // Initialize isChatHistoryVisible to true to show chat history by default
+  const [isChatHistoryVisible, setIsChatHistoryVisible] = useState(true);
   const [historyHideTimeout, setHistoryHideTimeout] = useState<NodeJS.Timeout | null>(null);
   const [isUserInteracting, setIsUserInteracting] = useState(false);
   
@@ -67,17 +69,14 @@ export const useVisibility = () => {
     const handleMouseLeave = () => {
       setIsUserInteracting(false);
       
-      // Set a timeout to hide chat after delay
-      const timeout = setTimeout(() => {
-        setIsChatVisible(false);
-      }, AUTO_HIDE_DELAY);
+      // Keep the chat bar visible always, only hide history after delay
+      // We don't set a timeout for hiding the chat bar itself
       
       // Set a timeout to hide chat history after delay
       const historyTimeout = setTimeout(() => {
         setIsChatHistoryVisible(false);
-      }, AUTO_HIDE_DELAY);
+      }, AUTO_HIDE_DELAY * 2); // Double the delay for better user experience
       
-      setHideTimeout(timeout);
       setHistoryHideTimeout(historyTimeout);
     };
 

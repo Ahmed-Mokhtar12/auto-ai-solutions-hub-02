@@ -43,8 +43,8 @@ const MessageContainer: React.FC<MessageContainerProps> = memo(({
         maxHeight: '220px', // Ensure it doesn't exceed this height
         left: position.left,
         bottom: `calc(${position.bottom} + 0.5cm)`, // Position exactly 0.5cm above chat bar
-        backgroundColor: 'rgba(20, 20, 30, 0.5)', // More transparent background
-        backdropFilter: 'blur(8px)',
+        backgroundColor: 'transparent', // Fully transparent background
+        backdropFilter: 'blur(8px)', // Keep blur for readability of text
         border: '1px solid rgba(255, 255, 255, 0.1)',
         borderRadius: '12px',
         padding: '10px',
