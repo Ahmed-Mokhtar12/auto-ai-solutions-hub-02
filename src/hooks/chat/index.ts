@@ -22,6 +22,8 @@ export const useChatState = () => {
     setIsChatVisible,
     messageJustSent,
     setMessageJustSent,
+    isChatHistoryVisible,
+    setIsChatHistoryVisible,
     handleVisibility
   } = useVisibility();
   
@@ -46,6 +48,8 @@ export const useChatState = () => {
     setMessage,
     isChatVisible,
     setIsChatVisible,
+    isChatHistoryVisible,
+    setIsChatHistoryVisible,
     messages,
     isLoading,
     messageJustSent,

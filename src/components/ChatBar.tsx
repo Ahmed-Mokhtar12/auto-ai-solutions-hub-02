@@ -20,6 +20,7 @@ const ChatBar: React.FC = () => {
     setMessage,
     isChatVisible,
     setIsChatVisible,
+    isChatHistoryVisible,
     messages,
     isLoading,
     sendMessage,
@@ -80,7 +81,7 @@ const ChatBar: React.FC = () => {
       {/* Chat Messages Display */}
       <ChatMessages 
         messages={messages} 
-        isChatVisible={isChatVisible || isHovering} 
+        isChatVisible={isChatHistoryVisible || isHovering} 
         position={position} 
       />
       
