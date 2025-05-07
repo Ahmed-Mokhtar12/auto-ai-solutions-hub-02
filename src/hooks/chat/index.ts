@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useMessages } from './useMessages';
 import { useVisibility } from './useVisibility';
 import { useChatApi } from './useChatApi';
@@ -34,14 +34,14 @@ export const useChatState = () => {
     setMessageJustSent
   );
   
-  const sendMessage = async () => {
+  const sendMessage = useCallback(async () => {
     if (!message.trim()) return;
     
     await sendToApi(message);
     
     // Clear input
     setMessage('');
-  };
+  }, [message, sendToApi, setMessage]);
 
   return {
     message,

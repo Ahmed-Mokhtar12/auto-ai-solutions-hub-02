@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { AUTO_HIDE_DELAY } from './constants';
 
 /**
@@ -11,6 +11,19 @@ export const useVisibility = () => {
   const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
   const [isChatHistoryVisible, setIsChatHistoryVisible] = useState(false);
   const [historyHideTimeout, setHistoryHideTimeout] = useState<NodeJS.Timeout | null>(null);
+  
+  // Clear all active timeouts
+  const clearAllTimeouts = useCallback(() => {
+    if (hideTimeout) {
+      clearTimeout(hideTimeout);
+      setHideTimeout(null);
+    }
+    
+    if (historyHideTimeout) {
+      clearTimeout(historyHideTimeout);
+      setHistoryHideTimeout(null);
+    }
+  }, [hideTimeout, historyHideTimeout]);
   
   // Handle chat visibility when a message is sent
   useEffect(() => {
@@ -28,38 +41,18 @@ export const useVisibility = () => {
 
   // Clean up timeout on unmount
   useEffect(() => {
-    return () => {
-      if (hideTimeout) {
-        clearTimeout(hideTimeout);
-      }
-      if (historyHideTimeout) {
-        clearTimeout(historyHideTimeout);
-      }
-    };
-  }, [hideTimeout, historyHideTimeout]);
+    return clearAllTimeouts;
+  }, [clearAllTimeouts]);
 
-  const handleVisibility = () => {
+  const handleVisibility = useCallback(() => {
     const handleMouseEnter = () => {
       // Show both chat bar and history when user interacts
       setIsChatVisible(true);
       setIsChatHistoryVisible(true);
-      
-      // Clear any existing timeouts
-      if (hideTimeout) {
-        clearTimeout(hideTimeout);
-        setHideTimeout(null);
-      }
-      
-      if (historyHideTimeout) {
-        clearTimeout(historyHideTimeout);
-        setHistoryHideTimeout(null);
-      }
+      clearAllTimeouts();
     };
     
     const handleMouseLeave = () => {
-      // We only start the timeout for hiding UI when user's mouse leaves
-      // both the chat bar and the chat messages
-      
       // Set a timeout to hide chat after delay
       const timeout = setTimeout(() => {
         setIsChatVisible(false);
@@ -75,7 +68,7 @@ export const useVisibility = () => {
     };
 
     return { handleMouseEnter, handleMouseLeave };
-  };
+  }, [clearAllTimeouts]);
 
   return {
     isChatVisible,

@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, memo } from 'react';
 import { cn } from '@/lib/utils';
 
 interface MessageContainerProps {
@@ -11,7 +11,8 @@ interface MessageContainerProps {
   onMouseLeave?: () => void;
 }
 
-const MessageContainer: React.FC<MessageContainerProps> = ({ 
+// Memoizing the component to prevent unnecessary re-renders
+const MessageContainer: React.FC<MessageContainerProps> = memo(({ 
   children, 
   isChatVisible, 
   position,
@@ -27,12 +28,6 @@ const MessageContainer: React.FC<MessageContainerProps> = ({
       messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
     }
   }, [children, isChatVisible]);
-
-  // Calculate position based on chat bar position
-  const messagePosition = {
-    left: `${position.left}`,
-    bottom: `${position.bottom}`
-  };
 
   return (
     <div 
@@ -55,8 +50,8 @@ const MessageContainer: React.FC<MessageContainerProps> = ({
         opacity: isChatVisible ? 1 : 0,
         visibility: isChatVisible ? 'visible' : 'hidden',
         transform: isChatVisible ? 'translateY(0) scale(1)' : 'translateY(10px) scale(0.98)',
-        left: messagePosition.left,
-        bottom: messagePosition.bottom,
+        left: position.left,
+        bottom: position.bottom,
         zIndex: 9998,
         backdropFilter: 'blur(0px)', // No blur for full transparency
         pointerEvents: isChatVisible ? 'auto' : 'none',
@@ -72,6 +67,8 @@ const MessageContainer: React.FC<MessageContainerProps> = ({
       {children}
     </div>
   );
-};
+});
+
+MessageContainer.displayName = 'MessageContainer';
 
 export default MessageContainer;
