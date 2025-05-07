@@ -23,7 +23,8 @@ const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => {
         textShadow: '0 1px 3px rgba(0, 0, 0, 0.7)', // Enhanced text shadow for readability
         lineHeight: '1.5',
         display: 'block',
-        color: isThinking ? '#C8C8C9' : 'white', // Even lighter gray for thinking message
+        // Yellow color for AI responses, white for user messages, light gray for thinking
+        color: isThinking ? '#C8C8C9' : isUser ? 'white' : '#FEF7CD',
         fontSize: isThinking ? '0.85rem' : 'inherit', // Smaller font for thinking message
         borderLeft: isUser ? 'none' : '1px solid rgba(72, 187, 120, 0.3)', // Even more subtle indicator
         borderRight: isUser ? '1px solid rgba(66, 153, 225, 0.3)' : 'none', // Even more subtle indicator
