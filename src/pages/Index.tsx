@@ -27,9 +27,9 @@ export default function Index() {
             Streamline your business operations using cutting-edge AI workflows tailored to your needs.
           </p>
           
-          <div className="flex flex-col md:flex-row justify-between gap-5 mx-auto mb-6">
-            {/* Free Consultation section - positioned with 15cm width and 3cm side margins */}
-            <div className="w-[15cm] mx-auto md:mx-[3cm] w-full md:w-auto bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700">
+          <div className="flex flex-col md:flex-row justify-center gap-[350px] md:gap-[400px] mx-auto mb-6">
+            {/* Free Consultation section - with chat bar length spacing between divs */}
+            <div className="bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700 w-[15cm] mx-auto md:mx-0">
               <h2 className="text-lg font-semibold text-gold mb-2">Free Consultation</h2>
               <p className="text-white mb-2 text-sm">Book a free session today to learn how our AI experts can automate and enhance your business operations.</p>
               <Button onClick={handleBookSession} className="gold-btn text-sm">
@@ -37,8 +37,8 @@ export default function Index() {
               </Button>
             </div>
             
-            {/* Our Solutions section - positioned with 15cm width and 3cm side margins */}
-            <div className="mt-5 md:mt-0 w-[15cm] mx-auto md:mx-[3cm] w-full md:w-auto bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700">
+            {/* Our Solutions section - with chat bar length spacing between divs */}
+            <div className="mt-5 md:mt-0 bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700 w-[15cm] mx-auto md:mx-0">
               <h2 className="text-lg font-semibold text-gold mb-2">Our Solutions</h2>
               <p className="text-white mb-2 text-sm">We offer tailored AI solutions including Email Automation, WhatsApp Bots, Hotel Concierge AI, and more.</p>
             </div>
