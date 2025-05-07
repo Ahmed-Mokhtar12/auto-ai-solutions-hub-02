@@ -43,12 +43,12 @@ const MessageContainer: React.FC<MessageContainerProps> = memo(({
         maxHeight: '220px', // Ensure it doesn't exceed this height
         left: position.left,
         bottom: `calc(${position.bottom} + 0.5cm)`, // Position exactly 0.5cm above chat bar
-        backgroundColor: 'rgba(20, 20, 30, 0.8)', // Slightly visible background
+        backgroundColor: 'rgba(20, 20, 30, 0.5)', // More transparent background
         backdropFilter: 'blur(8px)',
         border: '1px solid rgba(255, 255, 255, 0.1)',
         borderRadius: '12px',
         padding: '10px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)', // Lighter shadow
         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         opacity: isChatVisible ? 1 : 0,
         visibility: isChatVisible ? 'visible' : 'hidden',

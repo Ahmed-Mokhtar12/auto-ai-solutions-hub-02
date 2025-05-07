@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from 'react';
 import { useChatState } from '@/hooks/chat';
 
@@ -27,9 +28,12 @@ export const useChatBarInteractions = () => {
     e.preventDefault();
     e.stopPropagation(); // Prevent dragging when clicking button
     
-    // Only send if not currently loading a response
-    if (!isLoading) {
+    // Only send if not currently loading a response and message is not empty
+    if (!isLoading && message.trim()) {
       sendMessage();
+      
+      // Show chat history when sending a message
+      setIsChatHistoryVisible(true);
     }
     
     // Focus back on input
