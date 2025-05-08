@@ -2,9 +2,10 @@
 import React from 'react';
 import Header from "@/components/Header";
 import ChatBar from '@/components/ChatBar';
-import Footer from '@/components/Footer';
+import FooterContainer from '@/components/FooterContainer';
 import StarryBackground from '@/components/StarryBackground';
 import { Button } from '@/components/ui/button';
+import HoverVisibleContainer from '@/components/HoverVisibleContainer';
 
 export default function Index() {
   const handleBookSession = () => {
@@ -28,20 +29,32 @@ export default function Index() {
           </p>
           
           <div className="flex flex-col md:flex-row justify-center gap-[350px] md:gap-[400px] mx-auto mb-6">
-            {/* Free Consultation section - with chat bar length spacing between divs */}
-            <div className="bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700 w-[15cm] mx-auto md:mx-0">
-              <h2 className="text-lg font-semibold text-gold mb-2">Free Consultation</h2>
-              <p className="text-white mb-2 text-sm">Book a free session today to learn how our AI experts can automate and enhance your business operations.</p>
-              <Button onClick={handleBookSession} className="gold-btn text-sm">
-                Book a Free Session
-              </Button>
-            </div>
+            {/* Free Consultation section with hover visibility */}
+            <HoverVisibleContainer 
+              className="w-[15cm] mx-auto md:mx-0"
+              showIndicator={true}
+              autoHideDelay={2500}
+            >
+              <div className="bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700 w-full">
+                <h2 className="text-lg font-semibold text-gold mb-2">Free Consultation</h2>
+                <p className="text-white mb-2 text-sm">Book a free session today to learn how our AI experts can automate and enhance your business operations.</p>
+                <Button onClick={handleBookSession} className="gold-btn text-sm">
+                  Book a Free Session
+                </Button>
+              </div>
+            </HoverVisibleContainer>
             
-            {/* Our Solutions section - with chat bar length spacing between divs */}
-            <div className="mt-5 md:mt-0 bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700 w-[15cm] mx-auto md:mx-0">
-              <h2 className="text-lg font-semibold text-gold mb-2">Our Solutions</h2>
-              <p className="text-white mb-2 text-sm">We offer tailored AI solutions including Email Automation, WhatsApp Bots, Hotel Concierge AI, and more.</p>
-            </div>
+            {/* Our Solutions section with hover visibility */}
+            <HoverVisibleContainer 
+              className="mt-5 md:mt-0 w-[15cm] mx-auto md:mx-0"
+              showIndicator={true}
+              autoHideDelay={2500}
+            >
+              <div className="bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700 w-full">
+                <h2 className="text-lg font-semibold text-gold mb-2">Our Solutions</h2>
+                <p className="text-white mb-2 text-sm">We offer tailored AI solutions including Email Automation, WhatsApp Bots, Hotel Concierge AI, and more.</p>
+              </div>
+            </HoverVisibleContainer>
           </div>
           
           {/* Reduced space between content and footer */}
@@ -49,7 +62,7 @@ export default function Index() {
         </div>
       </main>
       
-      <Footer />
+      <FooterContainer />
       <ChatBar /> 
     </div>;
 }
