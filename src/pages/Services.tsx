@@ -4,25 +4,29 @@ import Header from "@/components/Header";
 import ChatBar from '@/components/ChatBar';
 import StarryBackground from '@/components/StarryBackground';
 import { Link } from 'react-router-dom';
+import Lottie from 'lottie-react';
 
 const Services = () => {
   const services = [
     {
       id: 'ai-agents',
       title: 'AI Agents',
-      image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=240&fit=crop&auto=format',
+      description: 'Intelligent automation solutions that handle complex tasks and make decisions to streamline your operations 24/7.',
+      lottieUrl: 'https://assets10.lottiefiles.com/packages/lf20_sSF6EG.json',
       link: '/ai-agents'
     },
     {
       id: 'generative-ai',
       title: 'Generative AI',
-      image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=240&fit=crop&auto=format',
+      description: 'Create content, generate insights, and automate creative processes with cutting-edge AI technology.',
+      lottieUrl: 'https://assets2.lottiefiles.com/packages/lf20_z1m3jxul.json',
       link: '/generative-ai'
     },
     {
       id: 'responsible-ai',
       title: 'Responsible AI',
-      image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&h=240&fit=crop&auto=format',
+      description: 'Ethical AI development with transparent, fair, and accountable solutions built with human values at the core.',
+      lottieUrl: 'https://assets1.lottiefiles.com/packages/lf20_drwzfp4j.json',
       link: '/responsible-ai'
     }
   ];
@@ -45,17 +49,23 @@ const Services = () => {
                 to={service.link}
                 className="group bg-[#F4F1EF] rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 cursor-pointer"
               >
-                <div className="h-60 overflow-hidden">
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                <div className="h-60 flex items-center justify-center bg-[#F4F1EF]">
+                  <Lottie
+                    animationData={null}
+                    loop={true}
+                    autoplay={true}
+                    style={{ width: 120, height: 120 }}
+                    src={service.lottieUrl}
+                    className="group-hover:scale-110 transition-transform duration-300"
                   />
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-medium text-gray-800">
+                  <h3 className="text-xl font-medium text-gray-800 mb-3">
                     {service.title}
                   </h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {service.description}
+                  </p>
                 </div>
               </Link>
             ))}
