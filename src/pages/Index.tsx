@@ -1,9 +1,11 @@
+
 import React from 'react';
 import Header from "@/components/Header";
 import ChatBar from '@/components/ChatBar';
 import FooterContainer from '@/components/FooterContainer';
 import StarryBackground from '@/components/StarryBackground';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 import HoverVisibleContainer from '@/components/HoverVisibleContainer';
 
 export default function Index() {
@@ -26,6 +28,15 @@ export default function Index() {
           <p className="text-center text-white mb-6 max-w-lg mx-auto opacity-90 text-sm md:text-base font-light">
             Streamline your business operations using cutting-edge AI workflows tailored to your needs.
           </p>
+          
+          {/* Services Button - Centered and prominent */}
+          <div className="flex justify-center mb-8">
+            <Link to="/services">
+              <Button className="gold-btn text-lg px-8 py-3">
+                View Our Services
+              </Button>
+            </Link>
+          </div>
           
           <div className="flex flex-col md:flex-row justify-center gap-[350px] md:gap-[400px] mx-auto mb-6">
             {/* Free Consultation section with hover visibility */}
