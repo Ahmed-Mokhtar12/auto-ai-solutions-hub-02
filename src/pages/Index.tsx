@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Header from "@/components/Header";
 import ChatBar from '@/components/ChatBar';
@@ -49,7 +50,8 @@ export default function Index() {
                 showIndicator={false}
                 autoHideDelay={2500}
               >
-                <div className="bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700 w-full">
+                <div className="bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700 w-full
+                               hover:border-gold hover:shadow-gold/20 transition-all duration-300 hover:scale-105">
                   <h2 className="text-lg font-semibold text-gold mb-2">Free Consultation</h2>
                   <p className="text-white mb-2 text-sm">Book a free session today to learn how our AI experts can automate and enhance your business operations.</p>
                   <Button onClick={handleBookSession} className="gold-btn text-sm">
