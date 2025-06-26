@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Header from "@/components/Header";
 import ChatBar from '@/components/ChatBar';
@@ -9,8 +8,8 @@ import HoverVisibleContainer from '@/components/HoverVisibleContainer';
 
 export default function Index() {
   const handleBookSession = () => {
-    // Open WhatsApp with predefined message
-    window.open('https://wa.me/009715913426?text=I%20would%20like%20to%20book%20a%20free%20consultation%20session', '_blank');
+    // Open Calendly with the provided link
+    window.open('https://calendly.com/ahmed-mokhtar12/30min?month=2025-06', '_blank');
   };
   
   return <div className="min-h-screen flex flex-col relative overflow-hidden">
