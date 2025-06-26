@@ -19,6 +19,14 @@ const Header: React.FC = () => {
           <NavigationMenu>
             <NavigationMenuList className="flex items-center space-x-6">
               <NavigationMenuItem>
+                <Button 
+                  onClick={handleLogin}
+                  className="gold-btn text-sm"
+                >
+                  Log In
+                </Button>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
                 <Link to="/services" className="text-sm text-gold hover:text-gold/80 transition-colors">
                   Services
                 </Link>
@@ -35,13 +43,6 @@ const Header: React.FC = () => {
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
-          
-          <Button 
-            onClick={handleLogin}
-            className="gold-btn text-sm"
-          >
-            Log In
-          </Button>
         </div>
       </div>
     </header>
