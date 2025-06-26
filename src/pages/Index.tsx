@@ -32,7 +32,7 @@ export default function Index() {
             {/* Free Consultation section with hover visibility */}
             <HoverVisibleContainer 
               className="w-[15cm] mx-auto md:mx-0"
-              showIndicator={true}
+              showIndicator={false}
               autoHideDelay={2500}
             >
               <div className="bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700 w-full">
@@ -47,7 +47,7 @@ export default function Index() {
             {/* Our Solutions section with hover visibility */}
             <HoverVisibleContainer 
               className="mt-5 md:mt-0 w-[15cm] mx-auto md:mx-0"
-              showIndicator={true}
+              showIndicator={false}
               autoHideDelay={2500}
             >
               <div className="bg-navy-800 p-4 rounded-lg shadow-lg border border-navy-700 w-full">
