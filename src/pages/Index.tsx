@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from "@/components/Header";
 import ChatBar from '@/components/ChatBar';
@@ -72,7 +71,6 @@ export default function Index() {
                 >
                   <h2 className="text-lg font-semibold text-gold mb-2">Our Solutions</h2>
                   <p className="text-white mb-2 text-sm">We offer tailored AI solutions including Email Automation, WhatsApp Bots, Hotel Concierge AI, and more.</p>
-                  <p className="text-gold text-xs">Click to explore →</p>
                 </div>
               </HoverVisibleContainer>
             </div>
