@@ -2,12 +2,12 @@
 import React from 'react';
 import Header from "@/components/Header";
 import ChatBar from '@/components/ChatBar';
-import NightBackground from '@/components/NightBackground';
+import DynamicBackground from '@/components/DynamicBackground';
 
 const GenerativeAI = () => {
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
-      <NightBackground />
+      <DynamicBackground />
       <Header />
       
       <main className="container mx-auto px-4 flex-grow flex items-center justify-center relative z-10">

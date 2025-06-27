@@ -1,7 +1,8 @@
+
 import React from 'react';
 import Header from "@/components/Header";
 import ChatBar from '@/components/ChatBar';
-import NightBackground from '@/components/NightBackground';
+import DynamicBackground from '@/components/DynamicBackground';
 import { Link } from 'react-router-dom';
 import Lottie from 'lottie-react';
 
@@ -32,7 +33,7 @@ const Services = () => {
 
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
-      <NightBackground />
+      <DynamicBackground />
       <Header />
       
       <main className="container mx-auto px-4 flex-grow flex items-center justify-center relative z-10">
