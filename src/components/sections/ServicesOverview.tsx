@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Bot, Sparkles, Shield, Zap, MessageSquare, Brain, Hotel, Utensils, Calendar } from 'lucide-react';
+import HoverVisibleContainer from '@/components/HoverVisibleContainer';
 
 const ServicesOverview: React.FC = () => {
   const services = [
@@ -66,29 +67,35 @@ const ServicesOverview: React.FC = () => {
         {/* Main Hospitality Services */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
           {services.map((service, index) => (
-            <Link
+            <HoverVisibleContainer
               key={index}
-              to={service.link}
-              className="group bg-navy-800/80 backdrop-blur-md p-8 rounded-xl border border-navy-700 
-                       hover:border-gold hover:shadow-gold/20 transition-all duration-300 hover:scale-105"
+              autoHideDelay={2500}
+              initialVisibility={false}
+              showIndicator={true}
             >
-              <div className="flex items-center mb-4">
-                {service.icon}
-                <h3 className="text-xl font-semibold text-white ml-3">{service.title}</h3>
-              </div>
-              <p className="text-gray-300 mb-6 leading-relaxed">{service.description}</p>
-              <ul className="space-y-2 mb-6">
-                {service.features.map((feature, idx) => (
-                  <li key={idx} className="text-sm text-gray-300 flex items-center">
-                    <span className="w-2 h-2 bg-gold rounded-full mr-3 flex-shrink-0"></span>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              <div className="text-gold text-sm font-medium group-hover:text-gold/80">
-                Learn More →
-              </div>
-            </Link>
+              <Link
+                to={service.link}
+                className="group bg-navy-800/80 backdrop-blur-md p-8 rounded-xl border border-navy-700 
+                         hover:border-gold hover:shadow-gold/20 transition-all duration-300 hover:scale-105 block"
+              >
+                <div className="flex items-center mb-4">
+                  {service.icon}
+                  <h3 className="text-xl font-semibold text-white ml-3">{service.title}</h3>
+                </div>
+                <p className="text-gray-300 mb-6 leading-relaxed">{service.description}</p>
+                <ul className="space-y-2 mb-6">
+                  {service.features.map((feature, idx) => (
+                    <li key={idx} className="text-sm text-gray-300 flex items-center">
+                      <span className="w-2 h-2 bg-gold rounded-full mr-3 flex-shrink-0"></span>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+                <div className="text-gold text-sm font-medium group-hover:text-gold/80">
+                  Learn More →
+                </div>
+              </Link>
+            </HoverVisibleContainer>
           ))}
         </div>
 
@@ -102,17 +109,23 @@ const ServicesOverview: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {hospitalityServices.map((service, index) => (
-            <div
+            <HoverVisibleContainer
               key={index}
-              className="bg-navy-800/50 backdrop-blur-sm p-6 rounded-lg border border-navy-700 
-                       hover:border-gold/50 transition-all duration-300"
+              autoHideDelay={2500}
+              initialVisibility={false}
+              showIndicator={true}
             >
-              <div className="flex items-center mb-3">
-                {service.icon}
-                <h4 className="text-lg font-medium text-white ml-3">{service.title}</h4>
+              <div
+                className="bg-navy-800/50 backdrop-blur-sm p-6 rounded-lg border border-navy-700 
+                         hover:border-gold/50 transition-all duration-300"
+              >
+                <div className="flex items-center mb-3">
+                  {service.icon}
+                  <h4 className="text-lg font-medium text-white ml-3">{service.title}</h4>
+                </div>
+                <p className="text-gray-300 text-sm leading-relaxed">{service.description}</p>
               </div>
-              <p className="text-gray-300 text-sm leading-relaxed">{service.description}</p>
-            </div>
+            </HoverVisibleContainer>
           ))}
         </div>
       </div>

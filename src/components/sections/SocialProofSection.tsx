@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Star, Users, Clock, TrendingUp, Hotel, Coffee } from 'lucide-react';
+import HoverVisibleContainer from '@/components/HoverVisibleContainer';
 
 const SocialProofSection: React.FC = () => {
   const stats = [
@@ -45,13 +46,19 @@ const SocialProofSection: React.FC = () => {
             resorts, and hospitality businesses worldwide. Our expertise in guest experience optimization 
             sets us apart in the industry.
           </p>
-          <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 max-w-2xl mx-auto">
-            <p className="text-gold font-semibold">🏨 Hospitality-First Approach</p>
-            <p className="text-white text-sm mt-2">
-              Unlike generic AI providers, we understand the unique challenges of hospitality operations, 
-              guest expectations, and the importance of maintaining luxury service standards.
-            </p>
-          </div>
+          <HoverVisibleContainer
+            autoHideDelay={2500}
+            initialVisibility={false}
+            showIndicator={true}
+          >
+            <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 max-w-2xl mx-auto">
+              <p className="text-gold font-semibold">🏨 Hospitality-First Approach</p>
+              <p className="text-white text-sm mt-2">
+                Unlike generic AI providers, we understand the unique challenges of hospitality operations, 
+                guest expectations, and the importance of maintaining luxury service standards.
+              </p>
+            </div>
+          </HoverVisibleContainer>
         </div>
 
         {/* Stats Section */}
@@ -60,14 +67,21 @@ const SocialProofSection: React.FC = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
-              <div key={index} className="bg-navy-800/50 backdrop-blur-sm p-6 rounded-lg border border-navy-700 text-center">
-                <div className="flex justify-center mb-4">
-                  {stat.icon}
+              <HoverVisibleContainer
+                key={index}
+                autoHideDelay={2500}
+                initialVisibility={false}
+                showIndicator={true}
+              >
+                <div className="bg-navy-800/50 backdrop-blur-sm p-6 rounded-lg border border-navy-700 text-center">
+                  <div className="flex justify-center mb-4">
+                    {stat.icon}
+                  </div>
+                  <div className="text-3xl font-bold text-gold mb-2">{stat.number}</div>
+                  <div className="text-lg font-semibold text-white mb-2">{stat.label}</div>
+                  <div className="text-sm text-gray-300">{stat.description}</div>
                 </div>
-                <div className="text-3xl font-bold text-gold mb-2">{stat.number}</div>
-                <div className="text-lg font-semibold text-white mb-2">{stat.label}</div>
-                <div className="text-sm text-gray-300">{stat.description}</div>
-              </div>
+              </HoverVisibleContainer>
             ))}
           </div>
         </div>

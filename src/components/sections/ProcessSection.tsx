@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Search, Lightbulb, Cog, Rocket } from 'lucide-react';
+import HoverVisibleContainer from '@/components/HoverVisibleContainer';
 
 const ProcessSection: React.FC = () => {
   const steps = [
@@ -43,35 +44,42 @@ const ProcessSection: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {steps.map((step, index) => (
-            <div key={index} className="relative">
-              {/* Connector Line */}
-              {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-gold to-transparent z-0" 
-                     style={{ width: 'calc(100% - 3rem)' }} />
-              )}
-              
-              <div className="relative bg-navy-800/80 backdrop-blur-md p-8 rounded-xl border border-navy-700 
-                            hover:border-gold hover:shadow-gold/20 transition-all duration-300 hover:scale-105 h-full">
-                <div className="text-center mb-6">
-                  <div className="inline-flex items-center justify-center w-20 h-20 bg-navy-700 rounded-full mb-4">
-                    {step.icon}
+            <HoverVisibleContainer
+              key={index}
+              autoHideDelay={2500}
+              initialVisibility={false}
+              showIndicator={true}
+            >
+              <div className="relative">
+                {/* Connector Line */}
+                {index < steps.length - 1 && (
+                  <div className="hidden lg:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-gold to-transparent z-0" 
+                       style={{ width: 'calc(100% - 3rem)' }} />
+                )}
+                
+                <div className="relative bg-navy-800/80 backdrop-blur-md p-8 rounded-xl border border-navy-700 
+                              hover:border-gold hover:shadow-gold/20 transition-all duration-300 hover:scale-105 h-full">
+                  <div className="text-center mb-6">
+                    <div className="inline-flex items-center justify-center w-20 h-20 bg-navy-700 rounded-full mb-4">
+                      {step.icon}
+                    </div>
+                    <div className="text-gold font-bold text-lg mb-2">Step {index + 1}</div>
+                    <h3 className="text-xl font-semibold text-white mb-3">{step.title}</h3>
                   </div>
-                  <div className="text-gold font-bold text-lg mb-2">Step {index + 1}</div>
-                  <h3 className="text-xl font-semibold text-white mb-3">{step.title}</h3>
+                  
+                  <p className="text-gray-300 mb-4 leading-relaxed text-center">{step.description}</p>
+                  
+                  <ul className="space-y-2">
+                    {step.details.map((detail, idx) => (
+                      <li key={idx} className="text-sm text-gray-300 flex items-center">
+                        <span className="w-1.5 h-1.5 bg-gold rounded-full mr-3 flex-shrink-0"></span>
+                        {detail}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                
-                <p className="text-gray-300 mb-4 leading-relaxed text-center">{step.description}</p>
-                
-                <ul className="space-y-2">
-                  {step.details.map((detail, idx) => (
-                    <li key={idx} className="text-sm text-gray-300 flex items-center">
-                      <span className="w-1.5 h-1.5 bg-gold rounded-full mr-3 flex-shrink-0"></span>
-                      {detail}
-                    </li>
-                  ))}
-                </ul>
               </div>
-            </div>
+            </HoverVisibleContainer>
           ))}
         </div>
       </div>
