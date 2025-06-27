@@ -43,7 +43,6 @@ const AuthForm: React.FC = () => {
         : await signIn(data.email, data.password);
 
       if (error) {
-        // Handle specific error cases with user-friendly messages
         if (error.message.includes('Invalid login credentials')) {
           setError('Invalid email or password. Please check your credentials and try again.');
         } else if (error.message.includes('User already registered')) {
@@ -56,10 +55,8 @@ const AuthForm: React.FC = () => {
       } else {
         if (isSignUp) {
           setError(null);
-          // Show success message for signup
           alert('Account created successfully! Please check your email to confirm your account.');
         } else {
-          // Successful sign in - redirect to home
           navigate('/');
         }
       }
@@ -71,8 +68,8 @@ const AuthForm: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-navy-900 px-4">
-      <Card className="w-full max-w-md bg-navy-800 border-navy-700">
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <Card className="w-full max-w-md bg-navy-800/95 border-navy-700 backdrop-blur-sm">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl text-gold">
             {isSignUp ? 'Create Account' : 'Welcome Back'}
@@ -124,7 +121,7 @@ const AuthForm: React.FC = () => {
 
             <Button
               type="submit"
-              className="w-full gold-btn"
+              className="w-full bg-gold hover:bg-gold/90 text-navy-900 font-semibold"
               disabled={loading}
             >
               {loading 

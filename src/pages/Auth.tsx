@@ -7,7 +7,9 @@ const Auth: React.FC = () => {
   return (
     <div className="min-h-screen relative">
       <StarryBackground />
-      <AuthForm />
+      <div className="relative z-10">
+        <AuthForm />
+      </div>
     </div>
   );
 };
