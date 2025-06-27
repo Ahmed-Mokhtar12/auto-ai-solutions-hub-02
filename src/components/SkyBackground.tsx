@@ -19,8 +19,8 @@ const SkyBackground: React.FC = () => {
     const drawSun = (sunX: number, sunY: number) => {
       context.save();
       
-      // Sun outer glow
-      const sunGlow = context.createRadialGradient(sunX, sunY, 0, sunX, sunY, 80);
+      // Sun outer glow - doubled from 80 to 160
+      const sunGlow = context.createRadialGradient(sunX, sunY, 0, sunX, sunY, 160);
       sunGlow.addColorStop(0, 'rgba(255, 255, 255, 1)');
       sunGlow.addColorStop(0.3, 'rgba(255, 255, 255, 0.6)');
       sunGlow.addColorStop(0.6, 'rgba(255, 255, 255, 0.3)');
@@ -28,18 +28,18 @@ const SkyBackground: React.FC = () => {
       
       context.fillStyle = sunGlow;
       context.beginPath();
-      context.arc(sunX, sunY, 80, 0, Math.PI * 2);
+      context.arc(sunX, sunY, 160, 0, Math.PI * 2);
       context.fill();
       
-      // Sun core
-      const sunCore = context.createRadialGradient(sunX, sunY, 0, sunX, sunY, 25);
+      // Sun core - doubled from 25 to 50
+      const sunCore = context.createRadialGradient(sunX, sunY, 0, sunX, sunY, 50);
       sunCore.addColorStop(0, '#ffffff');
       sunCore.addColorStop(0.7, '#ffffff');
       sunCore.addColorStop(1, 'rgba(255, 255, 255, 0.95)');
       
       context.fillStyle = sunCore;
       context.beginPath();
-      context.arc(sunX, sunY, 25, 0, Math.PI * 2);
+      context.arc(sunX, sunY, 50, 0, Math.PI * 2);
       context.fill();
       
       context.restore();
@@ -88,9 +88,9 @@ const SkyBackground: React.FC = () => {
       context.fillStyle = bottomBlur;
       context.fillRect(0, canvas.height * 0.6, canvas.width, canvas.height * 0.4);
       
-      // Position sun at the right corner with half visible
-      const sunX = canvas.width + 12;  // Positive offset to position half the sun off screen to the right
-      const sunY = -12;  // Negative Y to position half the sun above screen edge
+      // Position sun at the right corner with half visible - adjusted position for larger sun
+      const sunX = canvas.width + 25;  // Increased offset for larger sun
+      const sunY = -25;  // Increased negative Y for larger sun
       
       // Draw the sun (no rays)
       drawSun(sunX, sunY);
