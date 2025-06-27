@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 
 interface Cloud {
@@ -9,6 +8,7 @@ interface Cloud {
   opacity: number;
   layer: number;
   fluffiness: number;
+  baseY: number; // Store original Y position for natural drift
 }
 
 const SkyBackground: React.FC = () => {
@@ -29,11 +29,13 @@ const SkyBackground: React.FC = () => {
       const cloudCount = 12;
       
       for (let i = 0; i < cloudCount; i++) {
+        const baseY = 50 + Math.random() * (canvas.height * 0.5);
         cloudsRef.current.push({
           x: Math.random() * canvas.width * 1.5,
-          y: 50 + Math.random() * (canvas.height * 0.5),
+          y: baseY,
+          baseY: baseY, // Store the base Y position
           size: 60 + Math.random() * 120,
-          speed: 0.1 + Math.random() * 0.4,
+          speed: 0.02 + Math.random() * 0.08, // Much slower speed (was 0.1-0.5, now 0.02-0.1)
           opacity: 0.4 + Math.random() * 0.5,
           layer: Math.floor(Math.random() * 3),
           fluffiness: 0.7 + Math.random() * 0.3
@@ -156,18 +158,23 @@ const SkyBackground: React.FC = () => {
       context.fillStyle = hazeGradient;
       context.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Draw and animate clouds
+      // Draw and animate clouds with more natural movement
       cloudsRef.current.forEach(cloud => {
         drawCloud(cloud, context);
         
-        // Move cloud with slight vertical drift
+        // Move cloud horizontally at consistent slow speed
         cloud.x += cloud.speed;
-        cloud.y += (Math.sin(cloud.x * 0.001) * 0.1);
+        
+        // Add very subtle vertical drift based on cloud position and time
+        const driftAmount = Math.sin((cloud.x * 0.0005) + (Date.now() * 0.0001)) * 0.3;
+        cloud.y = cloud.baseY + driftAmount;
         
         // Reset cloud if it moves off screen
         if (cloud.x - cloud.size > canvas.width) {
           cloud.x = -cloud.size - Math.random() * 200;
-          cloud.y = 50 + Math.random() * (canvas.height * 0.5);
+          const newBaseY = 50 + Math.random() * (canvas.height * 0.5);
+          cloud.baseY = newBaseY;
+          cloud.y = newBaseY;
           cloud.fluffiness = 0.7 + Math.random() * 0.3;
         }
       });
