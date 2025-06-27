@@ -51,12 +51,6 @@ const ProcessSection: React.FC = () => {
               showIndicator={false}
             >
               <div className="relative">
-                {/* Connector Line */}
-                {index < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-gold to-transparent z-0" 
-                       style={{ width: 'calc(100% - 3rem)' }} />
-                )}
-                
                 <div className="relative bg-navy-800/80 p-8 rounded-xl border border-navy-700 
                               hover:border-gold hover:shadow-gold/20 transition-all duration-300 hover:scale-105 h-full">
                   <div className="text-center mb-6">
