@@ -12,9 +12,7 @@ const SkyBackground: React.FC = () => {
     height: number;
     opacity: number;
     speed: number;
-    scale: number;
-    stretchX: number;
-    stretchY: number;
+    type: 'main' | 'wispy' | 'small';
   }>>([]);
   
   useEffect(() => {
@@ -32,19 +30,43 @@ const SkyBackground: React.FC = () => {
     
     const initializeClouds = () => {
       cloudsRef.current = [];
-      const numClouds = 15;
       
-      for (let i = 0; i < numClouds; i++) {
+      // Main large clouds (like in the image)
+      for (let i = 0; i < 8; i++) {
         cloudsRef.current.push({
-          x: Math.random() * canvas.width * 1.5,
-          y: Math.random() * canvas.height * 0.7 + canvas.height * 0.1,
-          width: 200 + Math.random() * 300,
-          height: 40 + Math.random() * 60,
-          opacity: 0.4 + Math.random() * 0.6,
-          speed: 0.1 + Math.random() * 0.2,
-          scale: 0.6 + Math.random() * 0.8,
-          stretchX: 1.5 + Math.random() * 2,
-          stretchY: 0.3 + Math.random() * 0.4
+          x: Math.random() * canvas.width * 1.2,
+          y: Math.random() * canvas.height * 0.4 + canvas.height * 0.2,
+          width: 150 + Math.random() * 200,
+          height: 30 + Math.random() * 40,
+          opacity: 0.8 + Math.random() * 0.2,
+          speed: 0.05 + Math.random() * 0.1,
+          type: 'main'
+        });
+      }
+      
+      // Wispy thin clouds
+      for (let i = 0; i < 12; i++) {
+        cloudsRef.current.push({
+          x: Math.random() * canvas.width * 1.3,
+          y: Math.random() * canvas.height * 0.5 + canvas.height * 0.15,
+          width: 100 + Math.random() * 150,
+          height: 8 + Math.random() * 15,
+          opacity: 0.4 + Math.random() * 0.4,
+          speed: 0.03 + Math.random() * 0.07,
+          type: 'wispy'
+        });
+      }
+      
+      // Small scattered clouds
+      for (let i = 0; i < 15; i++) {
+        cloudsRef.current.push({
+          x: Math.random() * canvas.width * 1.4,
+          y: Math.random() * canvas.height * 0.6 + canvas.height * 0.1,
+          width: 40 + Math.random() * 80,
+          height: 15 + Math.random() * 25,
+          opacity: 0.3 + Math.random() * 0.5,
+          speed: 0.02 + Math.random() * 0.05,
+          type: 'small'
         });
       }
     };
@@ -56,59 +78,64 @@ const SkyBackground: React.FC = () => {
       
       const centerX = cloud.x;
       const centerY = cloud.y;
-      const baseWidth = cloud.width * cloud.scale * cloud.stretchX;
-      const baseHeight = cloud.height * cloud.scale * cloud.stretchY;
       
-      // Create very wispy, stretched horizontal clouds like in the image
-      context.beginPath();
+      if (cloud.type === 'main') {
+        // Large main clouds with realistic shape
+        context.beginPath();
+        context.ellipse(centerX, centerY, cloud.width * 0.3, cloud.height * 0.6, 0, 0, Math.PI * 2);
+        context.ellipse(centerX - cloud.width * 0.2, centerY + cloud.height * 0.1, cloud.width * 0.25, cloud.height * 0.5, 0, 0, Math.PI * 2);
+        context.ellipse(centerX + cloud.width * 0.15, centerY - cloud.height * 0.1, cloud.width * 0.2, cloud.height * 0.4, 0, 0, Math.PI * 2);
+        context.ellipse(centerX - cloud.width * 0.1, centerY - cloud.height * 0.2, cloud.width * 0.15, cloud.height * 0.3, 0, 0, Math.PI * 2);
+        context.fill();
+      } else if (cloud.type === 'wispy') {
+        // Very thin wispy clouds
+        context.beginPath();
+        context.ellipse(centerX, centerY, cloud.width * 0.4, cloud.height * 0.3, 0, 0, Math.PI * 2);
+        context.ellipse(centerX + cloud.width * 0.2, centerY, cloud.width * 0.3, cloud.height * 0.2, 0, 0, Math.PI * 2);
+        context.fill();
+      } else {
+        // Small scattered clouds
+        context.beginPath();
+        context.ellipse(centerX, centerY, cloud.width * 0.2, cloud.height * 0.4, 0, 0, Math.PI * 2);
+        context.ellipse(centerX + cloud.width * 0.1, centerY, cloud.width * 0.15, cloud.height * 0.3, 0, 0, Math.PI * 2);
+        context.fill();
+      }
       
-      // Main horizontal cloud body - very stretched
-      context.ellipse(centerX, centerY, baseWidth * 0.4, baseHeight * 0.25, 0, 0, Math.PI * 2);
-      context.ellipse(centerX - baseWidth * 0.3, centerY + baseHeight * 0.1, baseWidth * 0.35, baseHeight * 0.2, 0, 0, Math.PI * 2);
-      context.ellipse(centerX + baseWidth * 0.3, centerY - baseHeight * 0.05, baseWidth * 0.3, baseHeight * 0.18, 0, 0, Math.PI * 2);
-      
-      // Additional wispy extensions
-      context.ellipse(centerX - baseWidth * 0.5, centerY, baseWidth * 0.2, baseHeight * 0.15, 0, 0, Math.PI * 2);
-      context.ellipse(centerX + baseWidth * 0.45, centerY + baseHeight * 0.08, baseWidth * 0.25, baseHeight * 0.12, 0, 0, Math.PI * 2);
-      
-      // Very thin wispy parts
-      context.ellipse(centerX - baseWidth * 0.1, centerY - baseHeight * 0.2, baseWidth * 0.15, baseHeight * 0.08, 0, 0, Math.PI * 2);
-      context.ellipse(centerX + baseWidth * 0.2, centerY + baseHeight * 0.15, baseWidth * 0.18, baseHeight * 0.06, 0, 0, Math.PI * 2);
-      
-      context.fill();
       context.restore();
     };
     
     const animate = () => {
-      timeRef.current += 0.003;
+      timeRef.current += 0.002;
       
-      // Exact sky gradient to match the uploaded image
+      // Exact gradient to match the reference image
       const skyGradient = context.createLinearGradient(0, 0, 0, canvas.height);
       
-      // Sky colors matching the reference image exactly
-      skyGradient.addColorStop(0, '#4A90E2'); // Medium blue at top
-      skyGradient.addColorStop(0.3, '#6BB6FF'); // Brighter blue
-      skyGradient.addColorStop(0.6, '#87CEEB'); // Light sky blue
-      skyGradient.addColorStop(0.85, '#B8E0FF'); // Very light blue
-      skyGradient.addColorStop(1, '#E6F3FF'); // Almost white at bottom
+      // Colors from the reference image - deep blue at top transitioning to very light blue/white at bottom
+      skyGradient.addColorStop(0, '#1e6ba8');      // Deep blue at very top
+      skyGradient.addColorStop(0.15, '#2b7bc4');   // Medium blue
+      skyGradient.addColorStop(0.35, '#4a9de0');   // Lighter blue
+      skyGradient.addColorStop(0.55, '#7bb8ea');   // Much lighter blue
+      skyGradient.addColorStop(0.75, '#a8d1f0');   // Very light blue
+      skyGradient.addColorStop(0.9, '#d0e7f7');    // Almost white with hint of blue
+      skyGradient.addColorStop(1, '#e8f4fb');      // Very light blue-white at bottom
       
       context.fillStyle = skyGradient;
       context.fillRect(0, 0, canvas.width, canvas.height);
       
       // Update and draw clouds
       cloudsRef.current.forEach((cloud, index) => {
-        // Very slow cloud movement
-        cloud.x += cloud.speed * 0.5;
+        // Very slow natural movement
+        cloud.x += cloud.speed * 0.3;
         
         // Wrap around when cloud goes off screen
-        if (cloud.x - cloud.width * cloud.stretchX > canvas.width) {
-          cloud.x = -cloud.width * cloud.stretchX * 2;
-          cloud.y = Math.random() * canvas.height * 0.7 + canvas.height * 0.1;
+        if (cloud.x - cloud.width > canvas.width) {
+          cloud.x = -cloud.width * 1.5;
+          cloud.y = Math.random() * canvas.height * 0.6 + canvas.height * 0.1;
         }
         
-        // Very subtle opacity variation
-        const baseOpacity = 0.4 + Math.random() * 0.6;
-        cloud.opacity = baseOpacity + Math.sin(timeRef.current * 0.5 + index) * 0.05;
+        // Very subtle opacity variation for natural look
+        const baseOpacity = cloud.type === 'main' ? 0.9 : cloud.type === 'wispy' ? 0.6 : 0.4;
+        cloud.opacity = baseOpacity + Math.sin(timeRef.current * 0.3 + index * 0.5) * 0.1;
         
         drawCloud(cloud);
       });
