@@ -1,14 +1,22 @@
 
 import React from 'react';
 import Logo from './Logo';
-import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from "@/components/ui/navigation-menu";
+import { NavigationMenu, NavigationMenuList, NavigationMenuItem } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Header: React.FC = () => {
-  const handleLogin = () => {
-    // Handle login functionality
-    console.log('Login clicked');
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleAuthAction = async () => {
+    if (user) {
+      await signOut();
+      navigate('/auth');
+    } else {
+      navigate('/auth');
+    }
   };
 
   return (
@@ -20,10 +28,10 @@ const Header: React.FC = () => {
             <NavigationMenuList className="flex items-center space-x-6">
               <NavigationMenuItem>
                 <Button 
-                  onClick={handleLogin}
+                  onClick={handleAuthAction}
                   className="gold-btn text-sm"
                 >
-                  Log In
+                  {user ? 'Sign Out' : 'Log In'}
                 </Button>
               </NavigationMenuItem>
               <NavigationMenuItem>
