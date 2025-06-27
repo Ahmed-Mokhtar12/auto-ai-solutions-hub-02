@@ -48,7 +48,7 @@ const ServicesOverview: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-navy-800/20">
+    <section className="py-20 bg-navy-800/5">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <div className="flex items-center justify-center mb-4">
