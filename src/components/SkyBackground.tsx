@@ -19,22 +19,23 @@ const SkyBackground: React.FC = () => {
     };
     
     const drawSunRays = (sunX: number, sunY: number) => {
-      const numRays = 16;
-      const maxRayLength = Math.max(canvas.width, canvas.height) * 0.8;
+      const numRays = 24;
+      const maxRayLength = Math.max(canvas.width, canvas.height) * 1.2;
       
       context.save();
       
       // Create radial gradient for sun rays
       const rayGradient = context.createRadialGradient(sunX, sunY, 0, sunX, sunY, maxRayLength);
-      rayGradient.addColorStop(0, 'rgba(255, 255, 255, 0.6)');
-      rayGradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.4)');
-      rayGradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.2)');
+      rayGradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+      rayGradient.addColorStop(0.1, 'rgba(255, 255, 255, 0.6)');
+      rayGradient.addColorStop(0.3, 'rgba(255, 255, 255, 0.4)');
+      rayGradient.addColorStop(0.6, 'rgba(255, 255, 255, 0.2)');
       rayGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
       
       // Draw sun rays
       for (let i = 0; i < numRays; i++) {
-        const angle = (i * 2 * Math.PI) / numRays + timeRef.current * 0.05;
-        const rayWidth = 25 + Math.sin(angle * 2) * 8;
+        const angle = (i * 2 * Math.PI) / numRays + timeRef.current * 0.03;
+        const rayWidth = 35 + Math.sin(angle * 2) * 12;
         
         context.save();
         context.translate(sunX, sunY);
@@ -48,7 +49,7 @@ const SkyBackground: React.FC = () => {
         context.closePath();
         
         context.fillStyle = rayGradient;
-        context.globalAlpha = 0.4 + Math.sin(timeRef.current * 0.3 + i) * 0.15;
+        context.globalAlpha = 0.5 + Math.sin(timeRef.current * 0.2 + i) * 0.2;
         context.fill();
         
         context.restore();
@@ -61,50 +62,51 @@ const SkyBackground: React.FC = () => {
       context.save();
       
       // Sun outer glow
-      const sunGlow = context.createRadialGradient(sunX, sunY, 0, sunX, sunY, 100);
-      sunGlow.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
-      sunGlow.addColorStop(0.3, 'rgba(255, 255, 255, 0.6)');
-      sunGlow.addColorStop(0.6, 'rgba(255, 255, 255, 0.3)');
+      const sunGlow = context.createRadialGradient(sunX, sunY, 0, sunX, sunY, 120);
+      sunGlow.addColorStop(0, 'rgba(255, 255, 255, 1)');
+      sunGlow.addColorStop(0.2, 'rgba(255, 255, 255, 0.8)');
+      sunGlow.addColorStop(0.4, 'rgba(255, 255, 255, 0.5)');
+      sunGlow.addColorStop(0.7, 'rgba(255, 255, 255, 0.2)');
       sunGlow.addColorStop(1, 'rgba(255, 255, 255, 0)');
       
       context.fillStyle = sunGlow;
       context.beginPath();
-      context.arc(sunX, sunY, 100, 0, Math.PI * 2);
+      context.arc(sunX, sunY, 120, 0, Math.PI * 2);
       context.fill();
       
       // Sun core
-      const sunCore = context.createRadialGradient(sunX, sunY, 0, sunX, sunY, 30);
+      const sunCore = context.createRadialGradient(sunX, sunY, 0, sunX, sunY, 35);
       sunCore.addColorStop(0, '#ffffff');
-      sunCore.addColorStop(0.7, '#fffef8');
-      sunCore.addColorStop(1, 'rgba(255, 254, 248, 0.95)');
+      sunCore.addColorStop(0.6, '#ffffff');
+      sunCore.addColorStop(1, 'rgba(255, 255, 255, 0.98)');
       
       context.fillStyle = sunCore;
       context.beginPath();
-      context.arc(sunX, sunY, 30, 0, Math.PI * 2);
+      context.arc(sunX, sunY, 35, 0, Math.PI * 2);
       context.fill();
       
       context.restore();
     };
     
     const animate = () => {
-      timeRef.current += 0.003;
+      timeRef.current += 0.002;
       
-      // Create bright, vibrant sky gradient
+      // Create softer, more uniform sky gradient like the reference
       const skyGradient = context.createLinearGradient(0, 0, 0, canvas.height);
       
-      // Bright, saturated blue sky colors
-      skyGradient.addColorStop(0, '#1e90ff');      // Dodger blue at top
-      skyGradient.addColorStop(0.3, '#4169e1');    // Royal blue
-      skyGradient.addColorStop(0.6, '#6495ed');    // Cornflower blue
-      skyGradient.addColorStop(0.8, '#87ceeb');    // Sky blue
-      skyGradient.addColorStop(1, '#b0e0e6');      // Powder blue at horizon
+      // Softer, more uniform blue sky colors matching the reference
+      skyGradient.addColorStop(0, '#87CEEB');      // Sky blue at top
+      skyGradient.addColorStop(0.3, '#96D4E8');    // Slightly lighter
+      skyGradient.addColorStop(0.6, '#A8DBEC');    // Light sky blue
+      skyGradient.addColorStop(0.8, '#B8E2F0');    // Very light blue
+      skyGradient.addColorStop(1, '#C8E9F4');      // Lightest blue at horizon
       
       context.fillStyle = skyGradient;
       context.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Position sun higher up and more towards center-right, like in the reference
-      const sunX = canvas.width * 0.7;   // Slightly less to the right
-      const sunY = canvas.height * 0.15;  // Much higher up in the sky
+      // Position sun more centered horizontally and in upper portion like the reference
+      const sunX = canvas.width * 0.55;   // More centered horizontally
+      const sunY = canvas.height * 0.2;   // Upper portion of the sky
       
       // Draw sun rays first (behind the sun)
       drawSunRays(sunX, sunY);
