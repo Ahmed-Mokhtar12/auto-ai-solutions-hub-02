@@ -10,14 +10,20 @@ interface Cloud {
   layer: number;
   fluffiness: number;
   baseY: number;
-  density: number; // Cloud density for more realistic appearance
-  type: 'cumulus' | 'stratus' | 'cirrus'; // Different cloud types
+  density: number;
+  type: 'cumulus' | 'stratus' | 'cirrus';
+  windOffset: number;
+  verticalDrift: number;
+  time: number;
+  rotation: number;
+  shadowIntensity: number;
 }
 
 const SkyBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const cloudsRef = useRef<Cloud[]>([]);
   const frameRef = useRef<number>(0);
+  const timeRef = useRef<number>(0);
   
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -26,45 +32,47 @@ const SkyBackground: React.FC = () => {
     const context = canvas.getContext('2d');
     if (!context) return;
 
-    // Get random cloud type for natural variation
     const getCloudType = (): 'cumulus' | 'stratus' | 'cirrus' => {
       const rand = Math.random();
-      if (rand < 0.6) return 'cumulus'; // Most common
-      if (rand < 0.85) return 'stratus';
+      if (rand < 0.5) return 'cumulus';
+      if (rand < 0.8) return 'stratus';
       return 'cirrus';
     };
 
-    // Initialize clouds with natural properties
     const initClouds = () => {
       cloudsRef.current = [];
-      const cloudCount = 8; // Fewer clouds for more realistic sky
+      const cloudCount = 12;
       
       for (let i = 0; i < cloudCount; i++) {
         const cloudType = getCloudType();
-        const baseY = 20 + Math.random() * (canvas.height * 0.4); // Higher in sky
+        const layer = Math.floor(Math.random() * 4);
+        const baseY = 50 + (layer * 80) + Math.random() * 60;
         
         cloudsRef.current.push({
-          x: Math.random() * canvas.width * 1.8,
+          x: Math.random() * canvas.width * 2 - canvas.width * 0.5,
           y: baseY,
           baseY: baseY,
-          size: cloudType === 'cumulus' ? 80 + Math.random() * 140 : 
-                cloudType === 'stratus' ? 120 + Math.random() * 200 : 
-                60 + Math.random() * 100,
-          speed: 0.01 + Math.random() * 0.03, // Very slow, natural speed
-          opacity: cloudType === 'cumulus' ? 0.8 + Math.random() * 0.2 :
-                   cloudType === 'stratus' ? 0.6 + Math.random() * 0.3 :
-                   0.3 + Math.random() * 0.4,
-          layer: Math.floor(Math.random() * 3),
-          fluffiness: cloudType === 'cumulus' ? 0.8 + Math.random() * 0.2 :
-                      cloudType === 'stratus' ? 0.4 + Math.random() * 0.3 :
-                      0.6 + Math.random() * 0.3,
-          density: 0.7 + Math.random() * 0.3,
-          type: cloudType
+          size: cloudType === 'cumulus' ? 60 + Math.random() * 120 : 
+                cloudType === 'stratus' ? 100 + Math.random() * 180 : 
+                40 + Math.random() * 80,
+          speed: (0.1 + Math.random() * 0.3) * (1 - layer * 0.2),
+          opacity: Math.max(0.3, 0.9 - layer * 0.15),
+          layer: layer,
+          fluffiness: 0.7 + Math.random() * 0.3,
+          density: 0.6 + Math.random() * 0.4,
+          type: cloudType,
+          windOffset: Math.random() * Math.PI * 2,
+          verticalDrift: 0.5 + Math.random() * 1.5,
+          time: Math.random() * 1000,
+          rotation: (Math.random() - 0.5) * 0.1,
+          shadowIntensity: 0.2 + Math.random() * 0.3
         });
       }
+      
+      // Sort by layer for proper depth rendering
+      cloudsRef.current.sort((a, b) => b.layer - a.layer);
     };
     
-    // Set canvas to full screen
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -74,52 +82,71 @@ const SkyBackground: React.FC = () => {
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
     
-    // Draw realistic clouds based on type
-    const drawCloud = (cloud: Cloud, context: CanvasRenderingContext2D) => {
-      const { x, y, size, opacity, layer, fluffiness, density, type } = cloud;
+    const drawCloud = (cloud: Cloud, context: CanvasRenderingContext2D, globalTime: number) => {
+      const { x, y, size, opacity, layer, fluffiness, density, type, shadowIntensity } = cloud;
       
-      // Adjust properties for atmospheric perspective
-      const layerOpacity = opacity * (1 - layer * 0.12);
-      const layerSize = size * (1 - layer * 0.08);
+      // Atmospheric perspective
+      const distance = layer / 4;
+      const atmosphericOpacity = opacity * (1 - distance * 0.3);
+      const atmosphericSize = size * (1 - distance * 0.1);
+      const atmosphericContrast = 1 - distance * 0.4;
       
       context.save();
-      context.globalAlpha = layerOpacity;
+      context.globalAlpha = atmosphericOpacity;
+      
+      // Apply slight rotation for more natural look
+      context.translate(x, y);
+      context.rotate(cloud.rotation);
+      context.translate(-x, -y);
       
       if (type === 'cumulus') {
-        drawCumulusCloud(context, x, y, layerSize, fluffiness, density);
+        drawCumulusCloud(context, x, y, atmosphericSize, fluffiness, density, atmosphericContrast, shadowIntensity);
       } else if (type === 'stratus') {
-        drawStratusCloud(context, x, y, layerSize, fluffiness, density);
+        drawStratusCloud(context, x, y, atmosphericSize, fluffiness, density, atmosphericContrast);
       } else {
-        drawCirrusCloud(context, x, y, layerSize, fluffiness, density);
+        drawCirrusCloud(context, x, y, atmosphericSize, fluffiness, density, atmosphericContrast, globalTime + cloud.time);
       }
       
       context.restore();
     };
 
-    // Draw puffy cumulus clouds
-    const drawCumulusCloud = (context: CanvasRenderingContext2D, x: number, y: number, size: number, fluffiness: number, density: number) => {
-      // Natural cloud gradient
+    const drawCumulusCloud = (
+      context: CanvasRenderingContext2D, 
+      x: number, 
+      y: number, 
+      size: number, 
+      fluffiness: number, 
+      density: number,
+      contrast: number,
+      shadowIntensity: number
+    ) => {
+      // More natural cloud gradient with sun lighting
       const gradient = context.createRadialGradient(
-        x, y - size * 0.15, 0,
-        x, y + size * 0.1, size * 0.9
+        x - size * 0.2, y - size * 0.3, 0,
+        x, y, size * 0.8
       );
       
-      // More natural cloud colors - bright white on top, shadowed bottom
-      gradient.addColorStop(0, '#FFFFFF');
-      gradient.addColorStop(0.3, '#FAFAFA');
-      gradient.addColorStop(0.6, '#F0F0F0');
-      gradient.addColorStop(0.8, '#E8E8E8');
-      gradient.addColorStop(1, '#D0D0D0');
+      const highlight = `rgba(${255 * contrast}, ${255 * contrast}, ${255 * contrast}, 1)`;
+      const midtone = `rgba(${248 * contrast}, ${250 * contrast}, ${252 * contrast}, 0.95)`;
+      const shadow = `rgba(${220 * contrast}, ${225 * contrast}, ${235 * contrast}, 0.8)`;
+      const darkShadow = `rgba(${180 * contrast}, ${190 * contrast}, ${210 * contrast}, ${0.6 * shadowIntensity})`;
       
-      // Create irregular, natural cloud shape
+      gradient.addColorStop(0, highlight);
+      gradient.addColorStop(0.2, midtone);
+      gradient.addColorStop(0.6, shadow);
+      gradient.addColorStop(1, darkShadow);
+      
+      // Create more organic cloud shape
       const puffs = [
-        { offsetX: 0, offsetY: -size * 0.1, scale: 1.1 * fluffiness },
-        { offsetX: size * 0.35, offsetY: 0, scale: 0.9 * fluffiness },
-        { offsetX: -size * 0.3, offsetY: size * 0.05, scale: 0.95 * fluffiness },
-        { offsetX: size * 0.15, offsetY: -size * 0.2, scale: 0.8 * fluffiness },
-        { offsetX: -size * 0.2, offsetY: -size * 0.15, scale: 0.7 * fluffiness },
-        { offsetX: size * 0.4, offsetY: size * 0.15, scale: 0.6 * fluffiness },
-        { offsetX: -size * 0.35, offsetY: size * 0.2, scale: 0.65 * fluffiness },
+        { offsetX: 0, offsetY: -size * 0.15, scale: 1.2 * fluffiness },
+        { offsetX: size * 0.4, offsetY: -size * 0.05, scale: 1.0 * fluffiness },
+        { offsetX: -size * 0.35, offsetY: 0, scale: 1.1 * fluffiness },
+        { offsetX: size * 0.2, offsetY: -size * 0.25, scale: 0.9 * fluffiness },
+        { offsetX: -size * 0.25, offsetY: -size * 0.2, scale: 0.8 * fluffiness },
+        { offsetX: size * 0.45, offsetY: size * 0.1, scale: 0.7 * fluffiness },
+        { offsetX: -size * 0.4, offsetY: size * 0.15, scale: 0.75 * fluffiness },
+        { offsetX: size * 0.1, offsetY: size * 0.2, scale: 0.6 * fluffiness },
+        { offsetX: -size * 0.1, offsetY: size * 0.25, scale: 0.5 * fluffiness }
       ];
       
       context.fillStyle = gradient;
@@ -129,47 +156,58 @@ const SkyBackground: React.FC = () => {
         context.arc(
           x + puff.offsetX,
           y + puff.offsetY,
-          (size / 2.2) * puff.scale * density,
+          (size / 2.5) * puff.scale * density,
           0,
           Math.PI * 2
         );
         context.fill();
       });
 
-      // Add shadow to bottom of cloud
-      const shadowGradient = context.createLinearGradient(
-        x, y + size * 0.2,
-        x, y + size * 0.5
+      // Add realistic bottom shadow
+      const shadowGradient = context.createRadialGradient(
+        x, y + size * 0.3, 0,
+        x, y + size * 0.3, size * 0.6
       );
-      shadowGradient.addColorStop(0, 'rgba(180, 180, 180, 0.3)');
-      shadowGradient.addColorStop(1, 'rgba(160, 160, 160, 0.1)');
+      shadowGradient.addColorStop(0, `rgba(160, 170, 190, ${0.4 * shadowIntensity})`);
+      shadowGradient.addColorStop(0.7, `rgba(140, 150, 180, ${0.2 * shadowIntensity})`);
+      shadowGradient.addColorStop(1, 'rgba(140, 150, 180, 0)');
       
       context.fillStyle = shadowGradient;
       context.beginPath();
-      context.ellipse(x, y + size * 0.3, size * 0.7, size * 0.15, 0, 0, Math.PI * 2);
+      context.ellipse(x, y + size * 0.35, size * 0.8, size * 0.2, 0, 0, Math.PI * 2);
       context.fill();
     };
 
-    // Draw stretched stratus clouds
-    const drawStratusCloud = (context: CanvasRenderingContext2D, x: number, y: number, size: number, fluffiness: number, density: number) => {
+    const drawStratusCloud = (
+      context: CanvasRenderingContext2D, 
+      x: number, 
+      y: number, 
+      size: number, 
+      fluffiness: number, 
+      density: number,
+      contrast: number
+    ) => {
       const gradient = context.createLinearGradient(
-        x - size, y - size * 0.3,
-        x + size, y + size * 0.3
+        x - size * 0.8, y - size * 0.2,
+        x + size * 0.8, y + size * 0.3
       );
       
-      gradient.addColorStop(0, 'rgba(255, 255, 255, 0.1)');
-      gradient.addColorStop(0.2, '#F8F8F8');
-      gradient.addColorStop(0.5, '#F0F0F0');
-      gradient.addColorStop(0.8, '#E8E8E8');
-      gradient.addColorStop(1, 'rgba(220, 220, 220, 0.3)');
+      gradient.addColorStop(0, `rgba(${255 * contrast}, ${255 * contrast}, ${255 * contrast}, 0.1)`);
+      gradient.addColorStop(0.3, `rgba(${245 * contrast}, ${248 * contrast}, ${252 * contrast}, 0.8)`);
+      gradient.addColorStop(0.7, `rgba(${230 * contrast}, ${235 * contrast}, ${245 * contrast}, 0.6)`);
+      gradient.addColorStop(1, `rgba(${210 * contrast}, ${220 * contrast}, ${235 * contrast}, 0.2)`);
       
       context.fillStyle = gradient;
       
-      // Create stretched, layered appearance
-      for (let i = 0; i < 3; i++) {
-        const offsetY = (i - 1) * size * 0.1;
-        const scaleX = 1 + i * 0.1;
-        const scaleY = 0.6 - i * 0.1;
+      // Create layered, stretched appearance
+      for (let i = 0; i < 4; i++) {
+        const offsetY = (i - 1.5) * size * 0.08;
+        const scaleX = 1.2 + i * 0.1;
+        const scaleY = 0.4 - i * 0.05;
+        const layerOpacity = 0.8 - i * 0.15;
+        
+        context.save();
+        context.globalAlpha *= layerOpacity;
         
         context.beginPath();
         context.ellipse(
@@ -179,82 +217,107 @@ const SkyBackground: React.FC = () => {
           0, 0, Math.PI * 2
         );
         context.fill();
+        
+        context.restore();
       }
     };
 
-    // Draw wispy cirrus clouds
-    const drawCirrusCloud = (context: CanvasRenderingContext2D, x: number, y: number, size: number, fluffiness: number, density: number) => {
-      context.strokeStyle = `rgba(255, 255, 255, ${0.4 * density})`;
-      context.lineWidth = size * 0.02;
+    const drawCirrusCloud = (
+      context: CanvasRenderingContext2D, 
+      x: number, 
+      y: number, 
+      size: number, 
+      fluffiness: number, 
+      density: number,
+      contrast: number,
+      animationTime: number
+    ) => {
+      context.strokeStyle = `rgba(${255 * contrast}, ${255 * contrast}, ${255 * contrast}, ${0.6 * density})`;
+      context.lineWidth = Math.max(1, size * 0.015);
       context.lineCap = 'round';
       
-      // Create wispy, streaky patterns
-      for (let i = 0; i < 8; i++) {
-        const startX = x - size * 0.6 + Math.random() * size * 1.2;
-        const startY = y - size * 0.2 + Math.random() * size * 0.4;
-        const endX = startX + size * 0.8 + Math.random() * size * 0.4;
-        const endY = startY + (Math.random() - 0.5) * size * 0.3;
+      // Create wispy, animated streaks
+      for (let i = 0; i < 12; i++) {
+        const streak = i / 12;
+        const timeOffset = animationTime * 0.001 + streak * Math.PI;
+        
+        const startX = x - size * 0.7 + streak * size * 1.4;
+        const startY = y - size * 0.3 + Math.sin(timeOffset) * size * 0.1;
+        const endX = startX + size * 0.6 + Math.sin(timeOffset * 0.7) * size * 0.3;
+        const endY = startY + Math.cos(timeOffset * 0.5) * size * 0.2;
+        
+        const opacity = (0.3 + Math.sin(timeOffset * 0.3) * 0.2) * density * fluffiness;
+        context.strokeStyle = `rgba(${255 * contrast}, ${255 * contrast}, ${255 * contrast}, ${opacity})`;
         
         context.beginPath();
         context.moveTo(startX, startY);
         
-        // Create curved, natural streaks
-        const controlX = startX + (endX - startX) * 0.5 + (Math.random() - 0.5) * size * 0.3;
-        const controlY = startY + (endY - startY) * 0.5 + (Math.random() - 0.5) * size * 0.2;
+        const controlX = startX + (endX - startX) * 0.5 + Math.sin(timeOffset * 1.3) * size * 0.2;
+        const controlY = startY + (endY - startY) * 0.5 + Math.cos(timeOffset * 1.1) * size * 0.15;
         
         context.quadraticCurveTo(controlX, controlY, endX, endY);
         context.stroke();
       }
     };
     
-    // Animation loop
     const animate = () => {
-      // Create natural sky gradient - like real daytime sky
+      timeRef.current += 0.016;
+      
+      // Dynamic sky gradient based on time
       const skyGradient = context.createLinearGradient(0, 0, 0, canvas.height);
       
-      // Natural daytime sky colors
-      skyGradient.addColorStop(0, '#4A90E2');    // Deep blue at zenith
-      skyGradient.addColorStop(0.1, '#5BA3F5');  // Medium blue
-      skyGradient.addColorStop(0.25, '#7BB9F7'); // Lighter blue
-      skyGradient.addColorStop(0.4, '#96D0FA');  // Sky blue
-      skyGradient.addColorStop(0.6, '#B8E6FF');  // Very light blue
-      skyGradient.addColorStop(0.75, '#D4F1FF'); // Almost white blue
-      skyGradient.addColorStop(0.9, '#E8F7FF');  // Near horizon
-      skyGradient.addColorStop(1, '#F5FCFF');    // Horizon
+      const timeVariation = Math.sin(timeRef.current * 0.1) * 0.1;
+      const r1 = Math.floor(74 + timeVariation * 20);
+      const g1 = Math.floor(144 + timeVariation * 30);
+      const b1 = Math.floor(226 + timeVariation * 20);
+      
+      skyGradient.addColorStop(0, `rgb(${r1}, ${g1}, ${b1})`);
+      skyGradient.addColorStop(0.15, `rgb(${r1 + 20}, ${g1 + 30}, ${b1 + 15})`);
+      skyGradient.addColorStop(0.3, `rgb(${r1 + 45}, ${g1 + 45}, ${b1 + 10})`);
+      skyGradient.addColorStop(0.5, '#B8E6FF');
+      skyGradient.addColorStop(0.7, '#D4F1FF');
+      skyGradient.addColorStop(0.85, '#E8F7FF');
+      skyGradient.addColorStop(1, '#F5FCFF');
       
       context.fillStyle = skyGradient;
       context.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Add very subtle atmospheric haze near horizon
-      const hazeGradient = context.createLinearGradient(0, canvas.height * 0.75, 0, canvas.height);
+      // Atmospheric haze with subtle animation
+      const hazeGradient = context.createLinearGradient(0, canvas.height * 0.7, 0, canvas.height);
+      const hazeIntensity = 0.15 + Math.sin(timeRef.current * 0.05) * 0.05;
       hazeGradient.addColorStop(0, 'rgba(255, 255, 255, 0)');
-      hazeGradient.addColorStop(0.7, 'rgba(248, 252, 255, 0.15)');
-      hazeGradient.addColorStop(1, 'rgba(240, 248, 255, 0.25)');
+      hazeGradient.addColorStop(0.5, `rgba(248, 252, 255, ${hazeIntensity})`);
+      hazeGradient.addColorStop(1, `rgba(240, 248, 255, ${hazeIntensity + 0.1})`);
       
       context.fillStyle = hazeGradient;
       context.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Draw and animate clouds naturally
+      // Animate clouds with more natural movement
       cloudsRef.current.forEach(cloud => {
-        drawCloud(cloud, context);
+        cloud.time += 0.016;
         
-        // Very slow horizontal movement
-        cloud.x += cloud.speed;
+        // Wind effect with turbulence
+        const windForce = Math.sin(cloud.time * 0.02 + cloud.windOffset) * 0.5;
+        cloud.x += cloud.speed + windForce * 0.1;
         
-        // Extremely subtle vertical drift
-        const driftAmount = Math.sin((cloud.x * 0.0003) + (Date.now() * 0.00005)) * 0.5;
-        cloud.y = cloud.baseY + driftAmount;
+        // Natural vertical drift
+        const verticalWave = Math.sin(cloud.time * 0.01 + cloud.windOffset) * cloud.verticalDrift;
+        const turbulence = Math.sin(cloud.time * 0.03 + cloud.windOffset * 2) * 0.3;
+        cloud.y = cloud.baseY + verticalWave + turbulence;
         
-        // Reset cloud when off screen
-        if (cloud.x - cloud.size > canvas.width) {
-          cloud.x = -cloud.size - Math.random() * 300;
-          const newBaseY = 20 + Math.random() * (canvas.height * 0.4);
-          cloud.baseY = newBaseY;
-          cloud.y = newBaseY;
+        // Subtle size variation for breathing effect
+        const breathingEffect = 1 + Math.sin(cloud.time * 0.008) * 0.05;
+        const currentSize = cloud.size * breathingEffect;
+        
+        drawCloud({ ...cloud, size: currentSize }, context, timeRef.current);
+        
+        // Reset cloud position when off screen
+        if (cloud.x - cloud.size > canvas.width + 200) {
+          cloud.x = -cloud.size - Math.random() * 400;
+          cloud.baseY = 50 + (cloud.layer * 80) + Math.random() * 60;
+          cloud.y = cloud.baseY;
+          cloud.windOffset = Math.random() * Math.PI * 2;
           cloud.type = getCloudType();
-          cloud.fluffiness = cloud.type === 'cumulus' ? 0.8 + Math.random() * 0.2 :
-                            cloud.type === 'stratus' ? 0.4 + Math.random() * 0.3 :
-                            0.6 + Math.random() * 0.3;
         }
       });
       
