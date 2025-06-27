@@ -26,17 +26,17 @@ const SkyBackground: React.FC = () => {
     // Initialize clouds with more realistic properties
     const initClouds = () => {
       cloudsRef.current = [];
-      const cloudCount = 12; // More clouds for better coverage
+      const cloudCount = 12;
       
       for (let i = 0; i < cloudCount; i++) {
         cloudsRef.current.push({
-          x: Math.random() * canvas.width * 1.5, // Spread clouds wider
-          y: 50 + Math.random() * (canvas.height * 0.5), // Better vertical distribution
-          size: 60 + Math.random() * 120, // Larger size range
-          speed: 0.1 + Math.random() * 0.4, // Varied speeds
-          opacity: 0.4 + Math.random() * 0.5, // Higher opacity for visibility
+          x: Math.random() * canvas.width * 1.5,
+          y: 50 + Math.random() * (canvas.height * 0.5),
+          size: 60 + Math.random() * 120,
+          speed: 0.1 + Math.random() * 0.4,
+          opacity: 0.4 + Math.random() * 0.5,
           layer: Math.floor(Math.random() * 3),
-          fluffiness: 0.7 + Math.random() * 0.3 // Cloud shape variation
+          fluffiness: 0.7 + Math.random() * 0.3
         });
       }
     };
@@ -91,7 +91,7 @@ const SkyBackground: React.FC = () => {
       ];
       
       // Draw cloud base with soft edges
-      circles.forEach((circle, index) => {
+      circles.forEach((circle) => {
         const circleGradient = context.createRadialGradient(
           x + circle.offsetX, y + circle.offsetY, 0,
           x + circle.offsetX, y + circle.offsetY, (layerSize / 2) * circle.scale
@@ -136,13 +136,13 @@ const SkyBackground: React.FC = () => {
       const gradient = context.createLinearGradient(0, 0, 0, canvas.height);
       
       // More natural sky colors throughout the day
-      gradient.addColorStop(0, '#4A90E2'); // Deeper blue at top
-      gradient.addColorStop(0.15, '#5BA0F2'); // Rich blue
-      gradient.addColorStop(0.35, '#87CEEB'); // Sky blue
-      gradient.addColorStop(0.55, '#B8E6FF'); // Light blue
-      gradient.addColorStop(0.75, '#E0F4FF'); // Very light blue
-      gradient.addColorStop(0.9, '#F0F8FF'); // Near white
-      gradient.addColorStop(1, '#FAFCFF'); // Almost white at horizon
+      gradient.addColorStop(0, '#4A90E2');
+      gradient.addColorStop(0.15, '#5BA0F2');
+      gradient.addColorStop(0.35, '#87CEEB');
+      gradient.addColorStop(0.55, '#B8E6FF');
+      gradient.addColorStop(0.75, '#E0F4FF');
+      gradient.addColorStop(0.9, '#F0F8FF');
+      gradient.addColorStop(1, '#FAFCFF');
       
       context.fillStyle = gradient;
       context.fillRect(0, 0, canvas.width, canvas.height);
@@ -162,13 +162,13 @@ const SkyBackground: React.FC = () => {
         
         // Move cloud with slight vertical drift
         cloud.x += cloud.speed;
-        cloud.y += (Math.sin(cloud.x * 0.001) * 0.1); // Subtle vertical movement
+        cloud.y += (Math.sin(cloud.x * 0.001) * 0.1);
         
         // Reset cloud if it moves off screen
         if (cloud.x - cloud.size > canvas.width) {
           cloud.x = -cloud.size - Math.random() * 200;
           cloud.y = 50 + Math.random() * (canvas.height * 0.5);
-          cloud.fluffiness = 0.7 + Math.random() * 0.3; // Randomize shape again
+          cloud.fluffiness = 0.7 + Math.random() * 0.3;
         }
       });
       
@@ -178,7 +178,7 @@ const SkyBackground: React.FC = () => {
     animate();
     
     return () => {
-      window.removeEventListener('resize', resizeCanvas');
+      window.removeEventListener('resize', resizeCanvas);
       cancelAnimationFrame(frameRef.current);
     };
   }, []);
