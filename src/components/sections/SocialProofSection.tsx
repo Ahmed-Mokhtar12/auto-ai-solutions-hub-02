@@ -32,7 +32,7 @@ const SocialProofSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-navy-800/20 backdrop-blur-sm">
+    <section className="py-20 bg-navy-800/20">
       <div className="container mx-auto px-4">
         {/* Hospitality Specialization Header */}
         <div className="text-center mb-12">
@@ -49,7 +49,7 @@ const SocialProofSection: React.FC = () => {
           <HoverVisibleContainer
             autoHideDelay={2500}
             initialVisibility={false}
-            showIndicator={true}
+            showIndicator={false}
           >
             <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 max-w-2xl mx-auto">
               <p className="text-gold font-semibold">🏨 Hospitality-First Approach</p>
@@ -71,9 +71,9 @@ const SocialProofSection: React.FC = () => {
                 key={index}
                 autoHideDelay={2500}
                 initialVisibility={false}
-                showIndicator={true}
+                showIndicator={false}
               >
-                <div className="bg-navy-800/50 backdrop-blur-sm p-6 rounded-lg border border-navy-700 text-center">
+                <div className="bg-navy-800/50 p-6 rounded-lg border border-navy-700 text-center">
                   <div className="flex justify-center mb-4">
                     {stat.icon}
                   </div>

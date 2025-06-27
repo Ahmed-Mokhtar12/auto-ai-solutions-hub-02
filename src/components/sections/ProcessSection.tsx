@@ -48,7 +48,7 @@ const ProcessSection: React.FC = () => {
               key={index}
               autoHideDelay={2500}
               initialVisibility={false}
-              showIndicator={true}
+              showIndicator={false}
             >
               <div className="relative">
                 {/* Connector Line */}
@@ -57,7 +57,7 @@ const ProcessSection: React.FC = () => {
                        style={{ width: 'calc(100% - 3rem)' }} />
                 )}
                 
-                <div className="relative bg-navy-800/80 backdrop-blur-md p-8 rounded-xl border border-navy-700 
+                <div className="relative bg-navy-800/80 p-8 rounded-xl border border-navy-700 
                               hover:border-gold hover:shadow-gold/20 transition-all duration-300 hover:scale-105 h-full">
                   <div className="text-center mb-6">
                     <div className="inline-flex items-center justify-center w-20 h-20 bg-navy-700 rounded-full mb-4">

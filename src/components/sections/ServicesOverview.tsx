@@ -48,7 +48,7 @@ const ServicesOverview: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-navy-800/20 backdrop-blur-sm">
+    <section className="py-20 bg-navy-800/20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <div className="flex items-center justify-center mb-4">
@@ -71,11 +71,11 @@ const ServicesOverview: React.FC = () => {
               key={index}
               autoHideDelay={2500}
               initialVisibility={false}
-              showIndicator={true}
+              showIndicator={false}
             >
               <Link
                 to={service.link}
-                className="group bg-navy-800/80 backdrop-blur-md p-8 rounded-xl border border-navy-700 
+                className="group bg-navy-800/80 p-8 rounded-xl border border-navy-700 
                          hover:border-gold hover:shadow-gold/20 transition-all duration-300 hover:scale-105 block"
               >
                 <div className="flex items-center mb-4">
@@ -113,10 +113,10 @@ const ServicesOverview: React.FC = () => {
               key={index}
               autoHideDelay={2500}
               initialVisibility={false}
-              showIndicator={true}
+              showIndicator={false}
             >
               <div
-                className="bg-navy-800/50 backdrop-blur-sm p-6 rounded-lg border border-navy-700 
+                className="bg-navy-800/50 p-6 rounded-lg border border-navy-700 
                          hover:border-gold/50 transition-all duration-300"
               >
                 <div className="flex items-center mb-3">
