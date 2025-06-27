@@ -12,7 +12,7 @@ const SkyBackground: React.FC = () => {
     height: number;
     opacity: number;
     speed: number;
-    type: 'main' | 'wispy' | 'small';
+    segments: Array<{ x: number; y: number; width: number; height: number; }>;
   }>>([]);
   
   useEffect(() => {
@@ -31,43 +31,55 @@ const SkyBackground: React.FC = () => {
     const initializeClouds = () => {
       cloudsRef.current = [];
       
-      // Main large clouds (like in the image)
+      // Create thin horizontal streaky clouds like in the reference image
       for (let i = 0; i < 8; i++) {
-        cloudsRef.current.push({
-          x: Math.random() * canvas.width * 1.2,
-          y: Math.random() * canvas.height * 0.4 + canvas.height * 0.2,
-          width: 150 + Math.random() * 200,
-          height: 30 + Math.random() * 40,
-          opacity: 0.8 + Math.random() * 0.2,
-          speed: 0.05 + Math.random() * 0.1,
-          type: 'main'
-        });
-      }
-      
-      // Wispy thin clouds
-      for (let i = 0; i < 12; i++) {
-        cloudsRef.current.push({
-          x: Math.random() * canvas.width * 1.3,
+        const cloud = {
+          x: Math.random() * canvas.width * 1.5,
           y: Math.random() * canvas.height * 0.5 + canvas.height * 0.15,
-          width: 100 + Math.random() * 150,
-          height: 8 + Math.random() * 15,
-          opacity: 0.4 + Math.random() * 0.4,
-          speed: 0.03 + Math.random() * 0.07,
-          type: 'wispy'
-        });
+          width: 200 + Math.random() * 300,
+          height: 4 + Math.random() * 8,
+          opacity: 0.6 + Math.random() * 0.4,
+          speed: 0.02 + Math.random() * 0.03,
+          segments: []
+        };
+        
+        // Create multiple segments for each cloud to make them look streaky
+        const numSegments = 3 + Math.floor(Math.random() * 4);
+        for (let j = 0; j < numSegments; j++) {
+          cloud.segments.push({
+            x: j * (cloud.width / numSegments) + Math.random() * 20 - 10,
+            y: Math.random() * 6 - 3,
+            width: (cloud.width / numSegments) * (0.7 + Math.random() * 0.6),
+            height: cloud.height * (0.5 + Math.random() * 1)
+          });
+        }
+        
+        cloudsRef.current.push(cloud);
       }
       
-      // Small scattered clouds
-      for (let i = 0; i < 15; i++) {
-        cloudsRef.current.push({
-          x: Math.random() * canvas.width * 1.4,
-          y: Math.random() * canvas.height * 0.6 + canvas.height * 0.1,
-          width: 40 + Math.random() * 80,
-          height: 15 + Math.random() * 25,
-          opacity: 0.3 + Math.random() * 0.5,
-          speed: 0.02 + Math.random() * 0.05,
-          type: 'small'
-        });
+      // Add some very thin wispy clouds higher up
+      for (let i = 0; i < 6; i++) {
+        const cloud = {
+          x: Math.random() * canvas.width * 1.8,
+          y: Math.random() * canvas.height * 0.3 + canvas.height * 0.1,
+          width: 150 + Math.random() * 250,
+          height: 2 + Math.random() * 4,
+          opacity: 0.3 + Math.random() * 0.3,
+          speed: 0.01 + Math.random() * 0.02,
+          segments: []
+        };
+        
+        const numSegments = 2 + Math.floor(Math.random() * 3);
+        for (let j = 0; j < numSegments; j++) {
+          cloud.segments.push({
+            x: j * (cloud.width / numSegments) + Math.random() * 15 - 7,
+            y: Math.random() * 4 - 2,
+            width: (cloud.width / numSegments) * (0.8 + Math.random() * 0.4),
+            height: cloud.height * (0.6 + Math.random() * 0.8)
+          });
+        }
+        
+        cloudsRef.current.push(cloud);
       }
     };
     
@@ -76,66 +88,56 @@ const SkyBackground: React.FC = () => {
       context.globalAlpha = cloud.opacity;
       context.fillStyle = '#ffffff';
       
-      const centerX = cloud.x;
-      const centerY = cloud.y;
-      
-      if (cloud.type === 'main') {
-        // Large main clouds with realistic shape
+      // Draw each segment of the streaky cloud
+      cloud.segments.forEach(segment => {
         context.beginPath();
-        context.ellipse(centerX, centerY, cloud.width * 0.3, cloud.height * 0.6, 0, 0, Math.PI * 2);
-        context.ellipse(centerX - cloud.width * 0.2, centerY + cloud.height * 0.1, cloud.width * 0.25, cloud.height * 0.5, 0, 0, Math.PI * 2);
-        context.ellipse(centerX + cloud.width * 0.15, centerY - cloud.height * 0.1, cloud.width * 0.2, cloud.height * 0.4, 0, 0, Math.PI * 2);
-        context.ellipse(centerX - cloud.width * 0.1, centerY - cloud.height * 0.2, cloud.width * 0.15, cloud.height * 0.3, 0, 0, Math.PI * 2);
+        // Create thin horizontal streaks
+        context.ellipse(
+          cloud.x + segment.x, 
+          cloud.y + segment.y, 
+          segment.width * 0.5, 
+          segment.height * 0.3, 
+          0, 
+          0, 
+          Math.PI * 2
+        );
         context.fill();
-      } else if (cloud.type === 'wispy') {
-        // Very thin wispy clouds
-        context.beginPath();
-        context.ellipse(centerX, centerY, cloud.width * 0.4, cloud.height * 0.3, 0, 0, Math.PI * 2);
-        context.ellipse(centerX + cloud.width * 0.2, centerY, cloud.width * 0.3, cloud.height * 0.2, 0, 0, Math.PI * 2);
-        context.fill();
-      } else {
-        // Small scattered clouds
-        context.beginPath();
-        context.ellipse(centerX, centerY, cloud.width * 0.2, cloud.height * 0.4, 0, 0, Math.PI * 2);
-        context.ellipse(centerX + cloud.width * 0.1, centerY, cloud.width * 0.15, cloud.height * 0.3, 0, 0, Math.PI * 2);
-        context.fill();
-      }
+      });
       
       context.restore();
     };
     
     const animate = () => {
-      timeRef.current += 0.002;
+      timeRef.current += 0.001;
       
-      // Exact gradient to match the reference image
+      // Create the vibrant blue sky gradient matching the reference image
       const skyGradient = context.createLinearGradient(0, 0, 0, canvas.height);
       
-      // Colors from the reference image - deep blue at top transitioning to very light blue/white at bottom
-      skyGradient.addColorStop(0, '#1e6ba8');      // Deep blue at very top
-      skyGradient.addColorStop(0.15, '#2b7bc4');   // Medium blue
-      skyGradient.addColorStop(0.35, '#4a9de0');   // Lighter blue
-      skyGradient.addColorStop(0.55, '#7bb8ea');   // Much lighter blue
-      skyGradient.addColorStop(0.75, '#a8d1f0');   // Very light blue
-      skyGradient.addColorStop(0.9, '#d0e7f7');    // Almost white with hint of blue
-      skyGradient.addColorStop(1, '#e8f4fb');      // Very light blue-white at bottom
+      // Vibrant blue colors from the reference image
+      skyGradient.addColorStop(0, '#1B5AA0');      // Deep vibrant blue at top
+      skyGradient.addColorStop(0.2, '#2B6BB0');    // Rich blue
+      skyGradient.addColorStop(0.4, '#3B7BC0');    // Medium blue
+      skyGradient.addColorStop(0.6, '#4B8BD0');    // Lighter blue
+      skyGradient.addColorStop(0.8, '#5B9BE0');    // Even lighter blue
+      skyGradient.addColorStop(1, '#6BABF0');      // Light blue at horizon
       
       context.fillStyle = skyGradient;
       context.fillRect(0, 0, canvas.width, canvas.height);
       
       // Update and draw clouds
       cloudsRef.current.forEach((cloud, index) => {
-        // Very slow natural movement
-        cloud.x += cloud.speed * 0.3;
+        // Very slow movement
+        cloud.x += cloud.speed * 0.5;
         
         // Wrap around when cloud goes off screen
         if (cloud.x - cloud.width > canvas.width) {
-          cloud.x = -cloud.width * 1.5;
-          cloud.y = Math.random() * canvas.height * 0.6 + canvas.height * 0.1;
+          cloud.x = -cloud.width * 1.2;
+          cloud.y = Math.random() * canvas.height * 0.5 + canvas.height * 0.1;
         }
         
-        // Very subtle opacity variation for natural look
-        const baseOpacity = cloud.type === 'main' ? 0.9 : cloud.type === 'wispy' ? 0.6 : 0.4;
-        cloud.opacity = baseOpacity + Math.sin(timeRef.current * 0.3 + index * 0.5) * 0.1;
+        // Very subtle opacity variation
+        const baseOpacity = 0.7;
+        cloud.opacity = baseOpacity + Math.sin(timeRef.current * 0.2 + index * 0.3) * 0.1;
         
         drawCloud(cloud);
       });
