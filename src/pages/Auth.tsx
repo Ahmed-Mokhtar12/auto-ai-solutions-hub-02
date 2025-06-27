@@ -1,12 +1,12 @@
 
 import React from 'react';
 import AuthForm from '@/components/auth/AuthForm';
-import StarryBackground from '@/components/StarryBackground';
+import NightBackground from '@/components/NightBackground';
 
 const Auth: React.FC = () => {
   return (
     <div className="min-h-screen relative">
-      <StarryBackground />
+      <NightBackground />
       <div className="relative z-10">
         <AuthForm />
       </div>
