@@ -41,35 +41,34 @@ const SkyBackground: React.FC = () => {
 
     const initClouds = () => {
       cloudsRef.current = [];
-      const cloudCount = 12;
+      const cloudCount = 8; // Reduced for more realistic look
       
       for (let i = 0; i < cloudCount; i++) {
         const cloudType = getCloudType();
-        const layer = Math.floor(Math.random() * 4);
-        const baseY = 50 + (layer * 80) + Math.random() * 60;
+        const layer = Math.floor(Math.random() * 3);
+        const baseY = 80 + (layer * 120) + Math.random() * 80;
         
         cloudsRef.current.push({
           x: Math.random() * canvas.width * 2 - canvas.width * 0.5,
           y: baseY,
           baseY: baseY,
-          size: cloudType === 'cumulus' ? 60 + Math.random() * 120 : 
-                cloudType === 'stratus' ? 100 + Math.random() * 180 : 
-                40 + Math.random() * 80,
-          speed: (0.1 + Math.random() * 0.3) * (1 - layer * 0.2),
-          opacity: Math.max(0.3, 0.9 - layer * 0.15),
+          size: cloudType === 'cumulus' ? 80 + Math.random() * 140 : 
+                cloudType === 'stratus' ? 120 + Math.random() * 200 : 
+                60 + Math.random() * 100,
+          speed: (0.02 + Math.random() * 0.08) * (1 - layer * 0.3), // Much slower speed
+          opacity: Math.max(0.4, 0.8 - layer * 0.12),
           layer: layer,
-          fluffiness: 0.7 + Math.random() * 0.3,
-          density: 0.6 + Math.random() * 0.4,
+          fluffiness: 0.8 + Math.random() * 0.2,
+          density: 0.7 + Math.random() * 0.3,
           type: cloudType,
           windOffset: Math.random() * Math.PI * 2,
-          verticalDrift: 0.5 + Math.random() * 1.5,
+          verticalDrift: 0.2 + Math.random() * 0.6, // Slower vertical movement
           time: Math.random() * 1000,
-          rotation: (Math.random() - 0.5) * 0.1,
-          shadowIntensity: 0.2 + Math.random() * 0.3
+          rotation: (Math.random() - 0.5) * 0.05,
+          shadowIntensity: 0.15 + Math.random() * 0.25
         });
       }
       
-      // Sort by layer for proper depth rendering
       cloudsRef.current.sort((a, b) => b.layer - a.layer);
     };
     
@@ -85,16 +84,14 @@ const SkyBackground: React.FC = () => {
     const drawCloud = (cloud: Cloud, context: CanvasRenderingContext2D, globalTime: number) => {
       const { x, y, size, opacity, layer, fluffiness, density, type, shadowIntensity } = cloud;
       
-      // Atmospheric perspective
-      const distance = layer / 4;
-      const atmosphericOpacity = opacity * (1 - distance * 0.3);
-      const atmosphericSize = size * (1 - distance * 0.1);
-      const atmosphericContrast = 1 - distance * 0.4;
+      const distance = layer / 3;
+      const atmosphericOpacity = opacity * (1 - distance * 0.25);
+      const atmosphericSize = size * (1 - distance * 0.08);
+      const atmosphericContrast = 1 - distance * 0.3;
       
       context.save();
       context.globalAlpha = atmosphericOpacity;
       
-      // Apply slight rotation for more natural look
       context.translate(x, y);
       context.rotate(cloud.rotation);
       context.translate(-x, -y);
@@ -120,33 +117,30 @@ const SkyBackground: React.FC = () => {
       contrast: number,
       shadowIntensity: number
     ) => {
-      // More natural cloud gradient with sun lighting
+      // Lighter, more realistic cloud gradient
       const gradient = context.createRadialGradient(
-        x - size * 0.2, y - size * 0.3, 0,
-        x, y, size * 0.8
+        x - size * 0.3, y - size * 0.4, 0,
+        x, y, size * 0.9
       );
       
-      const highlight = `rgba(${255 * contrast}, ${255 * contrast}, ${255 * contrast}, 1)`;
-      const midtone = `rgba(${248 * contrast}, ${250 * contrast}, ${252 * contrast}, 0.95)`;
-      const shadow = `rgba(${220 * contrast}, ${225 * contrast}, ${235 * contrast}, 0.8)`;
-      const darkShadow = `rgba(${180 * contrast}, ${190 * contrast}, ${210 * contrast}, ${0.6 * shadowIntensity})`;
+      const highlight = `rgba(${Math.floor(255 * contrast)}, ${Math.floor(255 * contrast)}, ${Math.floor(255 * contrast)}, 0.95)`;
+      const midtone = `rgba(${Math.floor(250 * contrast)}, ${Math.floor(252 * contrast)}, ${Math.floor(255 * contrast)}, 0.9)`;
+      const shadow = `rgba(${Math.floor(235 * contrast)}, ${Math.floor(240 * contrast)}, ${Math.floor(250 * contrast)}, 0.7)`;
+      const darkShadow = `rgba(${Math.floor(200 * contrast)}, ${Math.floor(210 * contrast)}, ${Math.floor(230 * contrast)}, ${0.4 * shadowIntensity})`;
       
       gradient.addColorStop(0, highlight);
-      gradient.addColorStop(0.2, midtone);
-      gradient.addColorStop(0.6, shadow);
+      gradient.addColorStop(0.3, midtone);
+      gradient.addColorStop(0.7, shadow);
       gradient.addColorStop(1, darkShadow);
       
-      // Create more organic cloud shape
       const puffs = [
-        { offsetX: 0, offsetY: -size * 0.15, scale: 1.2 * fluffiness },
-        { offsetX: size * 0.4, offsetY: -size * 0.05, scale: 1.0 * fluffiness },
-        { offsetX: -size * 0.35, offsetY: 0, scale: 1.1 * fluffiness },
-        { offsetX: size * 0.2, offsetY: -size * 0.25, scale: 0.9 * fluffiness },
-        { offsetX: -size * 0.25, offsetY: -size * 0.2, scale: 0.8 * fluffiness },
-        { offsetX: size * 0.45, offsetY: size * 0.1, scale: 0.7 * fluffiness },
-        { offsetX: -size * 0.4, offsetY: size * 0.15, scale: 0.75 * fluffiness },
-        { offsetX: size * 0.1, offsetY: size * 0.2, scale: 0.6 * fluffiness },
-        { offsetX: -size * 0.1, offsetY: size * 0.25, scale: 0.5 * fluffiness }
+        { offsetX: 0, offsetY: -size * 0.12, scale: 1.1 * fluffiness },
+        { offsetX: size * 0.35, offsetY: -size * 0.08, scale: 0.9 * fluffiness },
+        { offsetX: -size * 0.3, offsetY: 0, scale: 1.0 * fluffiness },
+        { offsetX: size * 0.25, offsetY: -size * 0.2, scale: 0.8 * fluffiness },
+        { offsetX: -size * 0.2, offsetY: -size * 0.15, scale: 0.75 * fluffiness },
+        { offsetX: size * 0.4, offsetY: size * 0.08, scale: 0.65 * fluffiness },
+        { offsetX: -size * 0.35, offsetY: size * 0.12, scale: 0.7 * fluffiness }
       ];
       
       context.fillStyle = gradient;
@@ -156,25 +150,24 @@ const SkyBackground: React.FC = () => {
         context.arc(
           x + puff.offsetX,
           y + puff.offsetY,
-          (size / 2.5) * puff.scale * density,
+          (size / 2.8) * puff.scale * density,
           0,
           Math.PI * 2
         );
         context.fill();
       });
 
-      // Add realistic bottom shadow
+      // Subtle bottom shadow
       const shadowGradient = context.createRadialGradient(
-        x, y + size * 0.3, 0,
-        x, y + size * 0.3, size * 0.6
+        x, y + size * 0.25, 0,
+        x, y + size * 0.25, size * 0.5
       );
-      shadowGradient.addColorStop(0, `rgba(160, 170, 190, ${0.4 * shadowIntensity})`);
-      shadowGradient.addColorStop(0.7, `rgba(140, 150, 180, ${0.2 * shadowIntensity})`);
-      shadowGradient.addColorStop(1, 'rgba(140, 150, 180, 0)');
+      shadowGradient.addColorStop(0, `rgba(180, 190, 210, ${0.3 * shadowIntensity})`);
+      shadowGradient.addColorStop(1, 'rgba(180, 190, 210, 0)');
       
       context.fillStyle = shadowGradient;
       context.beginPath();
-      context.ellipse(x, y + size * 0.35, size * 0.8, size * 0.2, 0, 0, Math.PI * 2);
+      context.ellipse(x, y + size * 0.3, size * 0.7, size * 0.15, 0, 0, Math.PI * 2);
       context.fill();
     };
 
@@ -188,23 +181,22 @@ const SkyBackground: React.FC = () => {
       contrast: number
     ) => {
       const gradient = context.createLinearGradient(
-        x - size * 0.8, y - size * 0.2,
-        x + size * 0.8, y + size * 0.3
+        x - size * 0.9, y - size * 0.15,
+        x + size * 0.9, y + size * 0.25
       );
       
-      gradient.addColorStop(0, `rgba(${255 * contrast}, ${255 * contrast}, ${255 * contrast}, 0.1)`);
-      gradient.addColorStop(0.3, `rgba(${245 * contrast}, ${248 * contrast}, ${252 * contrast}, 0.8)`);
-      gradient.addColorStop(0.7, `rgba(${230 * contrast}, ${235 * contrast}, ${245 * contrast}, 0.6)`);
-      gradient.addColorStop(1, `rgba(${210 * contrast}, ${220 * contrast}, ${235 * contrast}, 0.2)`);
+      gradient.addColorStop(0, `rgba(${Math.floor(255 * contrast)}, ${Math.floor(255 * contrast)}, ${Math.floor(255 * contrast)}, 0.2)`);
+      gradient.addColorStop(0.4, `rgba(${Math.floor(248 * contrast)}, ${Math.floor(250 * contrast)}, ${Math.floor(255 * contrast)}, 0.7)`);
+      gradient.addColorStop(0.8, `rgba(${Math.floor(240 * contrast)}, ${Math.floor(245 * contrast)}, ${Math.floor(252 * contrast)}, 0.5)`);
+      gradient.addColorStop(1, `rgba(${Math.floor(230 * contrast)}, ${Math.floor(235 * contrast)}, ${Math.floor(248 * contrast)}, 0.3)`);
       
       context.fillStyle = gradient;
       
-      // Create layered, stretched appearance
-      for (let i = 0; i < 4; i++) {
-        const offsetY = (i - 1.5) * size * 0.08;
-        const scaleX = 1.2 + i * 0.1;
-        const scaleY = 0.4 - i * 0.05;
-        const layerOpacity = 0.8 - i * 0.15;
+      for (let i = 0; i < 3; i++) {
+        const offsetY = (i - 1) * size * 0.06;
+        const scaleX = 1.3 + i * 0.1;
+        const scaleY = 0.35 - i * 0.03;
+        const layerOpacity = 0.7 - i * 0.1;
         
         context.save();
         context.globalAlpha *= layerOpacity;
@@ -232,28 +224,27 @@ const SkyBackground: React.FC = () => {
       contrast: number,
       animationTime: number
     ) => {
-      context.strokeStyle = `rgba(${255 * contrast}, ${255 * contrast}, ${255 * contrast}, ${0.6 * density})`;
-      context.lineWidth = Math.max(1, size * 0.015);
+      context.strokeStyle = `rgba(${Math.floor(255 * contrast)}, ${Math.floor(255 * contrast)}, ${Math.floor(255 * contrast)}, ${0.5 * density})`;
+      context.lineWidth = Math.max(0.8, size * 0.012);
       context.lineCap = 'round';
       
-      // Create wispy, animated streaks
-      for (let i = 0; i < 12; i++) {
-        const streak = i / 12;
-        const timeOffset = animationTime * 0.001 + streak * Math.PI;
+      for (let i = 0; i < 8; i++) {
+        const streak = i / 8;
+        const timeOffset = animationTime * 0.0005 + streak * Math.PI; // Slower animation
         
-        const startX = x - size * 0.7 + streak * size * 1.4;
-        const startY = y - size * 0.3 + Math.sin(timeOffset) * size * 0.1;
-        const endX = startX + size * 0.6 + Math.sin(timeOffset * 0.7) * size * 0.3;
-        const endY = startY + Math.cos(timeOffset * 0.5) * size * 0.2;
+        const startX = x - size * 0.6 + streak * size * 1.2;
+        const startY = y - size * 0.25 + Math.sin(timeOffset) * size * 0.08;
+        const endX = startX + size * 0.5 + Math.sin(timeOffset * 0.6) * size * 0.25;
+        const endY = startY + Math.cos(timeOffset * 0.4) * size * 0.15;
         
-        const opacity = (0.3 + Math.sin(timeOffset * 0.3) * 0.2) * density * fluffiness;
-        context.strokeStyle = `rgba(${255 * contrast}, ${255 * contrast}, ${255 * contrast}, ${opacity})`;
+        const opacity = (0.4 + Math.sin(timeOffset * 0.2) * 0.15) * density * fluffiness;
+        context.strokeStyle = `rgba(${Math.floor(255 * contrast)}, ${Math.floor(255 * contrast)}, ${Math.floor(255 * contrast)}, ${opacity})`;
         
         context.beginPath();
         context.moveTo(startX, startY);
         
-        const controlX = startX + (endX - startX) * 0.5 + Math.sin(timeOffset * 1.3) * size * 0.2;
-        const controlY = startY + (endY - startY) * 0.5 + Math.cos(timeOffset * 1.1) * size * 0.15;
+        const controlX = startX + (endX - startX) * 0.5 + Math.sin(timeOffset * 1.1) * size * 0.15;
+        const controlY = startY + (endY - startY) * 0.5 + Math.cos(timeOffset * 0.9) * size * 0.1;
         
         context.quadraticCurveTo(controlX, controlY, endX, endY);
         context.stroke();
@@ -261,60 +252,59 @@ const SkyBackground: React.FC = () => {
     };
     
     const animate = () => {
-      timeRef.current += 0.016;
+      timeRef.current += 0.008; // Slower time progression
       
-      // Dynamic sky gradient based on time
+      // Light blue daytime sky gradient
       const skyGradient = context.createLinearGradient(0, 0, 0, canvas.height);
       
-      const timeVariation = Math.sin(timeRef.current * 0.1) * 0.1;
-      const r1 = Math.floor(74 + timeVariation * 20);
-      const g1 = Math.floor(144 + timeVariation * 30);
-      const b1 = Math.floor(226 + timeVariation * 20);
+      const timeVariation = Math.sin(timeRef.current * 0.05) * 0.05; // Slower variation
+      const r1 = Math.floor(135 + timeVariation * 15); // Light blue base
+      const g1 = Math.floor(206 + timeVariation * 20);
+      const b1 = Math.floor(250 + timeVariation * 5);
       
       skyGradient.addColorStop(0, `rgb(${r1}, ${g1}, ${b1})`);
-      skyGradient.addColorStop(0.15, `rgb(${r1 + 20}, ${g1 + 30}, ${b1 + 15})`);
-      skyGradient.addColorStop(0.3, `rgb(${r1 + 45}, ${g1 + 45}, ${b1 + 10})`);
-      skyGradient.addColorStop(0.5, '#B8E6FF');
-      skyGradient.addColorStop(0.7, '#D4F1FF');
-      skyGradient.addColorStop(0.85, '#E8F7FF');
-      skyGradient.addColorStop(1, '#F5FCFF');
+      skyGradient.addColorStop(0.2, `rgb(${r1 + 10}, ${g1 + 15}, ${b1})`);
+      skyGradient.addColorStop(0.4, `rgb(${r1 + 25}, ${g1 + 20}, ${b1})`);
+      skyGradient.addColorStop(0.6, '#E6F3FF');
+      skyGradient.addColorStop(0.8, '#F0F8FF');
+      skyGradient.addColorStop(1, '#F8FCFF');
       
       context.fillStyle = skyGradient;
       context.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Atmospheric haze with subtle animation
-      const hazeGradient = context.createLinearGradient(0, canvas.height * 0.7, 0, canvas.height);
-      const hazeIntensity = 0.15 + Math.sin(timeRef.current * 0.05) * 0.05;
+      // Subtle atmospheric haze
+      const hazeGradient = context.createLinearGradient(0, canvas.height * 0.8, 0, canvas.height);
+      const hazeIntensity = 0.08 + Math.sin(timeRef.current * 0.03) * 0.02;
       hazeGradient.addColorStop(0, 'rgba(255, 255, 255, 0)');
-      hazeGradient.addColorStop(0.5, `rgba(248, 252, 255, ${hazeIntensity})`);
-      hazeGradient.addColorStop(1, `rgba(240, 248, 255, ${hazeIntensity + 0.1})`);
+      hazeGradient.addColorStop(0.6, `rgba(250, 253, 255, ${hazeIntensity})`);
+      hazeGradient.addColorStop(1, `rgba(245, 250, 255, ${hazeIntensity + 0.05})`);
       
       context.fillStyle = hazeGradient;
       context.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Animate clouds with more natural movement
+      // Animate clouds with much slower movement
       cloudsRef.current.forEach(cloud => {
-        cloud.time += 0.016;
+        cloud.time += 0.008; // Slower time progression
         
-        // Wind effect with turbulence
-        const windForce = Math.sin(cloud.time * 0.02 + cloud.windOffset) * 0.5;
-        cloud.x += cloud.speed + windForce * 0.1;
+        // Gentle wind effect
+        const windForce = Math.sin(cloud.time * 0.01 + cloud.windOffset) * 0.2;
+        cloud.x += cloud.speed + windForce * 0.05;
         
-        // Natural vertical drift
-        const verticalWave = Math.sin(cloud.time * 0.01 + cloud.windOffset) * cloud.verticalDrift;
-        const turbulence = Math.sin(cloud.time * 0.03 + cloud.windOffset * 2) * 0.3;
+        // Subtle vertical drift
+        const verticalWave = Math.sin(cloud.time * 0.005 + cloud.windOffset) * cloud.verticalDrift;
+        const turbulence = Math.sin(cloud.time * 0.015 + cloud.windOffset * 2) * 0.15;
         cloud.y = cloud.baseY + verticalWave + turbulence;
         
-        // Subtle size variation for breathing effect
-        const breathingEffect = 1 + Math.sin(cloud.time * 0.008) * 0.05;
+        // Very subtle size variation
+        const breathingEffect = 1 + Math.sin(cloud.time * 0.004) * 0.02;
         const currentSize = cloud.size * breathingEffect;
         
         drawCloud({ ...cloud, size: currentSize }, context, timeRef.current);
         
         // Reset cloud position when off screen
-        if (cloud.x - cloud.size > canvas.width + 200) {
-          cloud.x = -cloud.size - Math.random() * 400;
-          cloud.baseY = 50 + (cloud.layer * 80) + Math.random() * 60;
+        if (cloud.x - cloud.size > canvas.width + 300) {
+          cloud.x = -cloud.size - Math.random() * 600;
+          cloud.baseY = 80 + (cloud.layer * 120) + Math.random() * 80;
           cloud.y = cloud.baseY;
           cloud.windOffset = Math.random() * Math.PI * 2;
           cloud.type = getCloudType();
