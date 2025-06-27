@@ -29,21 +29,31 @@ export const useChatState = () => {
     handleVisibility
   } = useVisibility();
   
-  const { isLoading, sendMessage: sendToApi } = useChatApi(
-    addUserMessage,
-    addSystemMessage,
-    removeMessage,
-    setMessageJustSent
-  );
+  const { isLoading, sendChatMessage, error } = useChatApi();
   
   const sendMessage = useCallback(async () => {
     if (!message.trim()) return;
     
-    await sendToApi(message);
+    try {
+      // Add user message first
+      addUserMessage(message);
+      setMessageJustSent(true);
+      
+      // Send to API and get response
+      const response = await sendChatMessage(message);
+      
+      // Add system response
+      addSystemMessage(response);
+    } catch (error) {
+      // Remove user message if API call failed
+      console.error('Failed to send message:', error);
+      // Add error message to chat
+      addSystemMessage('Sorry, I encountered an error. Please try again.');
+    }
     
     // Clear input
     setMessage('');
-  }, [message, sendToApi, setMessage]);
+  }, [message, sendChatMessage, addUserMessage, addSystemMessage, setMessageJustSent]);
 
   return {
     message,
