@@ -1,8 +1,27 @@
 import React, { useEffect, useRef } from 'react';
 
+interface Jet {
+  x: number;
+  y: number;
+  speed: number;
+  size: number;
+  opacity: number;
+  active: boolean;
+  angle: number;
+}
+
 const SkyBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const frameRef = useRef<number>(0);
+  const jetRef = useRef<Jet>({
+    x: -100,
+    y: 0,
+    speed: 1.5,
+    size: 1,
+    opacity: 0.8,
+    active: false,
+    angle: 0
+  });
   
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -44,6 +63,62 @@ const SkyBackground: React.FC = () => {
       
       context.restore();
     };
+    
+    const drawJet = (jet: Jet) => {
+      if (!jet.active) return;
+      
+      context.save();
+      context.translate(jet.x, jet.y);
+      context.rotate(jet.angle);
+      context.globalAlpha = jet.opacity;
+      
+      const jetLength = 20 * jet.size;
+      const jetWidth = 4 * jet.size;
+      
+      // Jet body (main fuselage)
+      context.fillStyle = '#C0C0C0';
+      context.fillRect(-jetLength/2, -jetWidth/2, jetLength, jetWidth);
+      
+      // Jet nose (pointed front)
+      context.fillStyle = '#A0A0A0';
+      context.beginPath();
+      context.moveTo(jetLength/2, 0);
+      context.lineTo(jetLength/2 - 6 * jet.size, -jetWidth/2);
+      context.lineTo(jetLength/2 - 6 * jet.size, jetWidth/2);
+      context.closePath();
+      context.fill();
+      
+      // Wings
+      context.fillStyle = '#B0B0B0';
+      context.fillRect(-jetLength/4, -jetWidth * 1.5, jetLength/2, jetWidth/2);
+      context.fillRect(-jetLength/4, jetWidth, jetLength/2, jetWidth/2);
+      
+      // Engine trail (subtle white trail)
+      context.fillStyle = 'rgba(255, 255, 255, 0.3)';
+      context.fillRect(-jetLength/2 - 8 * jet.size, -jetWidth/4, 8 * jet.size, jetWidth/2);
+      
+      context.restore();
+    };
+    
+    const triggerJet = () => {
+      if (!jetRef.current.active) {
+        const jet = jetRef.current;
+        jet.x = -100;
+        jet.y = canvas.height * (0.2 + Math.random() * 0.4); // Random height in upper-middle area
+        jet.speed = 1.2 + Math.random() * 0.8; // Random speed
+        jet.size = 0.8 + Math.random() * 0.4; // Random size
+        jet.opacity = 0.6 + Math.random() * 0.2; // Random opacity
+        jet.angle = (Math.random() - 0.5) * 0.2; // Slight angle variation
+        jet.active = true;
+      }
+    };
+    
+    // Trigger jet at random intervals
+    const jetInterval = setInterval(() => {
+      if (Math.random() > 0.7) { // 30% chance to trigger
+        triggerJet();
+      }
+    }, 8000 + Math.random() * 12000); // 8-20 seconds interval
     
     const animate = () => {
       // Create a sky gradient with varying blur effects
@@ -95,6 +170,19 @@ const SkyBackground: React.FC = () => {
       // Draw the sun (no rays)
       drawSun(sunX, sunY);
       
+      // Update and draw jet
+      const jet = jetRef.current;
+      if (jet.active) {
+        jet.x += jet.speed;
+        
+        // Reset jet when it goes off screen
+        if (jet.x > canvas.width + 100) {
+          jet.active = false;
+        }
+        
+        drawJet(jet);
+      }
+      
       frameRef.current = requestAnimationFrame(animate);
     };
     
@@ -104,6 +192,7 @@ const SkyBackground: React.FC = () => {
     
     return () => {
       window.removeEventListener('resize', resizeCanvas);
+      clearInterval(jetInterval);
       cancelAnimationFrame(frameRef.current);
     };
   }, []);
