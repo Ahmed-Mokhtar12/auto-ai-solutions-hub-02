@@ -3,22 +3,9 @@ import React from 'react';
 import Logo from './Logo';
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { Link } from 'react-router-dom';
 
 const Header: React.FC = () => {
-  const { user, signOut } = useAuth();
-  const navigate = useNavigate();
-
-  const handleAuthAction = async () => {
-    if (user) {
-      await signOut();
-      navigate('/auth');
-    } else {
-      navigate('/auth');
-    }
-  };
-
   return (
     <header className="w-full py-6">
       <div className="container mx-auto flex justify-between items-center">
@@ -27,11 +14,8 @@ const Header: React.FC = () => {
           <NavigationMenu>
             <NavigationMenuList className="flex items-center space-x-6">
               <NavigationMenuItem>
-                <Button 
-                  onClick={handleAuthAction}
-                  className="gold-btn text-sm"
-                >
-                  {user ? 'Sign Out' : 'Your AI Dashboard'}
+                <Button className="gold-btn text-sm">
+                  Your AI Dashboard
                 </Button>
               </NavigationMenuItem>
               <NavigationMenuItem>
