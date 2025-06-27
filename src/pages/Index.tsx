@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Header from "@/components/Header";
 import ChatBar from '@/components/ChatBar';
 import FooterContainer from '@/components/FooterContainer';
-import StarryBackground from '@/components/StarryBackground';
+import DynamicBackground from '@/components/DynamicBackground';
 import ThemeToggle from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import HoverVisibleContainer from '@/components/HoverVisibleContainer';
@@ -30,7 +30,7 @@ export default function Index() {
   
   return (
     <div className="min-h-screen flex flex-col relative">
-      <StarryBackground />
+      <DynamicBackground />
       
       {/* Theme Toggle - Top Left Corner */}
       <div className="absolute top-4 left-4 z-50">
