@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 
 const SkyBackground: React.FC = () => {
@@ -89,9 +88,9 @@ const SkyBackground: React.FC = () => {
       context.fillStyle = bottomBlur;
       context.fillRect(0, canvas.height * 0.6, canvas.width, canvas.height * 0.4);
       
-      // Position sun in top right corner
+      // Position sun at very top border with half visible
       const sunX = canvas.width * 0.85;   // 85% from left (right side)
-      const sunY = canvas.height * 0.15;  // 15% from top (upper portion)
+      const sunY = -12;  // Negative Y to position half the sun above screen edge
       
       // Draw the sun (no rays)
       drawSun(sunX, sunY);
