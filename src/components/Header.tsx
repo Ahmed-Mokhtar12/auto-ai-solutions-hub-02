@@ -31,7 +31,7 @@ const Header: React.FC = () => {
                   onClick={handleAuthAction}
                   className="gold-btn text-sm"
                 >
-                  {user ? 'Sign Out' : 'Log In'}
+                  {user ? 'Sign Out' : 'Your AI Dashboard'}
                 </Button>
               </NavigationMenuItem>
               <NavigationMenuItem>
