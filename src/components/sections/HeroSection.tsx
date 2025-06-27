@@ -23,7 +23,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onBookSession, onSolutionsCli
 
         <h1 className="text-4xl md:text-5xl font-bold mb-6">
           <span className="text-white">AI-Powered </span>
-          <span className="text-gold">Hotel Automation</span>
+          <span className="text-gold">Automation</span>
           <span className="text-white"> Solutions</span>
         </h1>
         

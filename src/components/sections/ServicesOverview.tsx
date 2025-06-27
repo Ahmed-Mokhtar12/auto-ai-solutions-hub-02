@@ -59,7 +59,7 @@ const ServicesOverview: React.FC = () => {
             From luxury hotels to boutique resorts, we enhance guest experiences while optimizing operations.
           </p>
           <div className="bg-gold/10 border border-gold/30 rounded-lg p-3 max-w-xl mx-auto">
-            <p className="text-gold font-medium">🏆 100% Hospitality Focused Since Day One</p>
+            <p className="text-gold font-medium">🏆 100% Hospitality Focused</p>
           </div>
         </div>
 
