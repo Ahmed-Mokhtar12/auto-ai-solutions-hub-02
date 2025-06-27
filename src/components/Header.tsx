@@ -19,9 +19,9 @@ const Header: React.FC = () => {
                 </Button>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link to="/services" className="text-sm text-gold hover:text-gold/80 transition-colors">
+                <span className="text-sm text-gold cursor-default">
                   Services
-                </Link>
+                </span>
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <Link to="/security" className="text-sm text-gold hover:text-gold/80 transition-colors">
