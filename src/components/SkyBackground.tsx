@@ -78,7 +78,7 @@ const SkyBackground: React.FC = () => {
       middleBlur.addColorStop(1, 'rgba(123, 184, 247, 0)');
       
       context.fillStyle = middleBlur;
-      context.fillRect(0, canvas.height * 0.3, canvas.width, canvas.height * 0.4);
+      context.fillRect(0, canvas.width * 0.3, canvas.width, canvas.height * 0.4);
       
       // Bottom blur area
       const bottomBlur = context.createRadialGradient(canvas.width * 0.7, canvas.height, 0, canvas.width / 2, canvas.height * 0.8, canvas.width);
@@ -89,9 +89,9 @@ const SkyBackground: React.FC = () => {
       context.fillStyle = bottomBlur;
       context.fillRect(0, canvas.height * 0.6, canvas.width, canvas.height * 0.4);
       
-      // Position sun more centered horizontally and in upper portion
-      const sunX = canvas.width * 0.5;   // Centered horizontally
-      const sunY = canvas.height * 0.2;   // Upper portion of the sky
+      // Position sun in top right corner
+      const sunX = canvas.width * 0.85;   // 85% from left (right side)
+      const sunY = canvas.height * 0.15;  // 15% from top (upper portion)
       
       // Draw the sun (no rays)
       drawSun(sunX, sunY);
