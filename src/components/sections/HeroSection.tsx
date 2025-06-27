@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import HoverVisibleContainer from '@/components/HoverVisibleContainer';
+import { Hotel } from 'lucide-react';
 
 interface HeroSectionProps {
   onBookSession: () => void;
@@ -12,31 +13,39 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onBookSession, onSolutionsCli
   return (
     <section className="container mx-auto px-4 py-20 text-center">
       <div className="max-w-4xl mx-auto">
+        {/* Hospitality Badge */}
+        <div className="flex items-center justify-center mb-6">
+          <div className="bg-gold/10 border border-gold/30 rounded-full px-6 py-2 flex items-center">
+            <Hotel className="h-5 w-5 text-gold mr-2" />
+            <span className="text-gold font-semibold text-sm">Hospitality AI Specialists</span>
+          </div>
+        </div>
+
         <h1 className="text-4xl md:text-5xl font-bold mb-6">
           <span className="text-white">AI-Powered </span>
-          <span className="text-gold">Automation</span>
+          <span className="text-gold">Hotel Automation</span>
           <span className="text-white"> Solutions</span>
         </h1>
         
         <p className="text-xl text-white mb-8 max-w-3xl mx-auto opacity-90 font-light leading-relaxed">
-          Transform your business operations with cutting-edge AI workflows. 
-          We deliver intelligent automation solutions that work 24/7 to enhance productivity, 
-          reduce costs, and accelerate growth.
+          Transform your hotel operations with cutting-edge AI workflows designed specifically for hospitality. 
+          We deliver intelligent automation solutions that work 24/7 to enhance guest experiences, 
+          reduce operational costs, and boost your hotel's reputation.
         </p>
         
         {/* Key Benefits */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
           <div className="bg-navy-800/50 backdrop-blur-sm p-6 rounded-lg border border-navy-700">
-            <h3 className="text-gold font-semibold mb-2">24/7 Operation</h3>
-            <p className="text-white text-sm">AI solutions that never sleep, ensuring continuous productivity</p>
+            <h3 className="text-gold font-semibold mb-2">24/7 Guest Service</h3>
+            <p className="text-white text-sm">AI concierge that never sleeps, ensuring guests get instant assistance</p>
           </div>
           <div className="bg-navy-800/50 backdrop-blur-sm p-6 rounded-lg border border-navy-700">
-            <h3 className="text-gold font-semibold mb-2">Cost Reduction</h3>
-            <p className="text-white text-sm">Reduce operational costs by up to 60% with intelligent automation</p>
+            <h3 className="text-gold font-semibold mb-2">70% Cost Reduction</h3>
+            <p className="text-white text-sm">Reduce hospitality operational costs while improving service quality</p>
           </div>
           <div className="bg-navy-800/50 backdrop-blur-sm p-6 rounded-lg border border-navy-700">
-            <h3 className="text-gold font-semibold mb-2">Scalable Solutions</h3>
-            <p className="text-white text-sm">Grow your business without proportional increase in resources</p>
+            <h3 className="text-gold font-semibold mb-2">Guest Satisfaction+</h3>
+            <p className="text-white text-sm">Boost guest satisfaction scores with personalized, instant service</p>
           </div>
         </div>
         
@@ -49,21 +58,21 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onBookSession, onSolutionsCli
           >
             <div className="bg-navy-800 p-6 rounded-xl shadow-lg border border-navy-700 w-full
                            hover:border-gold hover:shadow-gold/20 transition-all duration-300 hover:scale-105">
-              <h2 className="text-xl font-semibold text-gold mb-3">Free Consultation</h2>
+              <h2 className="text-xl font-semibold text-gold mb-3">Free Hotel AI Consultation</h2>
               <p className="text-white mb-4 text-sm leading-relaxed">
-                Book a free 30-minute session with our AI experts. We'll analyze your current processes 
-                and show you exactly how AI can transform your business operations.
+                Book a free 30-minute session with our hospitality AI experts. We'll analyze your hotel operations 
+                and show you exactly how AI can transform your guest experience and reduce costs.
               </p>
               <div className="text-left mb-4">
                 <ul className="text-white text-xs space-y-1">
-                  <li>• Process Analysis & Recommendations</li>
-                  <li>• ROI Calculator & Timeline</li>
-                  <li>• Custom Solution Design</li>
-                  <li>• Implementation Roadmap</li>
+                  <li>• Hotel Operations Analysis</li>
+                  <li>• Guest Experience Enhancement Plan</li>
+                  <li>• ROI Calculator for Your Property</li>
+                  <li>• Custom Implementation Roadmap</li>
                 </ul>
               </div>
               <Button onClick={onBookSession} className="gold-btn w-full">
-                Book Your Free Session
+                Book Your Free Hotel Consultation
               </Button>
             </div>
           </HoverVisibleContainer>
@@ -78,21 +87,21 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onBookSession, onSolutionsCli
                          hover:border-gold hover:shadow-gold/20 transition-all duration-300 hover:scale-105"
               onClick={onSolutionsClick}
             >
-              <h2 className="text-xl font-semibold text-gold mb-3">Our Solutions</h2>
+              <h2 className="text-xl font-semibold text-gold mb-3">Hospitality AI Solutions</h2>
               <p className="text-white mb-4 text-sm leading-relaxed">
-                Explore our comprehensive AI automation services including Email Automation, 
-                WhatsApp Bots, Hotel Concierge AI, and custom enterprise solutions.
+                Explore our specialized hospitality AI services including WhatsApp Guest Assistant, 
+                AI Hotel Concierge, Restaurant Automation, and custom hotel management solutions.
               </p>
               <div className="text-left mb-4">
                 <ul className="text-white text-xs space-y-1">
-                  <li>• AI Agents & Intelligent Automation</li>
-                  <li>• Generative AI for Content & Insights</li>
-                  <li>• Responsible AI Development</li>
-                  <li>• Custom Enterprise Solutions</li>
+                  <li>• AI Hotel Concierge & Guest Services</li>
+                  <li>• WhatsApp Integration for Hotels</li>
+                  <li>• Restaurant & F&B Automation</li>
+                  <li>• Custom Hotel Management AI</li>
                 </ul>
               </div>
               <div className="text-gold text-sm font-medium">
-                Click to explore our services →
+                Explore hospitality solutions →
               </div>
             </div>
           </HoverVisibleContainer>
