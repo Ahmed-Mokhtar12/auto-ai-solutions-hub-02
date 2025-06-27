@@ -2,7 +2,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import HoverVisibleContainer from '@/components/HoverVisibleContainer';
-import { Hotel } from 'lucide-react';
 
 interface HeroSectionProps {
   onBookSession: () => void;
@@ -13,14 +12,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onBookSession, onSolutionsCli
   return (
     <section className="container mx-auto px-4 py-20 text-center">
       <div className="max-w-4xl mx-auto">
-        {/* Hospitality Badge */}
-        <div className="flex items-center justify-center mb-6">
-          <div className="bg-gold/10 border border-gold/30 rounded-full px-6 py-2 flex items-center">
-            <Hotel className="h-5 w-5 text-gold mr-2" />
-            <span className="text-gold font-semibold text-sm">Hospitality AI Specialists</span>
-          </div>
-        </div>
-
         <h1 className="text-4xl md:text-5xl font-bold mb-6">
           <span className="text-white">AI-Powered </span>
           <span className="text-gold">Automation</span>
@@ -35,15 +26,15 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onBookSession, onSolutionsCli
         
         {/* Key Benefits */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
-          <div className="bg-navy-800/50 backdrop-blur-sm p-6 rounded-lg border border-navy-700">
+          <div className="bg-navy-800/50 p-6 rounded-lg border border-navy-700">
             <h3 className="text-gold font-semibold mb-2">24/7 Guest Service</h3>
             <p className="text-white text-sm">AI concierge that never sleeps, ensuring guests get instant assistance</p>
           </div>
-          <div className="bg-navy-800/50 backdrop-blur-sm p-6 rounded-lg border border-navy-700">
+          <div className="bg-navy-800/50 p-6 rounded-lg border border-navy-700">
             <h3 className="text-gold font-semibold mb-2">70% Cost Reduction</h3>
             <p className="text-white text-sm">Reduce hospitality operational costs while improving service quality</p>
           </div>
-          <div className="bg-navy-800/50 backdrop-blur-sm p-6 rounded-lg border border-navy-700">
+          <div className="bg-navy-800/50 p-6 rounded-lg border border-navy-700">
             <h3 className="text-gold font-semibold mb-2">Guest Satisfaction+</h3>
             <p className="text-white text-sm">Boost guest satisfaction scores with personalized, instant service</p>
           </div>

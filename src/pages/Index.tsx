@@ -1,8 +1,10 @@
+
 import React, { useState } from 'react';
 import Header from "@/components/Header";
 import ChatBar from '@/components/ChatBar';
 import FooterContainer from '@/components/FooterContainer';
 import StarryBackground from '@/components/StarryBackground';
+import ThemeToggle from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import HoverVisibleContainer from '@/components/HoverVisibleContainer';
 import FloatingServiceBox from '@/components/FloatingServiceBox';
@@ -29,6 +31,12 @@ export default function Index() {
   return (
     <div className="min-h-screen flex flex-col relative">
       <StarryBackground />
+      
+      {/* Theme Toggle - Top Left Corner */}
+      <div className="absolute top-4 left-4 z-50">
+        <ThemeToggle />
+      </div>
+      
       <Header />
       
       {!showSolutions ? (
@@ -50,7 +58,7 @@ export default function Index() {
           <SocialProofSection />
           
           {/* Call-to-Action Section */}
-          <section className="py-20 bg-navy-800/30 backdrop-blur-sm">
+          <section className="py-20 bg-navy-800/30">
             <div className="container mx-auto px-4 text-center">
               <h2 className="text-3xl font-bold text-white mb-6">Ready to Transform Your Business?</h2>
               <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
