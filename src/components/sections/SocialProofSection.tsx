@@ -7,8 +7,8 @@ const SocialProofSection: React.FC = () => {
     {
       icon: <Hotel className="h-8 w-8 text-gold" />,
       number: "200+",
-      label: "Hotels Automated",
-      description: "Luxury hotels and resorts trust our AI solutions"
+      label: "Hotels AI Workflows",
+      description: "Ready for Luxury hotels and resorts, trust our AI solutions"
     },
     {
       icon: <Clock className="h-8 w-8 text-gold" />,
