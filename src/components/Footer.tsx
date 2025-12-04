@@ -14,8 +14,8 @@ const Footer: React.FC = () => {
           <div className="space-y-0.5">
             <div className="flex items-center gap-2">
               <Mail className="text-gold h-3.5 w-3.5" />
-              <a href="mailto:info@autoaihub.com" className="text-white text-xs hover:text-gold transition-colors">
-                info@autoaihub.com
+              <a href="mailto:Ai.Agent@DigitLab.ai" className="text-white text-xs hover:text-gold transition-colors">
+                Ai.Agent@DigitLab.ai
               </a>
             </div>
             
