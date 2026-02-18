@@ -8,24 +8,18 @@ interface ChatMessageItemProps {
 }
 
 const ThinkingDots: React.FC = () => (
-  <span className="inline-flex items-center gap-1">
-    <span className="text-xs mr-1" style={{ color: '#C8C8C9' }}>Thinking</span>
+  <span className="inline-flex items-center gap-1.5">
+    <span className="text-sm mr-0.5" style={{ color: '#C8C8C9' }}>Thinking</span>
     {[0, 1, 2].map((i) => (
       <span
         key={i}
-        className="inline-block w-1.5 h-1.5 rounded-full"
+        className="inline-block w-2 h-2 rounded-full"
         style={{
           backgroundColor: '#C8C8C9',
-          animation: `thinking-dot 1.2s ease-in-out ${i * 0.2}s infinite`,
+          animation: `thinking-dot 1.2s ease-in-out ${i * 0.25}s infinite`,
         }}
       />
     ))}
-    <style>{`
-      @keyframes thinking-dot {
-        0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; }
-        40% { transform: scale(1); opacity: 1; }
-      }
-    `}</style>
   </span>
 );
 
