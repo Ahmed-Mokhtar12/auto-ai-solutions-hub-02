@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
-import { validateChatMessage, sanitizeApiResponse } from '@/utils/inputSanitizer';
+import { validateChatMessage } from '@/utils/inputSanitizer';
+import { WEBHOOK_URL } from './constants';
 
 interface ChatApiHook {
   sendChatMessage: (message: string) => Promise<string>;
@@ -23,10 +24,7 @@ export const useChatApi = (): ChatApiHook => {
     setError(null);
 
     try {
-      // Note: This is a placeholder for actual API integration
-      // In production, you should replace this with your actual N8N webhook
-      // and implement proper rate limiting and authentication
-      const response = await fetch('/api/chat', {
+      const response = await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,15 +36,27 @@ export const useChatApi = (): ChatApiHook => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to send message');
+        throw new Error(`Webhook responded with status ${response.status}`);
+      }
+
+      // Guard against non-JSON responses (e.g. HTML error pages)
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        const text = await response.text();
+        if (text) return text;
+        throw new Error('Unexpected response format from webhook');
       }
 
       const data = await response.json();
-      
-      // Sanitize the response before returning
-      const sanitizedResponse = sanitizeApiResponse(data);
-      
-      return sanitizedResponse.reply || 'Sorry, I could not process your request at the moment.';
+
+      // Handle common N8N response shapes
+      const reply =
+        data?.reply ||
+        data?.output ||
+        data?.message ||
+        (typeof data === 'string' ? data : null);
+
+      return reply || 'Sorry, I could not process your request at the moment.';
     } catch (err: any) {
       const errorMessage = 'Unable to connect to chat service. Please try again later.';
       setError(errorMessage);
