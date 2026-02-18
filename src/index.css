@@ -108,3 +108,8 @@
     @apply bg-gold text-navy-900 font-medium py-2 px-6 rounded-md hover:opacity-90 transition-opacity;
   }
 }
+
+@keyframes thinking-dot {
+  0%, 80%, 100% { transform: scale(0.5); opacity: 0.2; }
+  40% { transform: scale(1.2); opacity: 1; }
+}
