@@ -1,38 +1,36 @@
 
-## Make the Footer Taller — ~10% of Screen Height
+## Reposition the Chat Bar Above the Footer
 
-### What's changing
+### The Problem
 
-The footer currently uses `py-3` (12px top/bottom padding) with small `text-xs` labels and tiny `w-8 h-8` icon buttons. This makes it look like a thin strip at the bottom.
+The chat bar (draggable input) uses a default Y position of `window.innerHeight - 120px`. The footer is now `h-[10vh]` fixed at the bottom. On a standard 1080px screen, 10vh = 108px, so the chat bar and footer overlap.
 
-The goal is to make it feel like a real footer — approximately 10% of the viewport height — so it becomes a substantial, visually prominent section of every page.
+### The Fix
 
----
+The default Y position needs to account for the footer height. The new formula should be:
 
-### Changes to `src/components/Footer.tsx`
+```
+y = window.innerHeight - (10vh in px) - chatBarHeight - gap
+  = window.innerHeight - (window.innerHeight * 0.1) - 50 - 16
+  = window.innerHeight * 0.9 - 66
+```
 
-1. **Height**: Set a fixed height using `h-[10vh]` on the footer element itself, so it always occupies exactly 10% of the screen regardless of device.
+This places the chat bar ~16px above the top edge of the footer.
 
-2. **Padding**: Replace `py-3` with taller padding (`py-5`) inside the container, and use `h-full` on the inner grid so content is vertically centred within the 10vh bar.
+### File to change
 
-3. **Text sizes**: Bump up from `text-xs` to `text-sm` for all labels (email, phone, copyright, legal links).
+**`src/hooks/draggable/index.ts`** — one line change:
 
-4. **Icon circle buttons**: Increase from `w-8 h-8` to `w-10 h-10` and icon size from `h-4 w-4` to `h-5 w-5` so they're easier to tap and more visually prominent.
+```ts
+// Before
+y: typeof window !== 'undefined' ? window.innerHeight - 120 : 400
 
-5. **Gap spacing**: Increase gaps between elements (`gap-4` instead of `gap-3`, `gap-2` between contact lines).
+// After
+y: typeof window !== 'undefined' ? window.innerHeight * 0.9 - 66 : 400
+```
 
-6. **Brand label**: Add a small `DigitLab.ai` or `AI-Powered Automation` label above the copyright line in the centre column for a polished look.
+- `window.innerHeight * 0.9` = bottom of the scrollable area (top edge of the 10vh footer)
+- `- 50` = height of the chat bar itself
+- `- 16` = a comfortable 16px gap between chat bar and footer top border
 
----
-
-### Changes to all pages (bottom padding)
-
-All pages currently have `pb-16` (64px) to offset the footer. With the footer now set to `10vh`, this needs to change to `pb-[10vh]` so content is never hidden behind the taller footer.
-
-Files to update:
-- `src/pages/Index.tsx`
-- `src/pages/AIAgents.tsx`
-- `src/pages/GenerativeAI.tsx`
-- `src/pages/ResponsibleAI.tsx`
-- `src/pages/Services.tsx`
-- `src/pages/PrivacyPolicy.tsx`
+This is a minimal, targeted fix — no other files need to change.
