@@ -1,45 +1,50 @@
 
-## Add Privacy Policy Page with info@digitlab.ai
+## Redesign the Footer — Always Visible, Fixed at the Bottom
 
-### Overview
+### What's changing
 
-Create a `/privacy-policy` route that opens when someone clicks "Privacy Policy" in the footer. It will inherit the current sky/night background (DynamicBackground), match the existing page style, contain the full policy content from your document, and use **info@digitlab.ai** as the contact email.
+The current footer uses a hide/show animation that causes it to disappear and reappear. This entire behaviour will be removed. Instead, the footer will be:
 
----
-
-### Files to create / modify
-
-**1. New file — `src/pages/PrivacyPolicy.tsx`**
-
-A page built with the same shell as `GenerativeAI.tsx`:
-- `DynamicBackground` — picks up the current theme (sky or night)
-- `Header` — same navigation bar as every other page
-- `ChatBar` — floating chat remains available
-- A scrollable glass card (`bg-navy-800/80 backdrop-blur-md rounded-2xl`) containing all 9 policy sections
-- Gold (`text-gold`) section headings, white body text — consistent with the rest of the site
-- "← Back to Home" button at the top linking to `/`
-
-Policy sections (from your uploaded document):
-1. Information We Collect
-2. How We Use Your Information
-3. Data Storage & Security
-4. Data Sharing
-5. Data Deletion (contact: **info@digitlab.ai**, within 7 business days)
-6. Cookies
-7. Children's Privacy
-8. Changes to This Policy
-9. Contact Information — **info@digitlab.ai**
+- Always visible — no hover trick, no fade in/out
+- Fixed to the bottom of every page — it stays in place as the user scrolls
+- Slightly taller and visually redesigned with a proper layout, gold accents, and a clean border
 
 ---
 
-**2. Modified — `src/App.tsx`**
+### Visual redesign
 
-- Import the new `PrivacyPolicy` page
-- Add `<Route path="/privacy-policy" element={<PrivacyPolicy />} />` alongside the existing routes
+The new footer will be a single horizontal bar fixed to the bottom of the screen with these design elements:
+
+- A thin gold top border (`border-t border-gold/30`) for a premium feel
+- A dark semi-transparent background (`bg-navy-900/95 backdrop-blur-md`) so the background (sky/night) subtly shows through
+- Three columns laid out in a row on desktop, stacked on mobile:
+  - **Left**: Email and Phone with gold icons
+  - **Centre**: Copyright line and Privacy Policy / Terms of Service links
+  - **Right**: Social media icons (Facebook, Instagram, LinkedIn, WhatsApp) in a row
+- Slightly more padding (`py-3`) for breathing room
 
 ---
 
-**3. Modified — `src/components/Footer.tsx`**
+### Files to change
 
-- Import React Router's `Link` component
-- Change the "Privacy Policy" anchor tag from `<a href="#">` to `<Link to="/privacy-policy">` so it navigates in-app without a full page reload
+**1. `src/components/Footer.tsx`**
+
+Full visual redesign:
+- Fixed positioning (`fixed bottom-0 left-0 right-0 z-40`)
+- `backdrop-blur-md bg-navy-900/95 border-t border-gold/30`
+- Three-column layout: contact info | legal links | social icons
+- Larger icons (`h-4 w-4`), readable text (`text-xs/text-sm`)
+
+**2. `src/components/FooterContainer.tsx`**
+
+Remove entirely — it will no longer be needed. The `Footer` component itself will be fixed-positioned and always visible.
+
+**3. `src/pages/Index.tsx`**
+
+- Replace `<FooterContainer />` with `<Footer />` (direct import)
+- Add `pb-16` (padding-bottom) to the main page wrapper so scrollable content is never hidden behind the fixed footer
+
+**4. All subpages** (`AIAgents.tsx`, `GenerativeAI.tsx`, `ResponsibleAI.tsx`, `Services.tsx`, `PrivacyPolicy.tsx`)
+
+- Import and render `<Footer />` directly (same fixed footer on every page)
+- Add `pb-16` to the main wrapper so content doesn't get clipped by the footer
