@@ -1,36 +1,54 @@
 
-## Reposition the Chat Bar Above the Footer
+## Add a Security Page at /security
 
-### The Problem
+### What's happening
 
-The chat bar (draggable input) uses a default Y position of `window.innerHeight - 120px`. The footer is now `h-[10vh]` fixed at the bottom. On a standard 1080px screen, 10vh = 108px, so the chat bar and footer overlap.
+The header already has a "Security" link pointing to `/security`, but the route and page don't exist yet — clicking it leads to the 404 page. The goal is to create a proper `/security` page matching the exact dark card style used by Privacy Policy and Terms of Service.
 
-### The Fix
+---
 
-The default Y position needs to account for the footer height. The new formula should be:
+### New file: `src/pages/Security.tsx`
 
-```
-y = window.innerHeight - (10vh in px) - chatBarHeight - gap
-  = window.innerHeight - (window.innerHeight * 0.1) - 50 - 16
-  = window.innerHeight * 0.9 - 66
-```
+Follows the identical structure to `PrivacyPolicy.tsx` and `TermsOfService.tsx`:
 
-This places the chat bar ~16px above the top edge of the footer.
+- `DynamicBackground` + `Header` + `ChatBar` + `Footer`
+- `pb-[10vh]` on the root div to clear the fixed footer
+- Gold "Back to Home" arrow link at the top
+- `bg-navy-800/80 backdrop-blur-md rounded-2xl p-8 border border-navy-700` card
+- `Section` component for each topic
+- Gold headings, white/70 body text, gold email links
 
-### File to change
+**Content sections** relevant to an AI automation company:
 
-**`src/hooks/draggable/index.ts`** — one line change:
+1. Our Security Commitment
+2. Data Encryption
+3. Access Control
+4. Infrastructure Security
+5. AI Model Security
+6. Incident Response
+7. Compliance
+8. Responsible Disclosure
+9. Contact
+
+---
+
+### Update `src/App.tsx`
+
+Add the import and route:
 
 ```ts
-// Before
-y: typeof window !== 'undefined' ? window.innerHeight - 120 : 400
-
-// After
-y: typeof window !== 'undefined' ? window.innerHeight * 0.9 - 66 : 400
+import Security from "./pages/Security";
+// ...
+<Route path="/security" element={<Security />} />
 ```
 
-- `window.innerHeight * 0.9` = bottom of the scrollable area (top edge of the 10vh footer)
-- `- 50` = height of the chat bar itself
-- `- 16` = a comfortable 16px gap between chat bar and footer top border
+The header link at `/security` is already wired up correctly — no changes needed to `Header.tsx`.
 
-This is a minimal, targeted fix — no other files need to change.
+---
+
+### Summary of files to change
+
+| File | Change |
+|---|---|
+| `src/pages/Security.tsx` | Create — new page with dark card style |
+| `src/App.tsx` | Add import + `<Route path="/security">` |
