@@ -34,7 +34,7 @@ const Services = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden pb-16">
+    <div className="min-h-screen flex flex-col relative overflow-hidden pb-[10vh]">
       <DynamicBackground />
       <Header />
       

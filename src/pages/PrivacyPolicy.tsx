@@ -16,7 +16,7 @@ const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title
 
 const PrivacyPolicy = () => {
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden pb-16">
+    <div className="min-h-screen flex flex-col relative overflow-hidden pb-[10vh]">
       <DynamicBackground />
       <Header />
 
