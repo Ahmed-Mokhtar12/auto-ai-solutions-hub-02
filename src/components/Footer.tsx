@@ -2,6 +2,7 @@
 import React from 'react';
 import { Mail, Phone, Facebook, Instagram, Linkedin, MessageSquare } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
+import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
   return (
@@ -53,7 +54,7 @@ const Footer: React.FC = () => {
         <Separator className="my-1 bg-navy-700" />
         
         <div className="flex flex-wrap justify-center gap-2 text-xs text-gray-400">
-          <a href="#" className="hover:text-gold transition-colors">Privacy Policy</a>
+          <Link to="/privacy-policy" className="hover:text-gold transition-colors">Privacy Policy</Link>
           <span>|</span>
           <a href="#" className="hover:text-gold transition-colors">Terms of Service</a>
         </div>
