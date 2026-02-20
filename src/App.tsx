@@ -11,6 +11,7 @@ import GenerativeAI from "./pages/GenerativeAI";
 import ResponsibleAI from "./pages/ResponsibleAI";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import Security from "./pages/Security";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
               <Route path="/responsible-ai" element={<ResponsibleAI />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/security" element={<Security />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
