@@ -5,10 +5,11 @@ import { ArrowLeft } from 'lucide-react';
 import Header from "@/components/Header";
 import ChatBar from '@/components/ChatBar';
 import DynamicBackground from '@/components/DynamicBackground';
+import Footer from '@/components/Footer';
 
 const ResponsibleAI = () => {
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden">
+    <div className="min-h-screen flex flex-col relative overflow-hidden pb-16">
       <DynamicBackground />
       <Header />
       
@@ -32,6 +33,7 @@ const ResponsibleAI = () => {
       </main>
       
       <ChatBar />
+      <Footer />
     </div>
   );
 };

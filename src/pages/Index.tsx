@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Header from "@/components/Header";
 import ChatBar from '@/components/ChatBar';
-import FooterContainer from '@/components/FooterContainer';
+import Footer from '@/components/Footer';
 import DynamicBackground from '@/components/DynamicBackground';
 import ThemeToggle from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
@@ -29,7 +29,7 @@ export default function Index() {
   };
   
   return (
-    <div className="min-h-screen flex flex-col relative">
+    <div className="min-h-screen flex flex-col relative pb-16">
       <DynamicBackground />
       
       {/* Theme Toggle - Top Left Corner */}
@@ -114,7 +114,7 @@ export default function Index() {
         </main>
       )}
       
-      {!showSolutions && <FooterContainer />}
+      <Footer />
       <ChatBar /> 
     </div>
   );
