@@ -5,6 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import Header from "@/components/Header";
 import ChatBar from '@/components/ChatBar';
 import DynamicBackground from '@/components/DynamicBackground';
+import Footer from '@/components/Footer';
 
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
   <div className="mb-8">
@@ -15,7 +16,7 @@ const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title
 
 const PrivacyPolicy = () => {
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden">
+    <div className="min-h-screen flex flex-col relative overflow-hidden pb-16">
       <DynamicBackground />
       <Header />
 
@@ -132,6 +133,7 @@ const PrivacyPolicy = () => {
       </main>
 
       <ChatBar />
+      <Footer />
     </div>
   );
 };
