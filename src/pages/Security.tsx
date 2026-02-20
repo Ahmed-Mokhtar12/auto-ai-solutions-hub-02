@@ -7,12 +7,12 @@ import ChatBar from '@/components/ChatBar';
 import DynamicBackground from '@/components/DynamicBackground';
 import Footer from '@/components/Footer';
 
-const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
-  <div className="mb-8">
+const Section: React.FC<{title: string;children: React.ReactNode;}> = ({ title, children }) =>
+<div className="mb-8">
     <h2 className="text-gold text-xl font-semibold mb-3">{title}</h2>
     <div className="text-white/90 leading-relaxed space-y-2">{children}</div>
-  </div>
-);
+  </div>;
+
 
 const Security = () => {
   return (
@@ -24,8 +24,8 @@ const Security = () => {
         <div className="w-full max-w-4xl">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-gold hover:text-gold/80 transition-colors mb-6 text-sm font-medium"
-          >
+            className="inline-flex items-center gap-2 text-gold hover:text-gold/80 transition-colors mb-6 text-sm font-medium">
+
             <ArrowLeft className="h-4 w-4" />
             Back to Home
           </Link>
@@ -108,8 +108,8 @@ const Security = () => {
                 Report security issues to:{' '}
                 <a
                   href="mailto:security@digitlab.ai"
-                  className="text-gold hover:text-gold/80 transition-colors font-medium"
-                >
+                  className="text-gold hover:text-gold/80 transition-colors font-medium">
+
                   security@digitlab.ai
                 </a>
               </p>
@@ -119,15 +119,15 @@ const Security = () => {
               <p>For any security-related questions or concerns, please reach out to our team:</p>
               <div className="mt-3 space-y-1">
                 <p><strong className="text-white">DigitLab.ai — Security Team</strong></p>
-                <p>
-                  General enquiries:{' '}
-                  <a
-                    href="mailto:info@digitlab.ai"
-                    className="text-gold hover:text-gold/80 transition-colors font-medium"
-                  >
-                    info@digitlab.ai
-                  </a>
-                </p>
+                
+
+
+
+
+
+
+
+
               </div>
             </Section>
 
@@ -140,8 +140,8 @@ const Security = () => {
 
       <ChatBar />
       <Footer />
-    </div>
-  );
+    </div>);
+
 };
 
 export default Security;
