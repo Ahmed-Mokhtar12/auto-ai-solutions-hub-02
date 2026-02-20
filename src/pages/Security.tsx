@@ -120,15 +120,6 @@ const Security = () => {
               <div className="mt-3 space-y-1">
                 <p><strong className="text-white">DigitLab.ai — Security Team</strong></p>
                 <p>
-                  Email:{' '}
-                  <a
-                    href="mailto:security@digitlab.ai"
-                    className="text-gold hover:text-gold/80 transition-colors font-medium"
-                  >
-                    security@digitlab.ai
-                  </a>
-                </p>
-                <p>
                   General enquiries:{' '}
                   <a
                     href="mailto:info@digitlab.ai"
