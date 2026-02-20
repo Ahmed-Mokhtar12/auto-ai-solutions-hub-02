@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useChatFocus } from '@/contexts/ChatFocusContext';
 import Header from "@/components/Header";
 import ChatBar from '@/components/ChatBar';
 import Footer from '@/components/Footer';
@@ -15,6 +16,7 @@ import SocialProofSection from '@/components/sections/SocialProofSection';
 
 export default function Index() {
   const [showSolutions, setShowSolutions] = useState(false);
+  const { isChatFocused } = useChatFocus();
   
   const handleBookSession = () => {
     window.open('https://calendly.com/ahmed-mokhtar12/30min?month=2025-06', '_blank');
@@ -41,7 +43,14 @@ export default function Index() {
       
       {!showSolutions ? (
         // Enhanced homepage content - now scrollable
-        <main className="flex-grow relative z-10">
+        <main
+          className="flex-grow relative z-10"
+          style={{
+            opacity: isChatFocused ? 0 : 1,
+            pointerEvents: isChatFocused ? 'none' : 'auto',
+            transition: isChatFocused ? 'opacity 0.5s ease' : 'opacity 0.7s ease',
+          }}
+        >
           {/* Hero Section */}
           <HeroSection 
             onBookSession={handleBookSession}

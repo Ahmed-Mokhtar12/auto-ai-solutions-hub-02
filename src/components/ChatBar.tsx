@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useChatState } from '@/hooks/chat'; 
 import { useDraggable } from '@/hooks/draggable';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useChatFocus } from '@/contexts/ChatFocusContext';
 import ChatMessages from './ChatMessages';
 import ChatInput from './chat/ChatInput';
 import SendButton from './chat/SendButton';
@@ -14,6 +15,7 @@ const ChatBar: React.FC = () => {
   const [isHovering, setIsHovering] = useState(false);
   const isMobile = useIsMobile();
   const { currentPlaceholder } = usePlaceholderRotation();
+  const { setIsChatFocused } = useChatFocus();
   
   const {
     message,
@@ -46,14 +48,13 @@ const ChatBar: React.FC = () => {
   // Handle send button click
   const handleSend = (e: React.MouseEvent) => {
     e.preventDefault();
-    e.stopPropagation(); // Prevent dragging when clicking button
+    e.stopPropagation();
     
-    // Only send if not currently loading a response
     if (!isLoading) {
       sendMessage();
+      setIsChatFocused(true); // Keep focus mode active when sending
     }
     
-    // Focus back on input
     if (messageInputRef.current) {
       messageInputRef.current.focus();
     }
@@ -63,9 +64,12 @@ const ChatBar: React.FC = () => {
   const handleHover = (hovering: boolean) => {
     setIsHovering(hovering);
     if (hovering) {
+      setIsChatFocused(true);
       setIsChatVisible(true);
       setIsUserInteracting(true);
-      setIsChatHistoryVisible(true); // Always show history on hover
+      setIsChatHistoryVisible(true);
+    } else {
+      setIsChatFocused(false);
     }
   };
   
@@ -74,12 +78,14 @@ const ChatBar: React.FC = () => {
     handleMouseEnter();
     setIsHovering(true);
     setIsUserInteracting(true);
-    setIsChatHistoryVisible(true); // Always show history on mouse enter
+    setIsChatFocused(true);
+    setIsChatHistoryVisible(true);
   };
   
   const handleChatMessagesMouseLeave = () => {
     handleMouseLeave();
     setIsHovering(false);
+    setIsChatFocused(false);
   };
   
   // Reset hover timeout to prevent chat from disappearing while user is interacting
@@ -106,15 +112,15 @@ const ChatBar: React.FC = () => {
     
     const handleFocus = () => {
       setIsUserInteracting(true);
-      setIsChatHistoryVisible(true); // Show history when input is focused
+      setIsChatFocused(true);
+      setIsChatHistoryVisible(true);
     };
     
     const handleBlur = () => {
-      // Don't immediately turn off interaction on blur
-      // as user might be clicking elsewhere in chat
       setTimeout(() => {
         if (!isHovering) {
           setIsUserInteracting(false);
+          setIsChatFocused(false);
         }
       }, 100);
     };
