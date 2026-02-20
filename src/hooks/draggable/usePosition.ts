@@ -10,16 +10,14 @@ export const usePosition = (elementRef: React.RefObject<HTMLElement>, initialPos
   useEffect(() => {
     const handleResize = () => {
       if (elementRef.current) {
-        const maxX = window.innerWidth - elementRef.current.offsetWidth;
+        const elWidth = elementRef.current.offsetWidth;
         const maxY = window.innerHeight - elementRef.current.offsetHeight;
-        
-        // Position chat bar above the footer
-        const newY = window.innerHeight - 120; // Position 120px from bottom, above footer
-        
-        setPosition(prev => ({
-          x: Math.max(0, Math.min(prev.x, maxX)),
+        const newY = window.innerHeight - 120;
+
+        setPosition({
+          x: (window.innerWidth / 2) - (elWidth / 2),
           y: Math.min(newY, maxY)
-        }));
+        });
       }
     };
     
@@ -30,9 +28,10 @@ export const usePosition = (elementRef: React.RefObject<HTMLElement>, initialPos
     const initializePosition = () => {
       setTimeout(() => {
         if (elementRef.current) {
-          // Position it centered horizontally, above footer
+        // Position it centered horizontally, above footer
+          const elWidth = elementRef.current.offsetWidth || (isMobile ? 350 : 400);
           setPosition({
-            x: (window.innerWidth / 2) - (isMobile ? 175 : 200), // Adjust for wider bar
+            x: (window.innerWidth / 2) - (elWidth / 2),
             y: window.innerHeight - 120 // ~120px above footer
           });
         }
