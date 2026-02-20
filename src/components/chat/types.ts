@@ -5,7 +5,7 @@ export interface ChatInputProps {
   isLoading: boolean;
   onSend: () => void;
   placeholderText: string;
-  inputRef: React.RefObject<HTMLInputElement>;
+  inputRef: React.RefObject<HTMLTextAreaElement>;
 }
 
 export interface SendButtonProps {

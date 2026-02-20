@@ -10,7 +10,7 @@ import ChatContainer from './chat/ChatContainer';
 import { usePlaceholderRotation } from './chat/PlaceholderManager';
 
 const ChatBar: React.FC = () => {
-  const messageInputRef = useRef<HTMLInputElement>(null);
+  const messageInputRef = useRef<HTMLTextAreaElement>(null);
   const [isHovering, setIsHovering] = useState(false);
   const isMobile = useIsMobile();
   const { currentPlaceholder } = usePlaceholderRotation();
