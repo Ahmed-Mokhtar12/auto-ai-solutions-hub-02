@@ -1,31 +1,45 @@
 
-## Fix Chat Bar Webhook Connection
+## Add Privacy Policy Page with info@digitlab.ai
 
-### What's broken
+### Overview
 
-There are two issues in the current code:
+Create a `/privacy-policy` route that opens when someone clicks "Privacy Policy" in the footer. It will inherit the current sky/night background (DynamicBackground), match the existing page style, contain the full policy content from your document, and use **info@digitlab.ai** as the contact email.
 
-1. **Wrong URL**: `src/hooks/chat/useChatApi.ts` calls `/api/chat` — a relative local path that doesn't exist. The real webhook URL defined in `constants.ts` is never imported or used.
-2. **Old URL in constants**: `constants.ts` still has the old webhook `https://n8n-2seasons-u38985.vm.elestio.app/webhook/Website` instead of your new production one.
+---
 
-### What will be fixed
+### Files to create / modify
 
-**File 1 — `src/hooks/chat/constants.ts`**
-- Update `WEBHOOK_URL` to: `https://n8n.srv1095066.hstgr.cloud/webhook/Website`
+**1. New file — `src/pages/PrivacyPolicy.tsx`**
 
-**File 2 — `src/hooks/chat/useChatApi.ts`**
-- Import `WEBHOOK_URL` from constants
-- Replace `fetch('/api/chat', ...)` with `fetch(WEBHOOK_URL, ...)`
-- Add a content-type check to handle cases where the webhook returns HTML instead of JSON (e.g. errors), preventing a cryptic crash
-- Handle multiple common N8N response formats: `{ reply }`, `{ output }`, `{ message }`, and plain text responses — so it works regardless of how N8N is configured to respond
+A page built with the same shell as `GenerativeAI.tsx`:
+- `DynamicBackground` — picks up the current theme (sky or night)
+- `Header` — same navigation bar as every other page
+- `ChatBar` — floating chat remains available
+- A scrollable glass card (`bg-navy-800/80 backdrop-blur-md rounded-2xl`) containing all 9 policy sections
+- Gold (`text-gold`) section headings, white body text — consistent with the rest of the site
+- "← Back to Home" button at the top linking to `/`
 
-### Technical details
+Policy sections (from your uploaded document):
+1. Information We Collect
+2. How We Use Your Information
+3. Data Storage & Security
+4. Data Sharing
+5. Data Deletion (contact: **info@digitlab.ai**, within 7 business days)
+6. Cookies
+7. Children's Privacy
+8. Changes to This Policy
+9. Contact Information — **info@digitlab.ai**
 
-```text
-Current (broken):                    Fixed:
-fetch('/api/chat', ...)    →    fetch('https://n8n.srv1095066.hstgr.cloud/webhook/Website', ...)
-                                with proper content-type validation
-                                and flexible response parsing
-```
+---
 
-No other files need to change — the routing, UI, and chat state management are all fine.
+**2. Modified — `src/App.tsx`**
+
+- Import the new `PrivacyPolicy` page
+- Add `<Route path="/privacy-policy" element={<PrivacyPolicy />} />` alongside the existing routes
+
+---
+
+**3. Modified — `src/components/Footer.tsx`**
+
+- Import React Router's `Link` component
+- Change the "Privacy Policy" anchor tag from `<a href="#">` to `<Link to="/privacy-policy">` so it navigates in-app without a full page reload
