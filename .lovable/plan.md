@@ -1,66 +1,82 @@
 
-## Chat Bar Redesign: Bigger Size + Expandable Input
+## Focus Mode — Hide Only Main Content During Chat (Keep Header, Footer & ThemeToggle)
 
-### What's Changing
+### What You Asked For
 
-The chat bar currently uses a fixed `height: 50px` with a single-line `<Input>` (text input). The goal is to:
-1. Make the chat bar visibly larger and more prominent.
-2. Replace the single-line `<input>` with an auto-expanding `<textarea>` that grows as the user types, up to a defined max height, then scrolls.
+When the user hovers over or interacts with the chat bar, only the **middle page content** (Hero section, Services, Process, Social Proof, CTA) fades away. The **Header**, **Footer**, and **ThemeToggle** stay fully visible at all times. When the user moves away from the chat, the content smoothly fades back in.
 
 ---
 
-### Files to Modify
+### The Approach
 
-**1. `src/components/chat/ChatInput.tsx`**
-- Replace the `<Input>` (single-line) with a `<textarea>` element.
-- Add an `onChange` handler that auto-resizes the textarea by resetting `height` to `auto` then setting it to `scrollHeight`.
-- Set `rows={1}` as the base, with `min-height` matching the new bar height (~60px inner), and `max-height` of ~120px before scrolling kicks in.
-- Update the `inputRef` type from `React.RefObject<HTMLInputElement>` to `React.RefObject<HTMLTextAreaElement>`.
-- Keep `Enter` to send (with `Shift+Enter` for a real newline).
-
-**2. `src/components/chat/types.ts`**
-- Update `ChatInputProps.inputRef` type from `React.RefObject<HTMLInputElement>` to `React.RefObject<HTMLTextAreaElement>`.
-
-**3. `src/components/chat/ChatContainer.tsx`**
-- Change fixed `height: '50px'` to `minHeight: '68px'` and remove the height cap so it can grow.
-- Add `alignItems: 'flex-end'` so the send button stays pinned to the bottom as the textarea expands.
-- Add `flexWrap: 'nowrap'` and adjust padding slightly for the bigger look.
-
-**4. `src/components/ChatBar.tsx`**
-- Update `messageInputRef` type from `useRef<HTMLInputElement>` to `useRef<HTMLTextAreaElement>`.
-
-**5. `src/hooks/draggable/index.ts`**
-- Update `elementSize.height` from `50` to `68` to match the new minimum bar height for drag boundary calculations.
-
-**6. `src/hooks/draggable/usePosition.ts`**
-- Update the hardcoded `y: window.innerHeight - 120` to `window.innerHeight - 130` to account for the taller bar.
+A shared React Context (`ChatFocusContext`) will hold a single boolean `isChatFocused`. `ChatBar` sets it to `true` on hover/interaction and `false` (with a short delay) when the user leaves. `Index.tsx` reads it and applies a CSS fade transition **only on the `<main>` element**, leaving Header, Footer, and ThemeToggle completely untouched.
 
 ---
 
-### How the Expansion Works
+### Files to Create / Modify
+
+**1. NEW: `src/contexts/ChatFocusContext.tsx`**
+- Creates a React context exposing:
+  - `isChatFocused: boolean`
+  - `setIsChatFocused: (val: boolean) => void`
+- Exports `ChatFocusProvider` wrapper and `useChatFocus` hook.
+
+**2. `src/App.tsx`**
+- Wrap the app with `<ChatFocusProvider>` so both `Index.tsx` and `ChatBar.tsx` can access the same focus state.
+
+**3. `src/components/ChatBar.tsx`**
+- Import `useChatFocus`.
+- Call `setIsChatFocused(true)` when:
+  - User hovers over the chat bar (`handleHover` is called with `true`)
+  - User hovers over the chat messages window (`handleChatMessagesMouseEnter`)
+  - Input receives focus (`handleFocus`)
+  - A message is sent
+- Call `setIsChatFocused(false)` (with an ~800ms delay) when:
+  - User's mouse leaves the chat bar (`handleChatMessagesMouseLeave` / `handleHover` with `false`)
+  - Input loses focus (and user is not hovering)
+
+**4. `src/pages/Index.tsx`**
+- Import `useChatFocus`.
+- Apply fade CSS **only to the `<main>` element** (the content between Header and Footer):
+  ```
+  style={{
+    opacity: isChatFocused ? 0 : 1,
+    pointerEvents: isChatFocused ? 'none' : 'auto',
+    transition: 'opacity 0.5s ease'
+  }}
+  ```
+- Header, Footer, ThemeToggle, DynamicBackground, and ChatBar are **not wrapped** — they stay visible always.
+
+---
+
+### Visual Behavior
 
 ```text
-User types short text:
-┌─────────────────────────────────┐  ← height: 68px (min)
-│  Type your message...      [➤]  │
-└─────────────────────────────────┘
+Normal state:
+┌──────────────────────────────────────────┐
+│  [ThemeToggle]  [Header + Nav]           │  ← always visible
+├──────────────────────────────────────────┤
+│  Hero Title, CTA buttons                 │
+│  Services / Process / Social Proof / CTA │  ← fades out
+├──────────────────────────────────────────┤
+│  [Footer]                                │  ← always visible
+│            [Chat Bar]                    │  ← always visible
+└──────────────────────────────────────────┘
 
-User types a long message:
-┌─────────────────────────────────┐
-│  This is a very long message    │  ← textarea grows
-│  that wraps to a second line    │    up to ~120px
-│  and even a third line...  [➤]  │
-└─────────────────────────────────┘
-
-Beyond ~120px → textarea scrolls internally
+Focus mode (user hovers/types in chat):
+┌──────────────────────────────────────────┐
+│  [ThemeToggle]  [Header + Nav]           │  ← stays visible
+├──────────────────────────────────────────┤
+│                                          │
+│        [Sky / Night Background only]     │  ← main content gone
+│   [Chat Messages appear here cleanly]    │
+│                                          │
+├──────────────────────────────────────────┤
+│  [Footer]                                │  ← stays visible
+│            [Chat Bar]                    │  ← stays visible
+└──────────────────────────────────────────┘
 ```
 
-- The outer container expands upward (it's `position: fixed` anchored at top-left, so it grows downward). The `y` position is already set near the bottom of the screen so any growth is upward visually since the bar is at the bottom.
-- The send button uses `alignItems: 'flex-end'` to stay at the bottom-right as text grows.
-
----
-
-### Technical Notes
-- `Shift+Enter` inserts a newline; plain `Enter` sends the message.
-- After sending, `textarea` height resets back to the minimum (via resetting the value and re-triggering the auto-resize).
-- The `inputRef` type change is a minor TypeScript update — no functional impact elsewhere since `.focus()` and `.value` work the same on `<textarea>`.
+- Fade out: **0.5s ease** (content disappears smoothly)
+- Fade back in: **0.7s ease** (content returns slowly after mouse leaves)
+- Grace period before fading back: **800ms** after all interaction stops
