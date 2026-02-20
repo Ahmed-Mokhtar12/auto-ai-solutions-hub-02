@@ -56,7 +56,7 @@ const Footer: React.FC = () => {
               <Facebook className="h-5 w-5" />
             </a>
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/ai_digitlab/"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
