@@ -38,9 +38,9 @@ const Footer: React.FC = () => {
                 Privacy Policy
               </Link>
               <span>·</span>
-              <a href="#" className="hover:text-[#F8D042] transition-colors">
+              <Link to="/terms-of-service" className="hover:text-[#F8D042] transition-colors">
                 Terms of Service
-              </a>
+              </Link>
             </div>
           </div>
 
