@@ -1,34 +1,30 @@
 
-## Add a Security Page at /security
+## Add an About Us Page at /about
 
-### What's happening
+### What's needed
 
-The header already has a "Security" link pointing to `/security`, but the route and page don't exist yet — clicking it leads to the 404 page. The goal is to create a proper `/security` page matching the exact dark card style used by Privacy Policy and Terms of Service.
+The header already has an "About Us" link pointing to `/about`, but no route or page exists — clicking it hits the 404 page. The goal is to create the page and wire up the route, matching the exact same dark card style as Security, Privacy Policy, and Terms of Service.
 
 ---
 
-### New file: `src/pages/Security.tsx`
+### New file: `src/pages/AboutUs.tsx`
 
-Follows the identical structure to `PrivacyPolicy.tsx` and `TermsOfService.tsx`:
+Follows the identical structure to `Security.tsx` and `PrivacyPolicy.tsx`:
 
 - `DynamicBackground` + `Header` + `ChatBar` + `Footer`
 - `pb-[10vh]` on the root div to clear the fixed footer
 - Gold "Back to Home" arrow link at the top
 - `bg-navy-800/80 backdrop-blur-md rounded-2xl p-8 border border-navy-700` card
 - `Section` component for each topic
-- Gold headings, white/70 body text, gold email links
+- Gold headings, white/70 body text, gold email contact link
 
-**Content sections** relevant to an AI automation company:
+**Content sections** for an AI automation company:
 
-1. Our Security Commitment
-2. Data Encryption
-3. Access Control
-4. Infrastructure Security
-5. AI Model Security
-6. Incident Response
-7. Compliance
-8. Responsible Disclosure
-9. Contact
+1. Who We Are
+2. Our Mission
+3. What We Build
+4. Our Approach
+5. Contact Us (with `info@digitlab.ai`)
 
 ---
 
@@ -37,12 +33,12 @@ Follows the identical structure to `PrivacyPolicy.tsx` and `TermsOfService.tsx`:
 Add the import and route:
 
 ```ts
-import Security from "./pages/Security";
+import AboutUs from "./pages/AboutUs";
 // ...
-<Route path="/security" element={<Security />} />
+<Route path="/about" element={<AboutUs />} />
 ```
 
-The header link at `/security` is already wired up correctly — no changes needed to `Header.tsx`.
+The header link at `/about` is already wired up correctly — no changes needed to `Header.tsx`.
 
 ---
 
@@ -50,5 +46,5 @@ The header link at `/security` is already wired up correctly — no changes need
 
 | File | Change |
 |---|---|
-| `src/pages/Security.tsx` | Create — new page with dark card style |
-| `src/App.tsx` | Add import + `<Route path="/security">` |
+| `src/pages/AboutUs.tsx` | Create — new page with dark card style |
+| `src/App.tsx` | Add import + `<Route path="/about">` |
