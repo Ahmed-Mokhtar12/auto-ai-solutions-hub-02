@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { ChatFocusProvider } from "@/contexts/ChatFocusContext";
 import Index from "./pages/Index";
 import Services from "./pages/Services";
 import AIAgents from "./pages/AIAgents";
@@ -19,28 +20,30 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <TooltipProvider>
-        <Sonner />
-        <div className="dark">
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<Navigate to="/" replace />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/ai-agents" element={<AIAgents />} />
-              <Route path="/generative-ai" element={<GenerativeAI />} />
-              <Route path="/responsible-ai" element={<ResponsibleAI />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/terms-of-service" element={<TermsOfService />} />
-              <Route path="/security" element={<Security />} />
-              <Route path="/about" element={<AboutUs />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </div>
-      </TooltipProvider>
-    </ThemeProvider>
+    <ChatFocusProvider>
+      <ThemeProvider>
+        <TooltipProvider>
+          <Sonner />
+          <div className="dark">
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/auth" element={<Navigate to="/" replace />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/ai-agents" element={<AIAgents />} />
+                <Route path="/generative-ai" element={<GenerativeAI />} />
+                <Route path="/responsible-ai" element={<ResponsibleAI />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-service" element={<TermsOfService />} />
+                <Route path="/security" element={<Security />} />
+                <Route path="/about" element={<AboutUs />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </div>
+        </TooltipProvider>
+      </ThemeProvider>
+    </ChatFocusProvider>
   </QueryClientProvider>
 );
 
