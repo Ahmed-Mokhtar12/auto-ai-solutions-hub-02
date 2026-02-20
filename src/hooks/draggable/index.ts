@@ -17,7 +17,7 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
   const { initialPosition = defaultPosition, autoHideOnScroll = true } = options;
   
   const elementRef = useRef<HTMLDivElement | null>(null);
-  const elementSize = { width: isMobile ? 350 : 400, height: 50 }; // Match component dimensions
+  const elementSize = { width: isMobile ? 350 : 440, height: 68 }; // Match component dimensions
   
   // Use the extracted hooks
   const isVisible = useAutoHide(autoHideOnScroll);

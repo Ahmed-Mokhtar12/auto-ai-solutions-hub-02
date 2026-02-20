@@ -7,9 +7,9 @@ export const usePosition = (elementRef: React.RefObject<HTMLElement>, initialPos
   const [position, setPosition] = useState<Position>(initialPosition);
 
   const centerElement = () => {
-    const elWidth = elementRef.current?.offsetWidth || (isMobile ? 350 : 400);
+    const elWidth = elementRef.current?.offsetWidth || (isMobile ? 350 : 440);
     const x = (window.innerWidth / 2) - (elWidth / 2);
-    const y = window.innerHeight - 120;
+    const y = window.innerHeight - 130;
     setPosition({ x, y });
   };
 

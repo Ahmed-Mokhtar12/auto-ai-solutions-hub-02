@@ -33,10 +33,11 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
       className={`animate-fade-in ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
       style={{
         position: 'fixed',
-        width: isMobile ? 'min(350px, 95%)' : 'min(400px, 95%)',
-        height: '50px',
+        width: isMobile ? 'min(350px, 95%)' : 'min(440px, 95%)',
+        minHeight: '68px',
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-end',
+        flexWrap: 'nowrap',
         backgroundColor: isHovering ? 'rgba(31, 31, 46, 0.9)' : 'rgba(31, 31, 46, 0)',
         backdropFilter: 'blur(8px)',
         border: '1px solid rgba(255, 255, 255, 0.15)',
