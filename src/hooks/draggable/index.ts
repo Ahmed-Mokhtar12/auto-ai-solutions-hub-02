@@ -11,7 +11,7 @@ export const useDraggable = (options: UseDraggableOptions = {}) => {
   // Default position: horizontally centered, above footer
   const defaultPosition = { 
     x: typeof window !== 'undefined' ? (window.innerWidth / 2) - (isMobile ? 175 : 200) : 20, // Adjust for wider bar
-    y: typeof window !== 'undefined' ? window.innerHeight - 120 : 400 // ~120px above footer
+    y: typeof window !== 'undefined' ? window.innerHeight * 0.9 - 66 : 400 // 16px above top of 10vh footer
   };
   
   const { initialPosition = defaultPosition, autoHideOnScroll = true } = options;
