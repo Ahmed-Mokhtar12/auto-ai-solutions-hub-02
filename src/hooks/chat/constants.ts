@@ -2,7 +2,7 @@
 /**
  * API endpoint for the chat webhook
  */
-export const WEBHOOK_URL = "https://n8n.srv1095066.hstgr.cloud/webhook/Website";
+export const WEBHOOK_URL = "https://n8n-digitlab-u38985.vm.elestio.app/webhook/Website";
 
 /**
  * Duration in milliseconds for auto-hiding chat elements
