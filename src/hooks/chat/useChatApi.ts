@@ -11,31 +11,45 @@ interface ChatApiHook {
 }
 
 const STORAGE_KEY = 'digitlab_chat_session_id';
+const TIMESTAMP_KEY = 'digitlab_chat_session_ts';
+const SESSION_TTL_MS = 60 * 60 * 1000; // 60 minutes
 
 /**
  * Get or create a persistent session ID.
- * Stored in localStorage so it survives component remounts and
- * stays the same for the entire browser session / tab lifetime.
- * A new session is only created when localStorage is cleared or
- * the user opens a fresh private/incognito window.
+ * Expires after 60 minutes of inactivity — each message resets the timer.
  */
 const getOrCreateSessionId = (): string => {
   try {
     const existing = localStorage.getItem(STORAGE_KEY);
-    if (existing) return existing;
+    const lastActivity = localStorage.getItem(TIMESTAMP_KEY);
+
+    if (existing && lastActivity) {
+      const elapsed = Date.now() - Number(lastActivity);
+      if (elapsed < SESSION_TTL_MS) return existing;
+    }
   } catch {
-    // localStorage unavailable (e.g. incognito in some browsers)
+    // localStorage unavailable
   }
 
   const id = crypto.randomUUID();
 
   try {
     localStorage.setItem(STORAGE_KEY, id);
+    localStorage.setItem(TIMESTAMP_KEY, String(Date.now()));
   } catch {
-    // write failed – we'll still use the generated id for this page load
+    // write failed
   }
 
   return id;
+};
+
+/** Bump the activity timestamp so the TTL resets on each message. */
+const touchSession = () => {
+  try {
+    localStorage.setItem(TIMESTAMP_KEY, String(Date.now()));
+  } catch {
+    // ignore
+  }
 };
 
 export const useChatApi = (): ChatApiHook => {
