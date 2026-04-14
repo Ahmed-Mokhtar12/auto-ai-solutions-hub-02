@@ -83,6 +83,9 @@ export const useChatApi = (): ChatApiHook => {
         }),
       });
 
+      // Reset inactivity timer on every sent message
+      touchSession();
+
       if (!response.ok) {
         throw new Error(`Webhook responded with status ${response.status}`);
       }
