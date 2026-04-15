@@ -1,9 +1,18 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { MessageCircle, X, Send, Mic, MicOff } from 'lucide-react';
-import { useChatApi } from '@/hooks/chat/useChatApi';
+import { useChatApi, BatchMeta } from '@/hooks/chat/useChatApi';
 import { ChatMessage, generateMessageId } from '@/utils/messageUtils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
+import { WEBHOOK_URL } from '@/hooks/chat/constants';
+
+const DEBOUNCE_MS = 5_000;
+const MAX_WAIT_MS = 15_000;
+
+interface PendingMsg {
+  text: string;
+  timestamp: string;
+}
 
 const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,6 +20,7 @@ const ChatWidget: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
+  const [isBatching, setIsBatching] = useState(false);
 
   const { sendChatMessage, isLoading } = useChatApi();
   const isMobile = useIsMobile();
@@ -19,38 +29,125 @@ const ChatWidget: React.FC = () => {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Batching refs
+  const pendingMessagesRef = useRef<PendingMsg[]>([]);
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const maxWaitTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const isFlushingRef = useRef(false);
+
+  const sessionIdRef = useRef(
+    (() => {
+      try { return localStorage.getItem('digitlab_chat_session_id') || crypto.randomUUID(); }
+      catch { return crypto.randomUUID(); }
+    })()
+  );
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 300);
-    }
+    if (isOpen) setTimeout(() => inputRef.current?.focus(), 300);
   }, [isOpen]);
 
   const addMessage = useCallback((text: string, sender: 'user' | 'system') => {
     setMessages(prev => [...prev, { id: generateMessageId(), text, sender }]);
   }, []);
 
+  // ── Flush logic ──────────────────────────────────────────────
+  const flushMessages = useCallback(async () => {
+    if (isFlushingRef.current) return;
+    const pending = pendingMessagesRef.current;
+    if (pending.length === 0) return;
+
+    isFlushingRef.current = true;
+    if (debounceTimerRef.current) { clearTimeout(debounceTimerRef.current); debounceTimerRef.current = null; }
+    if (maxWaitTimerRef.current) { clearTimeout(maxWaitTimerRef.current); maxWaitTimerRef.current = null; }
+    setIsBatching(false);
+
+    const joined = pending.map(m => m.text).join('\n---\n');
+    const meta: BatchMeta = {
+      batched: pending.length > 1,
+      batched_count: pending.length,
+      first_message_at: pending[0].timestamp,
+      last_message_at: pending[pending.length - 1].timestamp,
+    };
+
+    try {
+      const response = await sendChatMessage(joined, meta);
+      // Success — clear buffer
+      pendingMessagesRef.current = [];
+      addMessage(response, 'system');
+    } catch {
+      // Keep pending messages intact for retry
+      addMessage('Sorry, I encountered an error. Please try again.', 'system');
+      if (pendingMessagesRef.current.length > 0) setIsBatching(true);
+    } finally {
+      isFlushingRef.current = false;
+    }
+  }, [sendChatMessage, addMessage]);
+
+  // Beacon fallback for beforeunload (sync, fire-and-forget)
+  const flushBeacon = useCallback(() => {
+    const pending = pendingMessagesRef.current;
+    if (pending.length === 0 || isFlushingRef.current) return;
+    const joined = pending.map(m => m.text).join('\n---\n');
+    const body = JSON.stringify({
+      session_id: sessionIdRef.current,
+      message: joined,
+      timestamp: new Date().toISOString(),
+      batched: pending.length > 1,
+      batched_count: pending.length,
+      first_message_at: pending[0].timestamp,
+      last_message_at: pending[pending.length - 1].timestamp,
+    });
+    navigator.sendBeacon(WEBHOOK_URL, new Blob([body], { type: 'application/json' }));
+    pendingMessagesRef.current = [];
+  }, []);
+
+  // Register visibilitychange + beforeunload
+  useEffect(() => {
+    const onVisChange = () => { if (document.hidden) flushMessages(); };
+    const onBeforeUnload = () => flushBeacon();
+    document.addEventListener('visibilitychange', onVisChange);
+    window.addEventListener('beforeunload', onBeforeUnload);
+    return () => {
+      document.removeEventListener('visibilitychange', onVisChange);
+      window.removeEventListener('beforeunload', onBeforeUnload);
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+      if (maxWaitTimerRef.current) clearTimeout(maxWaitTimerRef.current);
+    };
+  }, [flushMessages, flushBeacon]);
+
+  // ── Handle send (buffer) ────────────────────────────────────
   const handleSend = useCallback(async () => {
     const trimmed = message.trim();
     if (!trimmed) return;
 
     addMessage(trimmed, 'user');
     setMessage('');
+    if (inputRef.current) inputRef.current.style.height = 'auto';
 
-    if (inputRef.current) {
-      inputRef.current.style.height = 'auto';
+    const now = new Date().toISOString();
+    pendingMessagesRef.current.push({ text: trimmed, timestamp: now });
+
+    // Reset debounce
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    debounceTimerRef.current = setTimeout(() => flushMessages(), DEBOUNCE_MS);
+
+    // Start max-wait on first buffered message
+    if (pendingMessagesRef.current.length === 1) {
+      maxWaitTimerRef.current = setTimeout(() => flushMessages(), MAX_WAIT_MS);
     }
 
-    try {
-      const response = await sendChatMessage(trimmed);
-      addMessage(response, 'system');
-    } catch {
-      addMessage('Sorry, I encountered an error. Please try again.', 'system');
-    }
-  }, [message, sendChatMessage, addMessage]);
+    setIsBatching(true);
+  }, [message, addMessage, flushMessages]);
+
+  // ── Close chat (flush first) ─────────────────────────────────
+  const handleClose = useCallback(() => {
+    if (pendingMessagesRef.current.length > 0) flushMessages();
+    setIsOpen(false);
+  }, [flushMessages]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey && message.trim()) {
@@ -67,26 +164,21 @@ const ChatWidget: React.FC = () => {
       setRecordingDuration(0);
       return;
     }
-
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
       const chunks: BlobPart[] = [];
-
       recorder.ondataavailable = (e) => chunks.push(e.data);
       recorder.onstop = () => {
         stream.getTracks().forEach(t => t.stop());
         addMessage('🎤 Voice note sent', 'user');
         addMessage('Voice notes are not yet supported. Please type your message.', 'system');
       };
-
       recorder.start();
       mediaRecorderRef.current = recorder;
       setIsRecording(true);
       setRecordingDuration(0);
-      recordingIntervalRef.current = setInterval(() => {
-        setRecordingDuration(prev => prev + 1);
-      }, 1000);
+      recordingIntervalRef.current = setInterval(() => setRecordingDuration(prev => prev + 1), 1000);
     } catch {
       addMessage('Microphone access denied.', 'system');
     }
@@ -101,7 +193,7 @@ const ChatWidget: React.FC = () => {
     <>
       {/* Floating toggle button */}
       <button
-        onClick={() => setIsOpen(prev => !prev)}
+        onClick={() => isOpen ? handleClose() : setIsOpen(true)}
         className={cn(
           "fixed z-50 flex items-center justify-center rounded-full",
           "w-14 h-14 shadow-lg transition-all duration-300",
@@ -137,7 +229,7 @@ const ChatWidget: React.FC = () => {
             </h3>
           </div>
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={handleClose}
             className="text-muted-foreground hover:text-foreground transition-colors"
           >
             <X size={18} />
@@ -167,6 +259,15 @@ const ChatWidget: React.FC = () => {
               {msg.text}
             </div>
           ))}
+
+          {/* Batching indicator */}
+          {isBatching && !isLoading && (
+            <div className="flex items-center gap-2 mr-auto text-xs text-muted-foreground animate-fade-in py-1 px-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold/60 animate-pulse" />
+              Waiting for more messages…
+            </div>
+          )}
+
           {isLoading && (
             <div className="mr-auto bg-navy-700/60 border border-gold/10 rounded-2xl rounded-bl-md px-4 py-3 max-w-[85%] animate-fade-in">
               <div className="flex gap-1.5">
@@ -188,7 +289,6 @@ const ChatWidget: React.FC = () => {
             </div>
           )}
           <div className="flex items-end gap-2">
-            {/* Voice */}
             <button
               onClick={toggleRecording}
               className={cn(
@@ -200,7 +300,6 @@ const ChatWidget: React.FC = () => {
               {isRecording ? <MicOff size={18} /> : <Mic size={18} />}
             </button>
 
-            {/* Text input */}
             <textarea
               ref={inputRef}
               rows={1}
@@ -217,7 +316,6 @@ const ChatWidget: React.FC = () => {
               style={{ minHeight: '38px', maxHeight: '100px' }}
             />
 
-            {/* Send */}
             <button
               onClick={handleSend}
               disabled={isLoading || !message.trim()}
