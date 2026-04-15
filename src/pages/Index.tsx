@@ -15,7 +15,7 @@ export default function Index() {
   const [showSolutions, setShowSolutions] = useState(false);
   
   const handleBookSession = () => {
-    window.open('https://calendly.com/ahmed-mokhtar12/30min?month=2025-06', '_blank');
+    window.open('https://calendly.com/ahmed-mokhtar12/30min', '_blank');
   };
 
   const handleSolutionsClick = () => {
@@ -48,13 +48,13 @@ export default function Index() {
           
           <section className="py-20 bg-navy-800/30">
             <div className="container mx-auto px-4 text-center">
-              <h2 className="text-3xl font-bold text-foreground mb-6">Ready to Transform Your Business?</h2>
+              <h2 className="text-3xl font-bold text-foreground mb-6">Ready to Transform Your Business with AI?</h2>
               <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Join hundreds of businesses that have automated their operations with our AI solutions. 
-                Start with a free consultation today.
+                Join enterprises across hospitality, manufacturing, finance, and more that have 
+                automated their operations with our AI solutions. Start with a free consultation today.
               </p>
               <Button onClick={handleBookSession} className="gold-btn text-lg px-8 py-3">
-                Book Your Free Session Now
+                Request a Demo
               </Button>
             </div>
           </section>
