@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { MessageCircle, X, Send, Paperclip, Mic, MicOff, Image as ImageIcon } from 'lucide-react';
+import { MessageCircle, X, Send, Mic, MicOff } from 'lucide-react';
 import { useChatApi } from '@/hooks/chat/useChatApi';
 import { ChatMessage, generateMessageId } from '@/utils/messageUtils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -9,7 +9,6 @@ const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [attachedImage, setAttachedImage] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
 
@@ -17,16 +16,13 @@ const ChatWidget: React.FC = () => {
   const isMobile = useIsMobile();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Focus input when opened
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 300);
@@ -39,42 +35,28 @@ const ChatWidget: React.FC = () => {
 
   const handleSend = useCallback(async () => {
     const trimmed = message.trim();
-    if (!trimmed && !attachedImage) return;
+    if (!trimmed) return;
 
-    const displayText = attachedImage
-      ? `${trimmed || ''}\n[📎 Image attached]`
-      : trimmed;
-
-    addMessage(displayText, 'user');
+    addMessage(trimmed, 'user');
     setMessage('');
-    setAttachedImage(null);
 
     if (inputRef.current) {
       inputRef.current.style.height = 'auto';
     }
 
     try {
-      const response = await sendChatMessage(trimmed || 'Image shared');
+      const response = await sendChatMessage(trimmed);
       addMessage(response, 'system');
     } catch {
       addMessage('Sorry, I encountered an error. Please try again.', 'system');
     }
-  }, [message, attachedImage, sendChatMessage, addMessage]);
+  }, [message, sendChatMessage, addMessage]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey && (message.trim() || attachedImage)) {
+    if (e.key === 'Enter' && !e.shiftKey && message.trim()) {
       e.preventDefault();
       handleSend();
     }
-  };
-
-  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => setAttachedImage(reader.result as string);
-    reader.readAsDataURL(file);
-    e.target.value = '';
   };
 
   const toggleRecording = async () => {
@@ -163,7 +145,7 @@ const ChatWidget: React.FC = () => {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 scrollbar-thin">
+        <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 chat-scrollbar">
           {messages.length === 0 && (
             <div className="flex flex-col items-center justify-center h-full text-center px-4 gap-3 opacity-60">
               <MessageCircle size={36} className="text-gold/50" />
@@ -176,7 +158,7 @@ const ChatWidget: React.FC = () => {
             <div
               key={msg.id}
               className={cn(
-                "max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap",
+                "max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap animate-fade-in",
                 msg.sender === 'user'
                   ? "ml-auto bg-gold/15 text-foreground rounded-br-md"
                   : "mr-auto bg-navy-700/60 text-foreground border border-gold/10 rounded-bl-md"
@@ -186,7 +168,7 @@ const ChatWidget: React.FC = () => {
             </div>
           ))}
           {isLoading && (
-            <div className="mr-auto bg-navy-700/60 border border-gold/10 rounded-2xl rounded-bl-md px-4 py-3 max-w-[85%]">
+            <div className="mr-auto bg-navy-700/60 border border-gold/10 rounded-2xl rounded-bl-md px-4 py-3 max-w-[85%] animate-fade-in">
               <div className="flex gap-1.5">
                 <span className="w-2 h-2 bg-gold/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                 <span className="w-2 h-2 bg-gold/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -197,21 +179,6 @@ const ChatWidget: React.FC = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Image preview */}
-        {attachedImage && (
-          <div className="px-4 pb-1">
-            <div className="relative inline-block">
-              <img src={attachedImage} alt="Attached" className="h-16 rounded-lg border border-gold/20" />
-              <button
-                onClick={() => setAttachedImage(null)}
-                className="absolute -top-2 -right-2 w-5 h-5 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center text-xs"
-              >
-                ×
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* Input area */}
         <div className="px-3 py-3 border-t border-gold/10">
           {isRecording && (
@@ -221,22 +188,6 @@ const ChatWidget: React.FC = () => {
             </div>
           )}
           <div className="flex items-end gap-2">
-            {/* Attachment */}
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="shrink-0 p-2 text-muted-foreground hover:text-gold transition-colors"
-              aria-label="Attach image"
-            >
-              <Paperclip size={18} />
-            </button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleImageSelect}
-            />
-
             {/* Voice */}
             <button
               onClick={toggleRecording}
@@ -269,10 +220,10 @@ const ChatWidget: React.FC = () => {
             {/* Send */}
             <button
               onClick={handleSend}
-              disabled={isLoading || (!message.trim() && !attachedImage)}
+              disabled={isLoading || !message.trim()}
               className={cn(
                 "shrink-0 p-2.5 rounded-xl transition-all duration-200",
-                message.trim() || attachedImage
+                message.trim()
                   ? "bg-gold text-navy-900 hover:bg-gold/90 scale-100"
                   : "bg-navy-700 text-muted-foreground scale-95"
               )}

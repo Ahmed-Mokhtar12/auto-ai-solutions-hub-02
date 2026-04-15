@@ -93,6 +93,39 @@
   .hide-scrollbar::-webkit-scrollbar {
     display: none;  /* Chrome, Safari and Opera */
   }
+
+  /* Custom chat scrollbar */
+  .chat-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    transition: scrollbar-color 0.3s ease;
+  }
+
+  .chat-scrollbar:hover {
+    scrollbar-color: hsla(45, 93%, 55%, 0.25) transparent;
+  }
+
+  .chat-scrollbar::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .chat-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .chat-scrollbar::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 9999px;
+    transition: background 0.3s ease;
+  }
+
+  .chat-scrollbar:hover::-webkit-scrollbar-thumb {
+    background: hsla(45, 93%, 55%, 0.25);
+  }
+
+  .chat-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: hsla(45, 93%, 55%, 0.4);
+  }
 }
 
 @layer utilities {
