@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import Header from "@/components/Header";
-import ChatBar from '@/components/ChatBar';
+import ChatWidget from '@/components/chat/ChatWidget';
 import DynamicBackground from '@/components/DynamicBackground';
 import Footer from '@/components/Footer';
 
@@ -132,7 +132,7 @@ const PrivacyPolicy = () => {
         </div>
       </main>
 
-      <ChatBar />
+      <ChatWidget />
       <Footer />
     </div>
   );
