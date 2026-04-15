@@ -1,22 +1,18 @@
 
 
-## Improve Chat Widget Scrollbar and Remove Attachment Icon
+## Fix Textarea Scrollbar and Increase Chat Size
 
 ### What's changing
 
-1. **Remove the attachment (Paperclip) button and related file input** from the input area — lines 224-238
-2. **Replace the default browser scrollbar** on the messages area (line 166) with a custom styled thin scrollbar that matches the navy/gold theme — using CSS utilities for a sleek, semi-transparent gold-tinted track and thumb with smooth fade-in on hover
-3. **Add subtle entrance animations** to messages as they appear (slide-up + fade-in)
+1. **Apply the same `.chat-scrollbar` class to the textarea** — the user input textarea currently uses the default browser scrollbar, which looks different from the messages area. Adding the `chat-scrollbar` class makes both scrollbars match (thin, gold-tinted, appears on hover).
+
+2. **Increase chat panel size by 20%** — from `w-[380px] h-[520px]` to `w-[456px] h-[624px]`.
 
 ### Technical details
 
 **`src/components/chat/ChatWidget.tsx`**:
-- Remove `Paperclip` import and `fileInputRef`, `attachedImage` state, `handleImageSelect`, the attachment button, and the hidden file input
-- Remove the image preview section (lines 200-213)
-- Clean up `handleSend` and `handleKeyDown` to remove `attachedImage` references
-- Replace `scrollbar-thin` on messages div with a custom class
-- Add a fade-in animation class to each message bubble
+- Line 125: Change `w-[380px] h-[520px]` → `w-[456px] h-[624px]`
+- Line 212: Add `chat-scrollbar` class to the textarea's className so it uses the same custom scrollbar as the messages area
 
-**`src/index.css`**:
-- Add custom scrollbar styles (`.chat-scrollbar`) with a thin, gold-tinted thumb on a transparent track that only appears on hover/scroll
+No other files need changes — the `.chat-scrollbar` CSS is already defined in `index.css`.
 
