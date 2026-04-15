@@ -6,7 +6,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import { WEBHOOK_URL } from '@/hooks/chat/constants';
 
-const DEBOUNCE_MS = 5_000;
+const DEBOUNCE_MS = 7_000;
 const MAX_WAIT_MS = 15_000;
 
 interface PendingMsg {
