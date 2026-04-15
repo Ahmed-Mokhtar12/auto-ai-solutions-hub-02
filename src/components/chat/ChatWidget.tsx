@@ -21,6 +21,7 @@ const ChatWidget: React.FC = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
   const [isBatching, setIsBatching] = useState(false);
+  const [showBatchDots, setShowBatchDots] = useState(false);
 
   const { sendChatMessage, isLoading } = useChatApi();
   const isMobile = useIsMobile();
@@ -28,6 +29,7 @@ const ChatWidget: React.FC = () => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const batchDotsTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Batching refs
   const pendingMessagesRef = useRef<PendingMsg[]>([]);
@@ -67,7 +69,9 @@ const ChatWidget: React.FC = () => {
     isFlushingRef.current = true;
     if (debounceTimerRef.current) { clearTimeout(debounceTimerRef.current); debounceTimerRef.current = null; }
     if (maxWaitTimerRef.current) { clearTimeout(maxWaitTimerRef.current); maxWaitTimerRef.current = null; }
+    if (batchDotsTimerRef.current) { clearTimeout(batchDotsTimerRef.current); batchDotsTimerRef.current = null; }
     setIsBatching(false);
+    setShowBatchDots(false);
 
     const joined = pending.map(m => m.text).join('\n---\n');
     const meta: BatchMeta = {
@@ -128,6 +132,7 @@ const ChatWidget: React.FC = () => {
     return () => {
       if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
       if (maxWaitTimerRef.current) clearTimeout(maxWaitTimerRef.current);
+      if (batchDotsTimerRef.current) clearTimeout(batchDotsTimerRef.current);
     };
   }, []);
 
@@ -154,6 +159,9 @@ const ChatWidget: React.FC = () => {
     }
 
     setIsBatching(true);
+    setShowBatchDots(false);
+    if (batchDotsTimerRef.current) clearTimeout(batchDotsTimerRef.current);
+    batchDotsTimerRef.current = setTimeout(() => setShowBatchDots(true), 3000);
   }, [message, addMessage]);
 
   // ── Close chat (flush first) ─────────────────────────────────
@@ -274,10 +282,21 @@ const ChatWidget: React.FC = () => {
           ))}
 
           {/* Batching indicator */}
-          {isBatching && !isLoading && (
-            <div className="flex items-center gap-2 mr-auto text-xs text-muted-foreground animate-fade-in py-1 px-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-gold/60 animate-pulse" />
-              Waiting for more messages…
+          {isBatching && !isLoading && showBatchDots && (
+            <div className="mr-auto animate-fade-in py-1 px-2">
+              <span className="inline-flex items-center gap-1.5">
+                <span className="text-sm mr-0.5" style={{ color: '#C8C8C9' }}>Thinking</span>
+                {[0, 1, 2].map((i) => (
+                  <span
+                    key={i}
+                    className="inline-block w-2 h-2 rounded-full"
+                    style={{
+                      backgroundColor: '#C8C8C9',
+                      animation: `thinking-dot 1.2s ease-in-out ${i * 0.25}s infinite`,
+                    }}
+                  />
+                ))}
+              </span>
             </div>
           )}
 
