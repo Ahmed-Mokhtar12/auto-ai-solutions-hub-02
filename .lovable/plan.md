@@ -1,18 +1,58 @@
 
 
-## Fix Textarea Scrollbar and Increase Chat Size
+## Implement Message Batching with Safeguards
 
-### What's changing
+### Summary
+Buffer user messages client-side with a 5s debounce / 15s max-wait, then send them as one webhook call. Three safeguards added: flush guard, beforeunload/visibilitychange flush, and retry-safe pending buffer.
 
-1. **Apply the same `.chat-scrollbar` class to the textarea** — the user input textarea currently uses the default browser scrollbar, which looks different from the messages area. Adding the `chat-scrollbar` class makes both scrollbars match (thin, gold-tinted, appears on hover).
+### Changes
 
-2. **Increase chat panel size by 20%** — from `w-[380px] h-[520px]` to `w-[456px] h-[624px]`.
+**`src/hooks/chat/useChatApi.ts`**
+- Extend `sendChatMessage` signature to accept optional batch metadata object: `{ batched: boolean, batched_count: number, first_message_at: string, last_message_at: string }`
+- Spread these fields into the JSON body alongside existing `session_id`, `message`, `timestamp`
+- Update the `ChatApiHook` interface accordingly
 
-### Technical details
+**`src/components/chat/ChatWidget.tsx`**
+- Add refs: `pendingMessagesRef` (array of `{text, timestamp}`), `debounceTimerRef`, `maxWaitTimerRef`, `isFlushingRef` (boolean guard)
+- Add state: `isBatching` for UI indicator
+- Rewrite `handleSend`:
+  1. Add message to UI immediately
+  2. Push to `pendingMessagesRef` with ISO timestamp
+  3. Clear/restart 5s debounce timer
+  4. If first pending message, start 15s max-wait timer
+  5. Set `isBatching = true`
+- New `flushMessages` function:
+  1. Check `isFlushingRef` — if true, return (prevents double flush)
+  2. If no pending messages, return
+  3. Set `isFlushingRef = true`
+  4. Clear both timers, set `isBatching = false`
+  5. Join messages with `\n---\n`, build metadata
+  6. Call `sendChatMessage(joined, meta)`
+  7. On **success**: clear `pendingMessagesRef`, add bot reply
+  8. On **failure**: keep `pendingMessagesRef` intact, show error message, re-enable batching state so user can retry
+  9. Set `isFlushingRef = false`
+- Flush triggers:
+  - Debounce timer (5s)
+  - Max-wait timer (15s)
+  - Chat close: wrap `setIsOpen(false)` calls to flush first
+  - `visibilitychange` (document hidden) and `beforeunload` — use `useEffect` to register/cleanup these listeners; use synchronous `navigator.sendBeacon` as fallback in `beforeunload` since async fetch may not complete
+- UI: when `isBatching && !isLoading`, show subtle "Waiting for more messages..." with pulsing dot below last user message
 
-**`src/components/chat/ChatWidget.tsx`**:
-- Line 125: Change `w-[380px] h-[520px]` → `w-[456px] h-[624px]`
-- Line 212: Add `chat-scrollbar` class to the textarea's className so it uses the same custom scrollbar as the messages area
+### Webhook payload shape (backward compatible)
+```json
+{
+  "session_id": "...",
+  "message": "first message\n---\nsecond message",
+  "timestamp": "...",
+  "batched": true,
+  "batched_count": 2,
+  "first_message_at": "...",
+  "last_message_at": "..."
+}
+```
+Single messages: `batched: false, batched_count: 1`.
 
-No other files need changes — the `.chat-scrollbar` CSS is already defined in `index.css`.
+### Files modified
+- `src/hooks/chat/useChatApi.ts`
+- `src/components/chat/ChatWidget.tsx`
 
