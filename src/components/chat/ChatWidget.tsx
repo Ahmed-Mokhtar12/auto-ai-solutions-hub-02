@@ -122,7 +122,7 @@ const ChatWidget: React.FC = () => {
           "bg-navy-900/95 backdrop-blur-xl border border-gold/20 rounded-2xl shadow-2xl",
           "transition-all duration-300 origin-bottom-right",
           "bottom-[calc(10vh+5rem)] right-6",
-          isMobile ? "left-4 right-4 w-auto max-h-[70vh]" : "w-[380px] h-[520px]",
+          isMobile ? "left-4 right-4 w-auto max-h-[70vh]" : "w-[456px] h-[624px]",
           isOpen
             ? "opacity-100 scale-100 pointer-events-auto"
             : "opacity-0 scale-90 pointer-events-none"
@@ -210,7 +210,7 @@ const ChatWidget: React.FC = () => {
               placeholder="Type a message..."
               className={cn(
                 "flex-1 resize-none overflow-y-auto",
-                "bg-navy-800/80 text-foreground rounded-xl border border-gold/10",
+                "bg-navy-800/80 text-foreground rounded-xl border border-gold/10 chat-scrollbar",
                 "px-3 py-2 text-sm placeholder:text-muted-foreground",
                 "focus:outline-none focus:border-gold/30 transition-colors"
               )}
