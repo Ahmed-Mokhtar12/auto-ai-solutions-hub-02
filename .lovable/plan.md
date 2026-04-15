@@ -1,24 +1,59 @@
 
 
-## Replace Batching Indicator with Delayed "Thinking" Animation
+## Phase 1: Core Messaging & Positioning Update
 
-### What's changing
-Replace the "Waiting for more messages…" text with the existing `ThinkingDots` animation (the word "Thinking" followed by bouncing dots, already defined in `ChatMessageItem.tsx`). It appears only after a 3-second delay from the last sent message, so quick follow-ups don't trigger it.
+Rebrand from hospitality-only to "hospitality-first, multi-sector ready" across all main page sections.
 
-### Changes in `src/components/chat/ChatWidget.tsx`
+---
 
-1. **New state & ref**: `showBatchDots` (boolean, default false) and `batchDotsTimerRef` for the 3s delay timer.
+### Changes
 
-2. **In `handleSend`**: reset `showBatchDots = false`, clear and restart a 3-second timer that sets `showBatchDots = true`.
+**1. HeroSection.tsx** — Update headline, subheading, benefit cards, and CTA boxes:
+- Headline: "Enterprise AI Solutions" with gold "Built for Hospitality, Ready for Every Industry"
+- Subheading: Lead with hospitality expertise, then broaden to "proven methodology for enterprises across every sector"
+- Benefit cards:
+  - "24/7 Intelligent Operations" (was "24/7 Guest Service")
+  - "Up to 70% Cost Reduction" (generalized description)
+  - "Measurable ROI in 90 Days" (was "Guest Satisfaction+")
+- Left CTA box: "Free AI Consultation" (was "Free Hotel AI Consultation") — keep hospitality flavor in description but also mention enterprise
+- Right CTA box: "Enterprise AI Solutions" (was "Hospitality AI Solutions") — list both hospitality and cross-industry offerings
 
-3. **In `flushMessages`**: clear the dots timer and set `showBatchDots = false`.
+**2. ServicesOverview.tsx** — Broaden section while leading with hospitality:
+- Section header: "AI Solutions" with subtitle mentioning hospitality specialization plus multi-sector capability
+- Remove "100% Hospitality Focused" badge, replace with "Hospitality Specialists | Enterprise Ready"
+- Rename services to be more universal while keeping hospitality context:
+  - "AI Hotel Concierge" → "AI-Powered Automation" (mention hospitality concierge as example)
+  - "Guest Experience AI" → "Intelligent Analytics & Personalization"
+  - "Hospitality-Safe AI" → "Responsible & Secure AI"
+- Keep the specialized hospitality solutions grid but add a note: "We also serve Manufacturing, Finance, Retail, Healthcare, and more"
 
-4. **Replace the batching indicator UI** (the "Waiting for more messages…" block) with:
-   - Condition: `isBatching && !isLoading && showBatchDots`
-   - Content: "Thinking" text + 3 bouncing dots (reusing the same `thinking-dot` keyframe already in `index.css`)
+**3. SocialProofSection.tsx** — Generalize stats and messaging:
+- Header: "Proven Results Across Industries" (was "Hospitality AI Specialists")
+- Remove hospitality-first approach callout box
+- Update stats to be more universal:
+  - "200+ AI Workflows Deployed" (was "Hotels AI Workflows")
+  - "15,000+ Hours Saved Monthly" (was "Guest Hours Saved")
+  - "70% Average Cost Reduction" (was "Guest Satisfaction Increase")
+  - "99% Client Retention" (was "Hotel Client Retention")
+- Update icons to be less hospitality-specific
 
-5. **Cleanup**: clear `batchDotsTimerRef` on unmount alongside other timers.
+**4. Index.tsx** — Fix Calendly URL and update CTA section:
+- Remove hardcoded `?month=2025-06` from Calendly link
+- Update bottom CTA text to be more universal
+
+**5. Memory update** — Update `mem://business/specialization-focus` to reflect new hybrid positioning
+
+---
 
 ### Files modified
-- `src/components/chat/ChatWidget.tsx`
+- `src/components/sections/HeroSection.tsx`
+- `src/components/sections/ServicesOverview.tsx`
+- `src/components/sections/SocialProofSection.tsx`
+- `src/pages/Index.tsx`
+- `mem://business/specialization-focus`
+
+### What stays the same
+- ProcessSection.tsx — already generic enough ("How We Work")
+- All visual styling, layout, and animations
+- Footer, Header, chat widget, background
 
