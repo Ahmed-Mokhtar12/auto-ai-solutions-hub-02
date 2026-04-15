@@ -35,6 +35,10 @@ const ChatWidget: React.FC = () => {
   const maxWaitTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isFlushingRef = useRef(false);
 
+  // Keep a stable ref to sendChatMessage so timers always call the latest version
+  const sendChatMessageRef = useRef(sendChatMessage);
+  sendChatMessageRef.current = sendChatMessage;
+
   const sessionIdRef = useRef(
     (() => {
       try { return localStorage.getItem('digitlab_chat_session_id') || crypto.randomUUID(); }
@@ -54,7 +58,7 @@ const ChatWidget: React.FC = () => {
     setMessages(prev => [...prev, { id: generateMessageId(), text, sender }]);
   }, []);
 
-  // ── Flush logic ──────────────────────────────────────────────
+  // ── Flush logic (stable — no deps that change per render) ───
   const flushMessages = useCallback(async () => {
     if (isFlushingRef.current) return;
     const pending = pendingMessagesRef.current;
@@ -74,20 +78,22 @@ const ChatWidget: React.FC = () => {
     };
 
     try {
-      const response = await sendChatMessage(joined, meta);
-      // Success — clear buffer
+      const response = await sendChatMessageRef.current(joined, meta);
       pendingMessagesRef.current = [];
       addMessage(response, 'system');
     } catch {
-      // Keep pending messages intact for retry
       addMessage('Sorry, I encountered an error. Please try again.', 'system');
       if (pendingMessagesRef.current.length > 0) setIsBatching(true);
     } finally {
       isFlushingRef.current = false;
     }
-  }, [sendChatMessage, addMessage]);
+  }, [addMessage]); // stable — addMessage has [] deps
 
-  // Beacon fallback for beforeunload (sync, fire-and-forget)
+  // Keep a stable ref so event listeners always call the latest flush
+  const flushMessagesRef = useRef(flushMessages);
+  flushMessagesRef.current = flushMessages;
+
+  // Beacon fallback for beforeunload
   const flushBeacon = useCallback(() => {
     const pending = pendingMessagesRef.current;
     if (pending.length === 0 || isFlushingRef.current) return;
@@ -105,22 +111,28 @@ const ChatWidget: React.FC = () => {
     pendingMessagesRef.current = [];
   }, []);
 
-  // Register visibilitychange + beforeunload
+  // Register visibilitychange + beforeunload (stable deps — no timer clearing in cleanup)
   useEffect(() => {
-    const onVisChange = () => { if (document.hidden) flushMessages(); };
+    const onVisChange = () => { if (document.hidden) flushMessagesRef.current(); };
     const onBeforeUnload = () => flushBeacon();
     document.addEventListener('visibilitychange', onVisChange);
     window.addEventListener('beforeunload', onBeforeUnload);
     return () => {
       document.removeEventListener('visibilitychange', onVisChange);
       window.removeEventListener('beforeunload', onBeforeUnload);
+    };
+  }, [flushBeacon]);
+
+  // Cleanup timers on unmount only
+  useEffect(() => {
+    return () => {
       if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
       if (maxWaitTimerRef.current) clearTimeout(maxWaitTimerRef.current);
     };
-  }, [flushMessages, flushBeacon]);
+  }, []);
 
   // ── Handle send (buffer) ────────────────────────────────────
-  const handleSend = useCallback(async () => {
+  const handleSend = useCallback(() => {
     const trimmed = message.trim();
     if (!trimmed) return;
 
@@ -133,15 +145,16 @@ const ChatWidget: React.FC = () => {
 
     // Reset debounce
     if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-    debounceTimerRef.current = setTimeout(() => flushMessages(), DEBOUNCE_MS);
+    debounceTimerRef.current = setTimeout(() => flushMessagesRef.current(), DEBOUNCE_MS);
 
     // Start max-wait on first buffered message
     if (pendingMessagesRef.current.length === 1) {
-      maxWaitTimerRef.current = setTimeout(() => flushMessages(), MAX_WAIT_MS);
+      if (maxWaitTimerRef.current) clearTimeout(maxWaitTimerRef.current);
+      maxWaitTimerRef.current = setTimeout(() => flushMessagesRef.current(), MAX_WAIT_MS);
     }
 
     setIsBatching(true);
-  }, [message, addMessage, flushMessages]);
+  }, [message, addMessage]);
 
   // ── Close chat (flush first) ─────────────────────────────────
   const handleClose = useCallback(() => {
