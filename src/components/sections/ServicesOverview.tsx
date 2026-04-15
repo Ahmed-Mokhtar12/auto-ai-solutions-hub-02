@@ -1,35 +1,35 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Bot, Sparkles, Shield, Zap, MessageSquare, Brain, Hotel, Utensils, Calendar } from 'lucide-react';
+import { Bot, Sparkles, Shield, Zap, MessageSquare, Brain, Hotel, Utensils, Calendar, Factory, Building2 } from 'lucide-react';
 import HoverVisibleContainer from '@/components/HoverVisibleContainer';
 
 const ServicesOverview: React.FC = () => {
   const services = [
     {
       icon: <Bot className="h-8 w-8 text-gold" />,
-      title: "AI Hotel Concierge",
-      description: "Intelligent guest assistance that handles inquiries, bookings, and personalized recommendations 24/7.",
-      features: ["Multilingual Guest Support", "Room Service Automation", "Local Recommendations", "Instant Booking Management"],
+      title: "AI-Powered Automation",
+      description: "Intelligent automation that handles complex tasks and decisions 24/7 — from hotel concierge services to enterprise workflow optimization.",
+      features: ["Process Automation", "Intelligent Task Routing", "24/7 Operations", "Custom Workflow Design"],
       link: "/ai-agents"
     },
     {
       icon: <Sparkles className="h-8 w-8 text-gold" />,
-      title: "Guest Experience AI",
-      description: "Create personalized guest experiences with AI-powered content generation and preference learning.",
-      features: ["Personalized Recommendations", "Dynamic Pricing Optimization", "Guest Preference Analysis", "Custom Marketing Content"],
+      title: "Intelligent Analytics & Personalization",
+      description: "AI-driven insights, dynamic recommendations, and personalized experiences for your customers and operations.",
+      features: ["Predictive Analytics", "Dynamic Optimization", "Customer Preference Learning", "Data-Driven Decisions"],
       link: "/generative-ai"
     },
     {
       icon: <Shield className="h-8 w-8 text-gold" />,
-      title: "Hospitality-Safe AI",
-      description: "Privacy-first AI solutions designed specifically for hospitality with guest data protection at the core.",
-      features: ["GDPR Compliant Operations", "Guest Privacy Protection", "Secure Data Handling", "Transparent AI Decisions"],
+      title: "Responsible & Secure AI",
+      description: "Privacy-first AI solutions with transparent, fair, and accountable systems built with compliance at the core.",
+      features: ["GDPR Compliant Operations", "Data Privacy Protection", "Secure Data Handling", "Transparent AI Decisions"],
       link: "/responsible-ai"
     }
   ];
 
-  const hospitalityServices = [
+  const specializedServices = [
     {
       icon: <Hotel className="h-8 w-8 text-gold" />,
       title: "WhatsApp Hotel Assistant",
@@ -51,20 +51,17 @@ const ServicesOverview: React.FC = () => {
     <section className="py-20 bg-navy-800/5">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <div className="flex items-center justify-center mb-4">
-            <Hotel className="h-10 w-10 text-gold mr-2" />
-            <h2 className="text-4xl font-bold text-white">Hospitality AI Solutions</h2>
-          </div>
+          <h2 className="text-4xl font-bold text-white mb-4">AI Solutions</h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-6">
-            Specialized AI automation services designed exclusively for the hospitality industry. 
-            From luxury hotels to boutique resorts, we enhance guest experiences while optimizing operations.
+            Specialized in hospitality AI with proven expertise that extends across every industry. 
+            From luxury hotels to enterprise operations, we deliver intelligent automation that works.
           </p>
           <div className="bg-gold/10 border border-gold/30 rounded-lg p-3 max-w-xl mx-auto">
-            <p className="text-gold font-medium">🏆 100% Hospitality Focused</p>
+            <p className="text-gold font-medium">🏆 Hospitality Specialists | Enterprise Ready</p>
           </div>
         </div>
 
-        {/* Main Hospitality Services */}
+        {/* Main Services */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
           {services.map((service, index) => (
             <HoverVisibleContainer
@@ -101,14 +98,15 @@ const ServicesOverview: React.FC = () => {
 
         {/* Specialized Hospitality Services */}
         <div className="text-center mb-12">
-          <h3 className="text-2xl font-bold text-white mb-4">Specialized Hospitality Solutions</h3>
+          <h3 className="text-2xl font-bold text-white mb-4">Hospitality-Specific Solutions</h3>
           <p className="text-gray-300 max-w-2xl mx-auto">
-            Industry-specific AI tools built for the unique needs of hotels, restaurants, and hospitality businesses.
+            Industry-leading AI tools built for the unique needs of hotels, restaurants, and hospitality businesses. 
+            We also serve Manufacturing, Finance, Retail, Healthcare, and more.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {hospitalityServices.map((service, index) => (
+          {specializedServices.map((service, index) => (
             <HoverVisibleContainer
               key={index}
               autoHideDelay={2500}
