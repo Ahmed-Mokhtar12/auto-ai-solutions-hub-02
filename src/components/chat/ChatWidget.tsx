@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { MessageCircle, X, Send, Mic, MicOff } from 'lucide-react';
+import { MessageCircle, X, Send, Mic, MicOff, Phone, PhoneOff } from 'lucide-react';
 import { useChatApi, BatchMeta } from '@/hooks/chat/useChatApi';
+import { useVapi } from '@/hooks/useVapi';
 import { ChatMessage, generateMessageId } from '@/utils/messageUtils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
@@ -24,6 +25,7 @@ const ChatWidget: React.FC = () => {
   const [showBatchDots, setShowBatchDots] = useState(false);
 
   const { sendChatMessage, isLoading } = useChatApi();
+  const { status: callStatus, toggleCall } = useVapi();
   const isMobile = useIsMobile();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -212,6 +214,29 @@ const ChatWidget: React.FC = () => {
 
   return (
     <>
+      {/* VAPI Voice Call button */}
+      <button
+        onClick={toggleCall}
+        className={cn(
+          "fixed z-50 flex items-center justify-center rounded-full",
+          "w-14 h-14 shadow-lg transition-all duration-300",
+          "bg-navy-800 border border-gold/30",
+          "hover:scale-110 hover:shadow-xl",
+          "bottom-[calc(15vh+1rem)] right-[10rem]",
+          callStatus === 'active'
+            ? "text-green-500 hover:shadow-green-500/20 ring-2 ring-green-500/40"
+            : callStatus === 'connecting'
+            ? "text-yellow-400 hover:shadow-yellow-400/20 animate-pulse"
+            : "text-gold hover:shadow-gold/20"
+        )}
+        aria-label={callStatus === 'idle' ? 'Start voice call' : 'End voice call'}
+      >
+        {callStatus === 'idle' ? <Phone size={22} /> : <PhoneOff size={22} />}
+        {callStatus === 'active' && (
+          <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+        )}
+      </button>
+
       {/* WhatsApp floating button */}
       <a
         href="https://wa.me/15556395391"
