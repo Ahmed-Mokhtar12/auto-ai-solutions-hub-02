@@ -17,7 +17,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onBookSession, onSolutionsCli
           <span className="text-gold">Automate Conversations & Actions</span>
           <br />
           <span className="text-white text-xl md:text-3xl font-medium mt-2 block">
-            Built for Hospitality, Ready for Every Industry
+            Smart AI That Talks, Decides & Delivers — 24/7
           </span>
         </h1>
         
