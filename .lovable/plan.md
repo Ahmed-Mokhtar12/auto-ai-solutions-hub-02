@@ -1,25 +1,36 @@
 
 
-## Plan: Add WhatsApp Floating Button + Clean Up Contact Info
+## Plan: Integrate VAPI Voice Call Button
+
+Add a floating phone icon button next to the WhatsApp and chat buttons that starts a VAPI voice call with the AI assistant.
 
 ### What changes
 
-**1. Add WhatsApp floating icon next to chat icon (`src/components/chat/ChatWidget.tsx`)**
-- Add a new circular button (same size `w-14 h-14`, same styling as the chat toggle) positioned to the left of the chat button
-- Uses a WhatsApp icon (using the `MessageCircle` icon or a custom WhatsApp SVG) 
-- Links to `https://wa.me/15556395391` (the new number: +1 (555) 639-5391)
-- Positioned at `right-[5.5rem]` so it sits directly left of the chat button
+**1. Add VAPI script to `index.html`**
+- Add the VAPI web SDK script and config:
+  ```html
+  <script>
+    window.vapiPublicKey = "0def23cd-0eff-4436-9295-e10b67221d11";
+    window.assistantId = "ce112156-dae6-42ae-925a-c23db6110e70";
+  </script>
+  <script defer src="https://cdn.vapi.ai/web.js"></script>
+  ```
 
-**2. Remove phone + WhatsApp from Footer Contact column (`src/components/Footer.tsx`)**
-- Delete the phone link (`tel:+9715913426`) and WhatsApp link from the Contact column (lines 86-101)
-- Keep only the email link
-- Also remove `Phone` and `MessageSquare` from imports if no longer used elsewhere in the file (MessageSquare is still used in social icons column)
+**2. Create `src/hooks/useVapi.ts`**
+- Custom hook to initialize the Vapi SDK, start/stop calls, and track call state (idle, connecting, active)
+- Uses `window.vapiPublicKey` and `window.assistantId`
 
-**3. Remove phone + WhatsApp from Contact page (`src/pages/Contact.tsx`)**
-- Delete the phone link (line 169-170) and WhatsApp link (lines 172-173) from the Direct Contact section
-- Keep only the email link
-- Clean up unused imports (`Phone`)
+**3. Update `src/components/chat/ChatWidget.tsx`**
+- Add a phone icon button (same `w-14 h-14` circle style) positioned to the left of the WhatsApp button
+- Uses `useVapi` hook — clicking toggles the voice call on/off
+- Shows a pulsing green indicator when call is active, red when connecting
+- Position: `right-[10rem]` (left of WhatsApp at `right-[5.5rem]`, left of chat at `right-6`)
 
-**4. Update Footer social WhatsApp link**
-- Update the WhatsApp social icon link from `https://wa.me/009715913426` to `https://wa.me/15556395391`
+**4. Add type declarations in `src/vite-env.d.ts`**
+- Declare `window.vapiPublicKey`, `window.assistantId`, and the Vapi class on the Window interface
+
+### Technical details
+- The VAPI public key `0def23cd-0eff-4436-9295-e10b67221d11` is a publishable key, safe to store in code
+- Assistant ID: `ce112156-dae6-42ae-925a-c23db6110e70`
+- Three floating buttons in a row: Phone → WhatsApp → Chat (right to left)
 
