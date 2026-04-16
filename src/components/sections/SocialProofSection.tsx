@@ -32,11 +32,11 @@ const SocialProofSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-navy-800/20">
+    <section className="py-12 md:py-20 bg-navy-800/20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-white mb-6">Proven Results Across Industries</h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Proven Results Across Industries</h2>
+          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
             From luxury hotels to enterprise operations, our AI solutions deliver measurable impact. 
             We bring deep hospitality expertise and proven methodologies to every industry we serve.
           </p>
@@ -44,7 +44,7 @@ const SocialProofSection: React.FC = () => {
 
         {/* Stats Section */}
         <div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
             {stats.map((stat, index) => (
               <HoverVisibleContainer
                 key={index}

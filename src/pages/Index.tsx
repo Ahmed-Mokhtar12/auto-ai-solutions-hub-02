@@ -52,9 +52,9 @@ export default function Index() {
           <TrustSection />
           <SocialProofSection />
           
-          <section className="py-20 bg-navy-800/30">
+          <section className="py-12 md:py-20 bg-navy-800/30">
             <div className="container mx-auto px-4 text-center">
-              <h2 className="text-3xl font-bold text-foreground mb-6">Ready to Transform Your Business with AI?</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6">Ready to Transform Your Business with AI?</h2>
               <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
                 Join enterprises across hospitality, manufacturing, finance, and more that have 
                 automated their operations with our AI solutions. Start with a free consultation today.

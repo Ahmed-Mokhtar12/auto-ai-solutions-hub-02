@@ -235,7 +235,7 @@ const ChatWidget: React.FC = () => {
           "bg-navy-900/95 backdrop-blur-xl border border-gold/20 rounded-2xl shadow-2xl",
 "transition-all duration-300 origin-bottom-right",
 "bottom-[calc(15vh+5rem)] right-6",
-          isMobile ? "left-4 right-4 w-auto max-h-[70vh]" : "w-[456px] h-[624px]",
+          isMobile ? "left-3 right-3 w-auto max-h-[60vh]" : "w-[456px] h-[624px]",
           isOpen
             ? "opacity-100 scale-100 pointer-events-auto"
             : "opacity-0 scale-90 pointer-events-none"

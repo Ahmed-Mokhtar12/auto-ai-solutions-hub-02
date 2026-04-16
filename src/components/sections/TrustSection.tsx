@@ -10,9 +10,9 @@ const trustBadges = [
 
 const TrustSection: React.FC = () => {
   return (
-    <section className="py-16 bg-navy-800/30">
+    <section className="py-10 md:py-16 bg-navy-800/30">
       <div className="container mx-auto px-4">
-        <div className="flex flex-wrap justify-center gap-4 md:gap-8">
+        <div className="flex flex-wrap justify-center gap-3 md:gap-8">
           {trustBadges.map((badge, i) => (
             <div
               key={i}

@@ -14,42 +14,42 @@ const Footer: React.FC = () => {
           <div className="flex flex-col gap-2">
             <p className="text-[#F8D042] text-sm font-semibold tracking-wide">DigitLab.ai</p>
             <p className="text-white/50 text-xs">AI-Powered Automation Solutions</p>
-            <div className="flex items-center gap-2 mt-1">
+            <div className="flex items-center gap-3 mt-1">
               <a
                 href="https://www.facebook.com/aiautomationai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-7 h-7 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
+                className="flex items-center justify-center w-10 h-10 md:w-7 md:h-7 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
                 title="Facebook"
               >
-                <Facebook className="h-3.5 w-3.5" />
+                <Facebook className="h-4 w-4 md:h-3.5 md:w-3.5" />
               </a>
               <a
                 href="https://www.instagram.com/ai_digitlab/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-7 h-7 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
+                className="flex items-center justify-center w-10 h-10 md:w-7 md:h-7 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
                 title="Instagram"
               >
-                <Instagram className="h-3.5 w-3.5" />
+                <Instagram className="h-4 w-4 md:h-3.5 md:w-3.5" />
               </a>
               <a
                 href="https://www.linkedin.com/company/106986356/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-7 h-7 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
+                className="flex items-center justify-center w-10 h-10 md:w-7 md:h-7 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
                 title="LinkedIn"
               >
-                <Linkedin className="h-3.5 w-3.5" />
+                <Linkedin className="h-4 w-4 md:h-3.5 md:w-3.5" />
               </a>
               <a
                 href="https://wa.me/009715913426"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-7 h-7 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
+                className="flex items-center justify-center w-10 h-10 md:w-7 md:h-7 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
                 title="WhatsApp"
               >
-                <MessageSquare className="h-3.5 w-3.5" />
+                <MessageSquare className="h-4 w-4 md:h-3.5 md:w-3.5" />
               </a>
             </div>
           </div>
@@ -57,18 +57,18 @@ const Footer: React.FC = () => {
           {/* Column 2 — Solutions */}
           <div className="flex flex-col gap-1.5">
             <p className="text-[#F8D042] text-xs font-semibold uppercase tracking-wider mb-1">Solutions</p>
-            <Link to="/ai-agents" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors">AI Agents</Link>
-            <Link to="/generative-ai" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors">Generative AI</Link>
-            <Link to="/responsible-ai" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors">Responsible AI</Link>
+            <Link to="/ai-agents" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">AI Agents</Link>
+            <Link to="/generative-ai" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">Generative AI</Link>
+            <Link to="/responsible-ai" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">Responsible AI</Link>
           </div>
 
           {/* Column 3 — Company */}
           <div className="flex flex-col gap-1.5">
             <p className="text-[#F8D042] text-xs font-semibold uppercase tracking-wider mb-1">Company</p>
-            <Link to="/about-us" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors">About Us</Link>
-            <Link to="/security" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors">Security</Link>
-            <Link to="/privacy-policy" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors">Privacy Policy</Link>
-            <Link to="/terms-of-service" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors">Terms of Service</Link>
+            <Link to="/about-us" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">About Us</Link>
+            <Link to="/security" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">Security</Link>
+            <Link to="/privacy-policy" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">Privacy Policy</Link>
+            <Link to="/terms-of-service" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">Terms of Service</Link>
           </div>
 
           {/* Column 4 — Contact */}

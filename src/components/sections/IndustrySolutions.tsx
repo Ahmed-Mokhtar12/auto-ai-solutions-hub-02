@@ -48,18 +48,18 @@ const industries = [
 
 const IndustrySolutions: React.FC = () => {
   return (
-    <section className="py-20 bg-navy-800/20">
+    <section className="py-12 md:py-20 bg-navy-800/20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-foreground mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             Industry <span className="text-gold">Solutions</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
             Deep hospitality expertise. Proven methodology adaptable to any enterprise vertical.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {industries.map((industry, index) => (
             <div
               key={index}
@@ -87,7 +87,7 @@ const IndustrySolutions: React.FC = () => {
                 {industry.useCases.map((uc, i) => (
                   <span
                     key={i}
-                    className="text-xs bg-navy-700/80 text-gold/90 px-2.5 py-1 rounded-full border border-navy-700"
+                    className="text-xs bg-navy-700/80 text-gold/90 px-2.5 py-1.5 rounded-full border border-navy-700"
                   >
                     {uc}
                   </span>
