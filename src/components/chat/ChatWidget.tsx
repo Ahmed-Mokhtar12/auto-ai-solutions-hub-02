@@ -220,7 +220,7 @@ const ChatWidget: React.FC = () => {
           "w-14 h-14 shadow-lg transition-all duration-300",
           "bg-navy-800 border border-gold/30 text-gold",
           "hover:scale-110 hover:shadow-gold/20 hover:shadow-xl",
-          "bottom-[calc(10vh+1rem)] right-6",
+          "bottom-[calc(15vh+1rem)] right-6",
           isOpen && "rotate-90 scale-95"
         )}
         aria-label={isOpen ? 'Close chat' : 'Open chat'}
@@ -234,7 +234,7 @@ const ChatWidget: React.FC = () => {
           "fixed z-50 flex flex-col",
           "bg-navy-900/95 backdrop-blur-xl border border-gold/20 rounded-2xl shadow-2xl",
           "transition-all duration-300 origin-bottom-right",
-          "bottom-[calc(10vh+5rem)] right-6",
+          "bottom-[calc(15vh+5rem)] right-6",
           isMobile ? "left-4 right-4 w-auto max-h-[70vh]" : "w-[456px] h-[624px]",
           isOpen
             ? "opacity-100 scale-100 pointer-events-auto"
