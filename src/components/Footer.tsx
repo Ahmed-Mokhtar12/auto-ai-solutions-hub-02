@@ -56,7 +56,7 @@ const Footer: React.FC = () => {
 
           {/* Column 2 — Solutions */}
           <div className="flex flex-col gap-1.5">
-            <p className="text-white/70 text-xs font-semibold uppercase tracking-wider mb-1">Solutions</p>
+            <p className="text-[#F8D042] text-xs font-semibold uppercase tracking-wider mb-1">Solutions</p>
             <Link to="/ai-agents" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors">AI Agents</Link>
             <Link to="/generative-ai" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors">Generative AI</Link>
             <Link to="/responsible-ai" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors">Responsible AI</Link>
@@ -64,7 +64,7 @@ const Footer: React.FC = () => {
 
           {/* Column 3 — Company */}
           <div className="flex flex-col gap-1.5">
-            <p className="text-white/70 text-xs font-semibold uppercase tracking-wider mb-1">Company</p>
+            <p className="text-[#F8D042] text-xs font-semibold uppercase tracking-wider mb-1">Company</p>
             <Link to="/about-us" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors">About Us</Link>
             <Link to="/security" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors">Security</Link>
             <Link to="/privacy-policy" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors">Privacy Policy</Link>
@@ -73,7 +73,7 @@ const Footer: React.FC = () => {
 
           {/* Column 4 — Contact */}
           <div className="flex flex-col gap-1.5">
-            <p className="text-white/70 text-xs font-semibold uppercase tracking-wider mb-1">Contact</p>
+            <p className="text-[#F8D042] text-xs font-semibold uppercase tracking-wider mb-1">Contact</p>
             <a
               href="mailto:Ai.Agent@DigitLab.ai"
               className="inline-flex items-center gap-1.5 text-white/50 text-xs hover:text-[#F8D042] transition-colors"
