@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Logo from './Logo';
 import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
@@ -28,12 +28,12 @@ const services = [
 ];
 
 const industries = [
-  { label: 'Hospitality', icon: Hotel, desc: 'Our core specialty' },
-  { label: 'Manufacturing', icon: Factory, desc: 'Process optimization' },
-  { label: 'Finance', icon: Landmark, desc: 'Risk & compliance AI' },
-  { label: 'Retail', icon: ShoppingBag, desc: 'Customer intelligence' },
-  { label: 'Healthcare', icon: HeartPulse, desc: 'Clinical & operational AI' },
-  { label: 'Supply Chain', icon: Truck, desc: 'Logistics automation' },
+  { label: 'Hospitality', href: '/industries/hospitality', icon: Hotel, desc: 'Our core specialty' },
+  { label: 'Manufacturing', href: '/industries/manufacturing', icon: Factory, desc: 'Process optimization' },
+  { label: 'Finance', href: '/industries/finance', icon: Landmark, desc: 'Risk & compliance AI' },
+  { label: 'Retail', href: '/industries/retail', icon: ShoppingBag, desc: 'Customer intelligence' },
+  { label: 'Healthcare', href: '/industries/healthcare', icon: HeartPulse, desc: 'Clinical & operational AI' },
+  { label: 'Supply Chain', href: '/industries/logistics', icon: Truck, desc: 'Logistics automation' },
 ];
 
 const Header: React.FC = () => {
@@ -89,16 +89,18 @@ const Header: React.FC = () => {
                   {/* Industries section */}
                   <p className="text-xs text-muted-foreground uppercase tracking-wider px-3 pt-6 pb-2">Industries</p>
                   {industries.map((ind) => (
-                    <div
-                      key={ind.label}
-                      className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-foreground/80"
-                    >
-                      <ind.icon className="h-4 w-4 text-gold/70" />
-                      <div>
-                        <div className="font-medium">{ind.label}</div>
-                        <div className="text-xs text-muted-foreground">{ind.desc}</div>
-                      </div>
-                    </div>
+                    <SheetClose asChild key={ind.label}>
+                      <Link
+                        to={ind.href}
+                        className="flex items-center gap-3 px-3 py-2 rounded-md text-sm text-foreground/80 hover:text-gold hover:bg-gold/5 transition-colors"
+                      >
+                        <ind.icon className="h-4 w-4 text-gold/70" />
+                        <div>
+                          <div className="font-medium">{ind.label}</div>
+                          <div className="text-xs text-muted-foreground">{ind.desc}</div>
+                        </div>
+                      </Link>
+                    </SheetClose>
                   ))}
 
                   {/* Other links */}
@@ -111,6 +113,11 @@ const Header: React.FC = () => {
                     <SheetClose asChild>
                       <Link to="/about" className="px-3 py-2.5 text-sm text-foreground/80 hover:text-gold transition-colors rounded-md hover:bg-gold/5">
                         About Us
+                      </Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link to="/contact" className="px-3 py-2.5 text-sm text-foreground/80 hover:text-gold transition-colors rounded-md hover:bg-gold/5">
+                        Contact
                       </Link>
                     </SheetClose>
                   </div>
@@ -156,15 +163,17 @@ const Header: React.FC = () => {
             <DropdownMenuContent className="bg-background/95 backdrop-blur-xl border-gold/20 min-w-[240px]">
               <DropdownMenuLabel className="text-xs text-gold/60 uppercase tracking-wider">Our Specialties</DropdownMenuLabel>
               {industries.map((ind, i) => (
-                <DropdownMenuItem key={ind.label} className="flex items-center gap-3 px-3 py-2.5 cursor-default">
-                  <ind.icon className="h-4 w-4 text-gold/70" />
-                  <div>
-                    <div className="font-medium text-sm">{ind.label}</div>
-                    <div className="text-xs text-muted-foreground">{ind.desc}</div>
-                  </div>
-                  {i === 0 && (
-                    <span className="ml-auto text-[10px] bg-gold/20 text-gold px-1.5 py-0.5 rounded-full">Core</span>
-                  )}
+                <DropdownMenuItem key={ind.label} asChild>
+                  <Link to={ind.href} className="flex items-center gap-3 px-3 py-2.5 cursor-pointer">
+                    <ind.icon className="h-4 w-4 text-gold/70" />
+                    <div>
+                      <div className="font-medium text-sm">{ind.label}</div>
+                      <div className="text-xs text-muted-foreground">{ind.desc}</div>
+                    </div>
+                    {i === 0 && (
+                      <span className="ml-auto text-[10px] bg-gold/20 text-gold px-1.5 py-0.5 rounded-full">Core</span>
+                    )}
+                  </Link>
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
@@ -175,6 +184,9 @@ const Header: React.FC = () => {
           </Link>
           <Link to="/about" className="text-sm text-gold hover:text-gold/80 transition-colors">
             About Us
+          </Link>
+          <Link to="/contact" className="text-sm text-gold hover:text-gold/80 transition-colors">
+            Contact
           </Link>
         </nav>
 

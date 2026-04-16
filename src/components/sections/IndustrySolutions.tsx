@@ -1,10 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Hotel, Factory, Landmark, ShoppingBag, HeartPulse, Truck, Star } from 'lucide-react';
 
 const industries = [
   {
     icon: <Hotel className="h-8 w-8 text-gold" />,
     title: "Hospitality",
+    href: "/industries/hospitality",
     description: "Our core expertise. AI-powered guest experiences, concierge automation, and operational intelligence for hotels and resorts.",
     useCases: ["Smart Concierge", "Revenue Optimization", "Guest Personalization"],
     featured: true,
@@ -12,6 +14,7 @@ const industries = [
   {
     icon: <Factory className="h-8 w-8 text-gold" />,
     title: "Manufacturing",
+    href: "/industries/manufacturing",
     description: "Predictive maintenance, quality control automation, and supply chain optimization powered by AI.",
     useCases: ["Predictive Maintenance", "Quality Assurance", "Supply Chain AI"],
     featured: false,
@@ -19,6 +22,7 @@ const industries = [
   {
     icon: <Landmark className="h-8 w-8 text-gold" />,
     title: "Finance",
+    href: "/industries/finance",
     description: "Intelligent document processing, fraud detection, and automated compliance workflows.",
     useCases: ["Document Processing", "Risk Analysis", "Compliance Automation"],
     featured: false,
@@ -26,6 +30,7 @@ const industries = [
   {
     icon: <ShoppingBag className="h-8 w-8 text-gold" />,
     title: "Retail",
+    href: "/industries/retail",
     description: "Personalized customer journeys, inventory intelligence, and omnichannel automation.",
     useCases: ["Customer Analytics", "Inventory AI", "Omnichannel Bots"],
     featured: false,
@@ -33,6 +38,7 @@ const industries = [
   {
     icon: <HeartPulse className="h-8 w-8 text-gold" />,
     title: "Healthcare",
+    href: "/industries/healthcare",
     description: "Patient engagement automation, scheduling optimization, and clinical workflow support.",
     useCases: ["Patient Engagement", "Scheduling AI", "Workflow Automation"],
     featured: false,
@@ -40,6 +46,7 @@ const industries = [
   {
     icon: <Truck className="h-8 w-8 text-gold" />,
     title: "Logistics",
+    href: "/industries/logistics",
     description: "Route optimization, warehouse automation, and real-time tracking intelligence.",
     useCases: ["Route Optimization", "Warehouse AI", "Tracking Systems"],
     featured: false,
@@ -61,9 +68,10 @@ const IndustrySolutions: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {industries.map((industry, index) => (
-            <div
+            <Link
+              to={industry.href}
               key={index}
-              className={`relative p-6 rounded-lg border transition-all duration-300 h-full animate-fade-in ${
+              className={`relative p-6 rounded-lg border transition-all duration-300 h-full animate-fade-in block hover:scale-[1.02] ${
                 industry.featured
                   ? 'bg-navy-800/80 border-gold/40 shadow-lg shadow-gold/5'
                   : 'bg-navy-800/50 border-navy-700 hover:border-gold/20'
@@ -93,7 +101,7 @@ const IndustrySolutions: React.FC = () => {
                   </span>
                 ))}
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

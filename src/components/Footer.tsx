@@ -67,6 +67,7 @@ const Footer: React.FC = () => {
             <p className="text-[#F8D042] text-xs font-semibold uppercase tracking-wider mb-1">Company</p>
             <Link to="/about-us" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">About Us</Link>
             <Link to="/security" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">Security</Link>
+            <Link to="/contact" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">Contact Us</Link>
             <Link to="/privacy-policy" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">Privacy Policy</Link>
             <Link to="/terms-of-service" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">Terms of Service</Link>
           </div>
