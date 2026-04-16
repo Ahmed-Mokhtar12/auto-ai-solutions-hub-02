@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Mail, Phone, Facebook, Instagram, Linkedin, MessageSquare } from 'lucide-react';
+import { Mail, Facebook, Instagram, Linkedin, MessageSquare } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import logoV3 from '@/assets/digitlab-logo-v3.png';
 
@@ -44,7 +44,7 @@ const Footer: React.FC = () => {
                 <Linkedin className="h-3 w-3" />
               </a>
               <a
-                href="https://wa.me/009715913426"
+                href="https://wa.me/15556395391"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center w-6 h-6 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
@@ -82,22 +82,6 @@ const Footer: React.FC = () => {
             >
               <Mail className="h-3 w-3 text-[#F8D042] shrink-0" />
               Ai.Agent@DigitLab.ai
-            </a>
-            <a
-              href="tel:+9715913426"
-              className="inline-flex items-center gap-1 text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5"
-            >
-              <Phone className="h-3 w-3 text-[#F8D042] shrink-0" />
-              +971 591 3426
-            </a>
-            <a
-              href="https://wa.me/009715913426"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5"
-            >
-              <MessageSquare className="h-3 w-3 text-[#F8D042] shrink-0" />
-              WhatsApp
             </a>
           </div>
         </div>

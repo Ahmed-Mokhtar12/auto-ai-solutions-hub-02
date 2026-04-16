@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Send, Calendar, Mail, Phone, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Send, Calendar, Mail } from 'lucide-react';
 import { z } from 'zod';
 import Header from "@/components/Header";
 import ChatWidget from '@/components/chat/ChatWidget';
@@ -165,12 +165,6 @@ const Contact = () => {
                 <h2 className="text-xl font-semibold text-[#F8D042] mb-4">Direct Contact</h2>
                 <a href="mailto:Ai.Agent@DigitLab.ai" className="flex items-center gap-3 text-white/70 text-sm hover:text-[#F8D042] transition-colors">
                   <Mail className="h-4 w-4 text-[#F8D042] shrink-0" /> Ai.Agent@DigitLab.ai
-                </a>
-                <a href="tel:+9715913426" className="flex items-center gap-3 text-white/70 text-sm hover:text-[#F8D042] transition-colors">
-                  <Phone className="h-4 w-4 text-[#F8D042] shrink-0" /> +971 591 3426
-                </a>
-                <a href="https://wa.me/009715913426" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white/70 text-sm hover:text-[#F8D042] transition-colors">
-                  <MessageSquare className="h-4 w-4 text-[#F8D042] shrink-0" /> WhatsApp
                 </a>
               </div>
             </div>
