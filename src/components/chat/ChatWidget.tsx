@@ -233,7 +233,7 @@ const ChatWidget: React.FC = () => {
         className={cn(
           "fixed z-50 flex flex-col",
           "bg-navy-900/95 backdrop-blur-xl border border-gold/20 rounded-2xl shadow-2xl",
-          "transition-all duration-300 origin-bottom-right",
+          "transition-all duration-300 origin-top-right",
           "top-20 right-6",
           isMobile ? "left-4 right-4 w-auto max-h-[70vh]" : "w-[456px] h-[624px]",
           isOpen
