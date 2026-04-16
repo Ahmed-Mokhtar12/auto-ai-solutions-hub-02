@@ -1,78 +1,37 @@
 
 
-## Phase 7: Additional Pages
+## Fix Scrollbar Styling + Footer Overlap on All Subpages
 
-Enrich the three service subpages, create six industry landing pages, and add a contact/demo form page. All pages follow the existing subpage layout pattern (DynamicBackground, Header, glass card, Back to Home link, Footer, ChatWidget, `pb-[15vh]`).
+### Problems Identified
 
----
+1. **Ugly scrollbar**: The content cards on subpages use `scrollbar-thin scrollbar-thumb-gold/30 scrollbar-track-transparent` (Tailwind plugin classes) which render a default browser scrollbar. The chat widget uses a custom `.chat-scrollbar` CSS class that looks much better — thin, transparent by default, gold on hover.
 
-### 1. Enrich Service Subpages
+2. **Footer overlaps content**: The content card uses `max-h-[65vh]` but with `pb-[15vh]` for the footer, the card extends behind the footer. Need to reduce `max-h` or adjust the layout.
 
-Expand **AI Agents**, **Generative AI**, and **Responsible AI** from a single paragraph to full multi-section pages.
-
-Each page gets:
-- Hero intro paragraph (already exists, refined)
-- 3-4 content sections with gold headings (reuse the `Section` component pattern from AboutUs/Security)
-- Key features list with icons
-- Use cases grid (2-3 cards)
-- Bottom CTA: "Request a Demo" button linking to Calendly
-
-**Files modified:**
-- `src/pages/AIAgents.tsx` — add sections: How It Works, Key Capabilities (icon list), Use Cases (cards), CTA
-- `src/pages/GenerativeAI.tsx` — add sections: What We Offer, Applications, Integration, CTA
-- `src/pages/ResponsibleAI.tsx` — add sections: Our Framework, Principles (icon list), Governance, CTA
+3. **Footer too tall**: Reduce footer padding to make it ~25% shorter.
 
 ---
 
-### 2. Industry Landing Pages
+### Changes
 
-Create six new pages, one per industry from the IndustrySolutions grid. Each follows the same template:
+**1. Replace scrollbar classes with `.chat-scrollbar` on all subpage content cards**
 
-- Industry icon + title
-- Overview paragraph
-- 3 use-case sections with descriptions
-- "How We Help" process (3 steps)
-- Bottom CTA
+Files affected:
+- `src/pages/ResponsibleAI.tsx` — line 42: replace `scrollbar-thin scrollbar-thumb-gold/30 scrollbar-track-transparent` with `chat-scrollbar`
+- `src/pages/AIAgents.tsx` — line 48: same replacement
+- `src/pages/GenerativeAI.tsx` — same replacement on the content card div
+- `src/pages/industries/IndustryPageTemplate.tsx` — same replacement (covers all 6 industry pages)
+- `src/pages/AboutUs.tsx` — check and apply if scrollable card exists
+- `src/pages/Security.tsx` — check and apply if scrollable card exists
+- `src/pages/Contact.tsx` — check and apply if applicable
+- `src/pages/PrivacyPolicy.tsx`, `src/pages/TermsOfService.tsx` — check and apply
 
-**New files:**
-- `src/pages/industries/Hospitality.tsx`
-- `src/pages/industries/Manufacturing.tsx`
-- `src/pages/industries/Finance.tsx`
-- `src/pages/industries/Retail.tsx`
-- `src/pages/industries/Healthcare.tsx`
-- `src/pages/industries/Logistics.tsx`
+**2. Reduce content card max-height from `max-h-[65vh]` to `max-h-[55vh]`** on all subpages to prevent footer overlap.
 
-**Files modified:**
-- `src/App.tsx` — add routes: `/industries/hospitality`, `/industries/manufacturing`, etc.
-- `src/components/sections/IndustrySolutions.tsx` — wrap each industry card title in a `Link` to its page
-- `src/components/Header.tsx` — add `href` to industries array items, make them clickable links in the dropdown
+**3. Shrink footer by ~25%**
+- `src/components/Footer.tsx`: reduce `py-4` to `py-2`, reduce `mb-3` to `mb-1.5`, reduce `gap-2` to `gap-1`
+- Update all pages from `pb-[15vh]` to `pb-[10vh]`
+- Update `mem://ui/fixed-footer` to reflect new sizing
 
----
-
-### 3. Contact / Demo Form Page
-
-A standalone `/contact` page with a form (name, email, company, message) that submits to the existing n8n webhook or a mailto fallback. No backend needed — uses `fetch` to POST to a webhook.
-
-**New file:**
-- `src/pages/Contact.tsx` — form with zod validation, gold-styled inputs, Calendly link as alternative
-
-**Files modified:**
-- `src/App.tsx` — add `/contact` route
-- `src/components/Header.tsx` — add "Contact" link to nav (mobile + desktop)
-- `src/components/Footer.tsx` — add "Contact Us" link in Company column
-
----
-
-### Technical details
-
-- All new pages use the shared pattern: `DynamicBackground`, `Header`, `Footer`, `ChatWidget`, `pb-[15vh]`
-- Industry pages share a reusable template component `src/pages/industries/IndustryPageTemplate.tsx` to avoid duplication
-- Form validation with zod; input sanitization reuses existing `src/utils/inputSanitizer.ts`
-- No new dependencies needed
-- Mobile-responsive from the start (using Phase 6 patterns: `text-3xl md:text-4xl`, `py-12 md:py-20`, etc.)
-
-### What stays the same
-- All existing pages, layouts, and functionality
-- Index page sections unchanged
-- Services page (`/services`) unchanged
+**4. Update memory** to document the new footer height and scrollbar convention.
 
