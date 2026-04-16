@@ -7,7 +7,10 @@ import { Button } from '@/components/ui/button';
 import FloatingServiceBox from '@/components/FloatingServiceBox';
 import HeroSection from '@/components/sections/HeroSection';
 import ServicesOverview from '@/components/sections/ServicesOverview';
+import IndustrySolutions from '@/components/sections/IndustrySolutions';
 import ProcessSection from '@/components/sections/ProcessSection';
+import TestimonialsSection from '@/components/sections/TestimonialsSection';
+import TrustSection from '@/components/sections/TrustSection';
 import SocialProofSection from '@/components/sections/SocialProofSection';
 import ChatWidget from '@/components/chat/ChatWidget';
 
@@ -43,7 +46,10 @@ export default function Index() {
             onSolutionsClick={handleSolutionsClick}
           />
           <ServicesOverview />
+          <IndustrySolutions />
           <ProcessSection />
+          <TestimonialsSection />
+          <TrustSection />
           <SocialProofSection />
           
           <section className="py-20 bg-navy-800/30">
