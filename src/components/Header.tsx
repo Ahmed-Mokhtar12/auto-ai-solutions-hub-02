@@ -45,7 +45,7 @@ const Header: React.FC = () => {
 
   if (isMobile) {
     return (
-      <header className="w-full py-4 px-4">
+      <header className="w-full py-4 px-4 relative z-30">
         <div className="flex justify-between items-center">
           <Logo />
           <div className="flex items-center gap-3">
@@ -124,61 +124,61 @@ const Header: React.FC = () => {
   }
 
   return (
-    <header className="w-full py-6">
-      <div className="container mx-auto flex justify-between items-center">
+    <header className="w-full py-6 relative z-30">
+      <div className="container mx-auto px-4 flex items-center">
         <Logo />
-        <div className="flex items-center gap-6">
-          <nav className="flex items-center gap-6">
-            {/* Services Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-1 text-sm text-gold hover:text-gold/80 transition-colors outline-none cursor-pointer">
-                Services <ChevronDown className="h-3 w-3" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-background/95 backdrop-blur-xl border-gold/20 min-w-[240px]">
-                {services.map((s) => (
-                  <DropdownMenuItem key={s.label} asChild>
-                    <Link to={s.href} className="flex items-center gap-3 px-3 py-2.5 cursor-pointer">
-                      <s.icon className="h-4 w-4 text-gold/70" />
-                      <div>
-                        <div className="font-medium text-sm">{s.label}</div>
-                        <div className="text-xs text-muted-foreground">{s.desc}</div>
-                      </div>
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Industries Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-1 text-sm text-gold hover:text-gold/80 transition-colors outline-none cursor-pointer">
-                Industries <ChevronDown className="h-3 w-3" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-background/95 backdrop-blur-xl border-gold/20 min-w-[240px]">
-                <DropdownMenuLabel className="text-xs text-gold/60 uppercase tracking-wider">Our Specialties</DropdownMenuLabel>
-                {industries.map((ind, i) => (
-                  <DropdownMenuItem key={ind.label} className="flex items-center gap-3 px-3 py-2.5 cursor-default">
-                    <ind.icon className="h-4 w-4 text-gold/70" />
+        <nav className="flex items-center gap-4 lg:gap-6 ml-8">
+          {/* Services Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex items-center gap-1 text-sm text-gold hover:text-gold/80 transition-colors outline-none cursor-pointer">
+              Services <ChevronDown className="h-3 w-3" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-background/95 backdrop-blur-xl border-gold/20 min-w-[240px]">
+              {services.map((s) => (
+                <DropdownMenuItem key={s.label} asChild>
+                  <Link to={s.href} className="flex items-center gap-3 px-3 py-2.5 cursor-pointer">
+                    <s.icon className="h-4 w-4 text-gold/70" />
                     <div>
-                      <div className="font-medium text-sm">{ind.label}</div>
-                      <div className="text-xs text-muted-foreground">{ind.desc}</div>
+                      <div className="font-medium text-sm">{s.label}</div>
+                      <div className="text-xs text-muted-foreground">{s.desc}</div>
                     </div>
-                    {i === 0 && (
-                      <span className="ml-auto text-[10px] bg-gold/20 text-gold px-1.5 py-0.5 rounded-full">Core</span>
-                    )}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  </Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-            <Link to="/security" className="text-sm text-gold hover:text-gold/80 transition-colors">
-              Security
-            </Link>
-            <Link to="/about" className="text-sm text-gold hover:text-gold/80 transition-colors">
-              About Us
-            </Link>
-          </nav>
+          {/* Industries Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex items-center gap-1 text-sm text-gold hover:text-gold/80 transition-colors outline-none cursor-pointer">
+              Industries <ChevronDown className="h-3 w-3" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-background/95 backdrop-blur-xl border-gold/20 min-w-[240px]">
+              <DropdownMenuLabel className="text-xs text-gold/60 uppercase tracking-wider">Our Specialties</DropdownMenuLabel>
+              {industries.map((ind, i) => (
+                <DropdownMenuItem key={ind.label} className="flex items-center gap-3 px-3 py-2.5 cursor-default">
+                  <ind.icon className="h-4 w-4 text-gold/70" />
+                  <div>
+                    <div className="font-medium text-sm">{ind.label}</div>
+                    <div className="text-xs text-muted-foreground">{ind.desc}</div>
+                  </div>
+                  {i === 0 && (
+                    <span className="ml-auto text-[10px] bg-gold/20 text-gold px-1.5 py-0.5 rounded-full">Core</span>
+                  )}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
+          <Link to="/security" className="text-sm text-gold hover:text-gold/80 transition-colors">
+            Security
+          </Link>
+          <Link to="/about" className="text-sm text-gold hover:text-gold/80 transition-colors">
+            About Us
+          </Link>
+        </nav>
+
+        <div className="flex items-center gap-3 ml-auto shrink-0">
           <Link to="/auth">
             <Button className="gold-btn text-sm">Your AI Dashboard</Button>
           </Link>
