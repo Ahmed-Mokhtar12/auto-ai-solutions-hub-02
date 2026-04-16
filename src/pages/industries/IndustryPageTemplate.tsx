@@ -29,7 +29,7 @@ interface IndustryPageProps {
 
 const IndustryPageTemplate: React.FC<IndustryPageProps> = ({ icon: Icon, title, overview, useCases, steps }) => {
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden <div className="min-h-screen flex flex-col relative overflow-hidden pb-[10vh]">">
+    <div className="<div className="min-h-screen flex flex-col relative overflow-hidden pb-[10vh]"> className="min-h-screen flex flex-col relative overflow-hidden pb-[10vh]">">
       <DynamicBackground />
       <Header />
 
