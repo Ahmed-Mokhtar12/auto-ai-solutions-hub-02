@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import HoverVisibleContainer from '@/components/HoverVisibleContainer';
 
 const testimonials = [
   {
@@ -46,57 +47,59 @@ const TestimonialsSection: React.FC = () => {
           </p>
         </div>
 
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-navy-800/60 border border-navy-700 rounded-xl p-8 md:p-12 relative">
-            <Quote className="h-10 w-10 text-gold/30 absolute top-6 left-6" />
+        <HoverVisibleContainer autoHideDelay={2500} initialVisibility={false} showIndicator={false}>
+          <div className="max-w-3xl mx-auto">
+            <div className="bg-navy-800/60 border border-navy-700 rounded-xl p-8 md:p-12 relative">
+              <Quote className="h-10 w-10 text-gold/30 absolute top-6 left-6" />
 
-            <div className="text-center">
-              <p className="text-lg md:text-xl text-foreground/90 italic leading-relaxed mb-8 pt-4">
-                "{t.quote}"
-              </p>
+              <div className="text-center">
+                <p className="text-lg md:text-xl text-foreground/90 italic leading-relaxed mb-8 pt-4">
+                  "{t.quote}"
+                </p>
 
-              <div className="mb-2">
-                <p className="text-foreground font-semibold text-lg">{t.name}</p>
-                <p className="text-muted-foreground text-sm">{t.title}, {t.company}</p>
+                <div className="mb-2">
+                  <p className="text-foreground font-semibold text-lg">{t.name}</p>
+                  <p className="text-muted-foreground text-sm">{t.title}, {t.company}</p>
+                </div>
+                <span className="text-xs bg-gold/10 text-gold px-3 py-1 rounded-full border border-gold/20">
+                  {t.industry}
+                </span>
               </div>
-              <span className="text-xs bg-gold/10 text-gold px-3 py-1 rounded-full border border-gold/20">
-                {t.industry}
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-center gap-4 mt-6">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={prev}
-              className="text-muted-foreground hover:text-gold"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </Button>
-
-            <div className="flex gap-2">
-              {testimonials.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrent(i)}
-                  className={`h-3 rounded-full transition-all duration-300 ${
-                    i === current ? 'w-8 bg-gold' : 'w-3 bg-navy-700'
-                  }`}
-                />
-              ))}
             </div>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={next}
-              className="text-muted-foreground hover:text-gold"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </Button>
+            <div className="flex items-center justify-center gap-4 mt-6">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={prev}
+                className="text-muted-foreground hover:text-gold"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </Button>
+
+              <div className="flex gap-2">
+                {testimonials.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrent(i)}
+                    className={`h-3 rounded-full transition-all duration-300 ${
+                      i === current ? 'w-8 bg-gold' : 'w-3 bg-navy-700'
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={next}
+                className="text-muted-foreground hover:text-gold"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
-        </div>
+        </HoverVisibleContainer>
       </div>
     </section>
   );

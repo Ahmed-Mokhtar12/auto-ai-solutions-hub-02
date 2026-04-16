@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Hotel, Factory, Landmark, ShoppingBag, HeartPulse, Truck, Star } from 'lucide-react';
+import HoverVisibleContainer from '@/components/HoverVisibleContainer';
 
 const industries = [
   {
@@ -68,40 +69,41 @@ const IndustrySolutions: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {industries.map((industry, index) => (
-            <Link
-              to={industry.href}
-              key={index}
-              className={`relative p-6 rounded-lg border transition-all duration-300 h-full animate-fade-in block hover:scale-[1.02] ${
-                industry.featured
-                  ? 'bg-navy-800/80 border-gold/40 shadow-lg shadow-gold/5'
-                  : 'bg-navy-800/50 border-navy-700 hover:border-gold/20'
-              }`}
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              {industry.featured && (
-                <div className="absolute -top-3 left-4 flex items-center gap-1 bg-gold text-navy-900 text-xs font-bold px-3 py-1 rounded-full">
-                  <Star className="h-3 w-3" /> Core Expertise
+            <HoverVisibleContainer key={index} autoHideDelay={2500} initialVisibility={false} showIndicator={false}>
+              <Link
+                to={industry.href}
+                className={`relative p-6 rounded-lg border transition-all duration-300 h-full animate-fade-in block hover:scale-[1.02] ${
+                  industry.featured
+                    ? 'bg-navy-800/80 border-gold/40 shadow-lg shadow-gold/5'
+                    : 'bg-navy-800/50 border-navy-700 hover:border-gold/20'
+                }`}
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                {industry.featured && (
+                  <div className="absolute -top-3 left-4 flex items-center gap-1 bg-gold text-navy-900 text-xs font-bold px-3 py-1 rounded-full">
+                    <Star className="h-3 w-3" /> Core Expertise
+                  </div>
+                )}
+
+                <div className="flex items-center gap-3 mb-4 mt-1">
+                  {industry.icon}
+                  <h3 className="text-xl font-bold text-foreground">{industry.title}</h3>
                 </div>
-              )}
 
-              <div className="flex items-center gap-3 mb-4 mt-1">
-                {industry.icon}
-                <h3 className="text-xl font-bold text-foreground">{industry.title}</h3>
-              </div>
+                <p className="text-muted-foreground text-sm mb-4">{industry.description}</p>
 
-              <p className="text-muted-foreground text-sm mb-4">{industry.description}</p>
-
-              <div className="flex flex-wrap gap-2">
-                {industry.useCases.map((uc, i) => (
-                  <span
-                    key={i}
-                    className="text-xs bg-navy-700/80 text-gold/90 px-2.5 py-1.5 rounded-full border border-navy-700"
-                  >
-                    {uc}
-                  </span>
-                ))}
-              </div>
-            </Link>
+                <div className="flex flex-wrap gap-2">
+                  {industry.useCases.map((uc, i) => (
+                    <span
+                      key={i}
+                      className="text-xs bg-navy-700/80 text-gold/90 px-2.5 py-1.5 rounded-full border border-navy-700"
+                    >
+                      {uc}
+                    </span>
+                  ))}
+                </div>
+              </Link>
+            </HoverVisibleContainer>
           ))}
         </div>
       </div>
