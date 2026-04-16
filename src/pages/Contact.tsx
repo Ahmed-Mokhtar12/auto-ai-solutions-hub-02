@@ -77,7 +77,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="<div className="min-h-screen flex flex-col relative overflow-hidden pb-[10vh]"> className="min-h-screen flex flex-col relative overflow-hidden pb-[10vh]">">
+    <div className="min-h-screen flex flex-col relative overflow-hidden pb-[10vh]">
       <DynamicBackground />
       <Header />
 
