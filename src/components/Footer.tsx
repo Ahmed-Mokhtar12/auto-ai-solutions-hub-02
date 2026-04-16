@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
 
           {/* Column 1 — Brand + Socials */}
           <div className="flex flex-col gap-0.5">
-            <p className="text-[#F8D042] text-sm font-bold tracking-wide">DigitLab.ai</p>
+            <img src={logoV3} alt="DigitLab.ai" width={20} height={20} className="object-contain" />
             <p className="text-white/50 text-[9px] leading-tight">AI-Powered Automation Solutions</p>
             <div className="flex items-center gap-2 mt-0.5">
               <a
