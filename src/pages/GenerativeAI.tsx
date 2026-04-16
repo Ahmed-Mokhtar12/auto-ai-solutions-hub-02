@@ -45,7 +45,7 @@ const GenerativeAI = () => {
             Generative AI
           </h1>
 
-          <div className="bg-navy-800/80 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-navy-700 space-y-10 max-h-[65vh] overflow-y-auto <div className="bg-navy-800/80 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-navy-700 space-y-10 max-h-[55vh] overflow-y-auto chat-scrollbar">">
+          <div className="bg-navy-800/80 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-navy-700 space-y-10 max-h-[55vh] overflow-y-auto chat-scrollbar">
             <p className="text-white/90 text-lg leading-relaxed">
               Harness the power of Generative AI to create content, generate insights, and
               automate creative processes. Our solutions produce high-quality outputs across
