@@ -30,7 +30,7 @@ export default function Index() {
   };
   
   return (
-    <div className="min-h-screen flex flex-col relative pb-[10vh]">
+    <div className="min-h-screen flex flex-col relative pb-[15vh]">
       <DynamicBackground />
       
       <div className="absolute top-4 left-4 z-50">
