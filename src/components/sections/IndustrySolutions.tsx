@@ -1,6 +1,5 @@
 import React from 'react';
 import { Hotel, Factory, Landmark, ShoppingBag, HeartPulse, Truck, Star } from 'lucide-react';
-import HoverVisibleContainer from '@/components/HoverVisibleContainer';
 
 const industries = [
   {
@@ -62,44 +61,39 @@ const IndustrySolutions: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {industries.map((industry, index) => (
-            <HoverVisibleContainer
+            <div
               key={index}
-              autoHideDelay={3000}
-              initialVisibility={false}
-              showIndicator={false}
+              className={`relative p-6 rounded-lg border transition-all duration-300 h-full animate-fade-in ${
+                industry.featured
+                  ? 'bg-navy-800/80 border-gold/40 shadow-lg shadow-gold/5'
+                  : 'bg-navy-800/50 border-navy-700 hover:border-gold/20'
+              }`}
+              style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div
-                className={`relative p-6 rounded-lg border transition-all duration-300 h-full ${
-                  industry.featured
-                    ? 'bg-navy-800/80 border-gold/40 shadow-lg shadow-gold/5'
-                    : 'bg-navy-800/50 border-navy-700 hover:border-gold/20'
-                }`}
-              >
-                {industry.featured && (
-                  <div className="absolute -top-3 left-4 flex items-center gap-1 bg-gold text-navy-900 text-xs font-bold px-3 py-1 rounded-full">
-                    <Star className="h-3 w-3" /> Core Expertise
-                  </div>
-                )}
-
-                <div className="flex items-center gap-3 mb-4 mt-1">
-                  {industry.icon}
-                  <h3 className="text-xl font-bold text-foreground">{industry.title}</h3>
+              {industry.featured && (
+                <div className="absolute -top-3 left-4 flex items-center gap-1 bg-gold text-navy-900 text-xs font-bold px-3 py-1 rounded-full">
+                  <Star className="h-3 w-3" /> Core Expertise
                 </div>
+              )}
 
-                <p className="text-muted-foreground text-sm mb-4">{industry.description}</p>
-
-                <div className="flex flex-wrap gap-2">
-                  {industry.useCases.map((uc, i) => (
-                    <span
-                      key={i}
-                      className="text-xs bg-navy-700/80 text-gold/90 px-2.5 py-1 rounded-full border border-navy-700"
-                    >
-                      {uc}
-                    </span>
-                  ))}
-                </div>
+              <div className="flex items-center gap-3 mb-4 mt-1">
+                {industry.icon}
+                <h3 className="text-xl font-bold text-foreground">{industry.title}</h3>
               </div>
-            </HoverVisibleContainer>
+
+              <p className="text-muted-foreground text-sm mb-4">{industry.description}</p>
+
+              <div className="flex flex-wrap gap-2">
+                {industry.useCases.map((uc, i) => (
+                  <span
+                    key={i}
+                    className="text-xs bg-navy-700/80 text-gold/90 px-2.5 py-1 rounded-full border border-navy-700"
+                  >
+                    {uc}
+                  </span>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </div>
