@@ -10,7 +10,7 @@ interface HeroSectionProps {
 
 const HeroSection: React.FC<HeroSectionProps> = ({ onBookSession, onSolutionsClick }) => {
   return (
-    <section className="container mx-auto px-4 py-20 text-center">
+    <section className="container mx-auto px-4 py-12 md:py-20 text-center">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-bold mb-6">
           <span className="text-white">Enterprise </span>
