@@ -13,8 +13,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onBookSession, onSolutionsCli
     <section className="container mx-auto px-4 py-12 md:py-20 text-center">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-bold mb-6">
-          <span className="text-white">Enterprise </span>
-          <span className="text-gold">AI Solutions</span>
+          <span className="text-white">AI Agents That </span>
+          <span className="text-gold">Automate Conversations & Actions</span>
           <br />
           <span className="text-white text-xl md:text-3xl font-medium mt-2 block">
             Built for Hospitality, Ready for Every Industry
