@@ -2,6 +2,7 @@
 import React from 'react';
 import { Mail, Phone, Facebook, Instagram, Linkedin, MessageSquare } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import logoV3 from '@/assets/digitlab-logo-v3.png';
 
 const Footer: React.FC = () => {
   return (
