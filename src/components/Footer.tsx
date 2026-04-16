@@ -84,7 +84,7 @@ const Footer: React.FC = () => {
             </a>
             <a
               href="tel:+9715913426"
-              className="inline-flex items-center gap-1 text-white/50 text-[11px] hover:text-[#F8D042] transition-colors py-0.5"
+              className="inline-flex items-center gap-1 text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5"
             >
               <Phone className="h-3 w-3 text-[#F8D042] shrink-0" />
               +971 591 3426
