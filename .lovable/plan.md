@@ -1,19 +1,18 @@
 
 
-## Make Footer Headers Bigger/Bolder, Shrink Content Below
+## Integrate V3 Logo into Header and Footer (Icon Only)
 
-The user wants the 4 column headers (DigitLab.ai, Solutions, Company, Contact) to be more prominent, and the links/text beneath them to be smaller.
+### Changes
 
-### Changes in `src/components/Footer.tsx`
+**`src/components/Logo.tsx`**
+- Import `digitlab-logo-v3.png`
+- Replace the entire text ("Digit", "Lab", ".ai") with just the `<img>` tag (32×32px)
+- Keep the `<Link to="/">` wrapper
 
-**Headers — make bolder and bigger:**
-- "DigitLab.ai": `text-xs font-semibold` → `text-sm font-bold`
-- "Solutions", "Company", "Contact" headers: `text-[10px] font-semibold` → `text-xs font-bold`
+**`src/components/Footer.tsx`**
+- Import `digitlab-logo-v3.png`
+- Replace the "DigitLab.ai" text in column 1 with a 20×20px `<img>` of the logo
 
-**Content below headers — shrink:**
-- Tagline "AI-Powered Automation Solutions": `text-[10px]` → `text-[9px]`
-- All links (Solutions, Company columns): `text-[11px]` → `text-[10px]`
-- Contact info (email, phone, WhatsApp): `text-[11px]` → `text-[10px]`
-
-No other files affected.
+**`index.html`**
+- Update favicon `href` to `/digitlab-logo-v3.png` (copy asset to `public/`)
 
