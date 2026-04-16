@@ -1,18 +1,25 @@
 
 
-## Plan: Add HoverVisibleContainer to Industry Solutions and Testimonials
+## Plan: Add WhatsApp Floating Button + Clean Up Contact Info
 
-The Industry Solutions cards and Testimonials section are currently always visible. Other sections (ServicesOverview, ProcessSection, SocialProofSection) wrap their cards in `HoverVisibleContainer`, which makes them invisible until hovered. This plan applies the same pattern.
+### What changes
 
-### Changes
+**1. Add WhatsApp floating icon next to chat icon (`src/components/chat/ChatWidget.tsx`)**
+- Add a new circular button (same size `w-14 h-14`, same styling as the chat toggle) positioned to the left of the chat button
+- Uses a WhatsApp icon (using the `MessageCircle` icon or a custom WhatsApp SVG) 
+- Links to `https://wa.me/15556395391` (the new number: +1 (555) 639-5391)
+- Positioned at `right-[5.5rem]` so it sits directly left of the chat button
 
-**1. `src/components/sections/IndustrySolutions.tsx`**
-- Import `HoverVisibleContainer`
-- Wrap each industry `<Link>` card inside `<HoverVisibleContainer autoHideDelay={2500} initialVisibility={false} showIndicator={false}>`
+**2. Remove phone + WhatsApp from Footer Contact column (`src/components/Footer.tsx`)**
+- Delete the phone link (`tel:+9715913426`) and WhatsApp link from the Contact column (lines 86-101)
+- Keep only the email link
+- Also remove `Phone` and `MessageSquare` from imports if no longer used elsewhere in the file (MessageSquare is still used in social icons column)
 
-**2. `src/components/sections/TestimonialsSection.tsx`**
-- Import `HoverVisibleContainer`
-- Wrap the testimonial card (the `bg-navy-800/60` div + navigation controls) inside `<HoverVisibleContainer autoHideDelay={2500} initialVisibility={false} showIndicator={false}>`
+**3. Remove phone + WhatsApp from Contact page (`src/pages/Contact.tsx`)**
+- Delete the phone link (line 169-170) and WhatsApp link (lines 172-173) from the Direct Contact section
+- Keep only the email link
+- Clean up unused imports (`Phone`)
 
-Both will use the same settings as the existing hover tiles on the page.
+**4. Update Footer social WhatsApp link**
+- Update the WhatsApp social icon link from `https://wa.me/009715913426` to `https://wa.me/15556395391`
 
