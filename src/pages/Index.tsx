@@ -59,9 +59,14 @@ export default function Index() {
                 Join enterprises across hospitality, manufacturing, finance, and more that have 
                 automated their operations with our AI solutions. Start with a free consultation today.
               </p>
-              <Button onClick={handleBookSession} className="gold-btn text-lg px-8 py-3">
-                Request a Demo
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button onClick={handleBookSession} className="gold-btn text-lg px-8 py-3">
+                  Request a Demo
+                </Button>
+                <Button onClick={handleSolutionsClick} variant="outline" className="border-gold text-gold hover:bg-gold/10 text-lg px-8 py-3">
+                  Explore Solutions
+                </Button>
+              </div>
             </div>
           </section>
         </main>

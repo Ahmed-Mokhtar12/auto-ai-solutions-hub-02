@@ -67,7 +67,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onBookSession, onSolutionsCli
                 </ul>
               </div>
               <Button onClick={onBookSession} className="gold-btn w-full">
-                Book Your Free Consultation
+                Request a Demo
               </Button>
             </div>
           </HoverVisibleContainer>
@@ -96,9 +96,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onBookSession, onSolutionsCli
                   <li>• Custom Enterprise Integrations</li>
                 </ul>
               </div>
-              <div className="text-gold text-sm font-medium">
-                Explore solutions →
-              </div>
+              <Button variant="outline" className="w-full border-gold text-gold hover:bg-gold/10">
+                Explore Solutions
+              </Button>
             </div>
           </HoverVisibleContainer>
         </div>
