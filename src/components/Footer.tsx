@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom';
 const Footer: React.FC = () => {
   return (
     <footer className="fixed bottom-0 left-0 right-0 z-40 border-t border-[#F8D042]/30 bg-[#0B0F19]/95 backdrop-blur-md">
-      <div className="container mx-auto px-4 py-3">
+      <div className="container mx-auto px-4 py-2">
         {/* Main 4-column grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 mb-1.5">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 mb-1">
 
           {/* Column 1 — Brand + Socials */}
           <div className="flex flex-col gap-2">
@@ -102,7 +102,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Copyright */}
-        <div className="text-center border-t border-white/5 pt-2">
+        <div className="text-center border-t border-white/5 pt-1.5">
           <p className="text-white/40 text-xs">
             © {new Date().getFullYear()} DigitLab.ai — All rights reserved.
           </p>
