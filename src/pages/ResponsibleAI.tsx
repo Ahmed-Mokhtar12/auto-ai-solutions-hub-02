@@ -24,7 +24,7 @@ const principles = [
 
 const ResponsibleAI = () => {
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden pb-[15vh]">
+    <div className="min-h-screen flex flex-col relative overflow-hidden <div className="min-h-screen flex flex-col relative overflow-hidden pb-[10vh]">">
       <DynamicBackground />
       <Header />
 
@@ -39,7 +39,7 @@ const ResponsibleAI = () => {
             Responsible AI
           </h1>
 
-          <div className="bg-navy-800/80 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-navy-700 space-y-10 max-h-[65vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gold/30 scrollbar-track-transparent">
+          <div className="bg-navy-800/80 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-navy-700 space-y-10 max-h-[65vh] overflow-y-auto <div className="bg-navy-800/80 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-navy-700 space-y-10 max-h-[55vh] overflow-y-auto chat-scrollbar">">
             <p className="text-white/90 text-lg leading-relaxed">
               We prioritize ethical AI development with transparent, fair, and accountable solutions.
               Our Responsible AI practices ensure your systems are built with privacy, security,

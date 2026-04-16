@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom';
 const Footer: React.FC = () => {
   return (
     <footer className="fixed bottom-0 left-0 right-0 z-40 border-t border-[#F8D042]/30 bg-[#0B0F19]/95 backdrop-blur-md">
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-4 py-2">
         {/* Main 4-column grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 mb-1.5">
 
           {/* Column 1 — Brand + Socials */}
           <div className="flex flex-col gap-2">

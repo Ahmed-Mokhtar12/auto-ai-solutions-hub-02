@@ -16,7 +16,7 @@ const Section: React.FC<{title: string;children: React.ReactNode;}> = ({ title, 
 
 const Security = () => {
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden pb-[15vh]">
+    <div className="min-h-screen flex flex-col relative overflow-hidden <div className="min-h-screen flex flex-col relative overflow-hidden pb-[10vh]">">
       <DynamicBackground />
       <Header />
 
@@ -34,7 +34,7 @@ const Security = () => {
             Security
           </h1>
 
-          <div className="bg-navy-800/80 backdrop-blur-md rounded-2xl p-8 border border-navy-700">
+          <div className="bg-navy-800/80 backdrop-blur-md rounded-2xl p-8 border border-navy-700 max-h-[55vh] overflow-y-auto chat-scrollbar">
             <p className="text-white/70 text-sm mb-8">
               <strong className="text-gold">Our Commitment:</strong> At DigitLab.ai, security is foundational to everything we build. We apply industry-leading practices to protect your data, our infrastructure, and the AI systems that power our services.
             </p>
