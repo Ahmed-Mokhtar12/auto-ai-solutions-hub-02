@@ -16,7 +16,7 @@ const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title
 
 const TermsOfService = () => {
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden pb-[15vh]">
+    <div className="<div className="min-h-screen flex flex-col relative overflow-hidden pb-[10vh]"> className="min-h-screen flex flex-col relative overflow-hidden pb-[10vh]">">
       <DynamicBackground />
       <Header />
 
@@ -35,7 +35,7 @@ const TermsOfService = () => {
             Terms of Service
           </h1>
 
-          <div className="bg-navy-800/80 backdrop-blur-md rounded-2xl p-8 border border-navy-700">
+          <div className="bg-navy-800/80 backdrop-blur-md rounded-2xl p-8 border border-navy-700 max-h-[55vh] overflow-y-auto chat-scrollbar">
             <p className="text-white/70 text-sm mb-8">
               <strong className="text-gold">Effective Date:</strong> By accessing or using DigitLab.ai's services, you agree to be bound by these Terms of Service. Please read them carefully before using our platform or AI-powered tools.
             </p>
