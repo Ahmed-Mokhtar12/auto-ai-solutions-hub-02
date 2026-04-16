@@ -10,25 +10,25 @@ interface HeroSectionProps {
 
 const HeroSection: React.FC<HeroSectionProps> = ({ onBookSession, onSolutionsClick }) => {
   return (
-    <section className="container mx-auto px-4 py-20 text-center">
+    <section className="container mx-auto px-4 py-12 md:py-20 text-center">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-bold mb-6">
           <span className="text-white">Enterprise </span>
           <span className="text-gold">AI Solutions</span>
           <br />
-          <span className="text-white text-2xl md:text-3xl font-medium mt-2 block">
+          <span className="text-white text-xl md:text-3xl font-medium mt-2 block">
             Built for Hospitality, Ready for Every Industry
           </span>
         </h1>
         
-        <p className="text-xl text-white mb-8 max-w-3xl mx-auto opacity-90 font-light leading-relaxed">
+        <p className="text-lg md:text-xl text-white mb-8 max-w-3xl mx-auto opacity-90 font-light leading-relaxed">
           We specialize in AI workflows for luxury hotels and resorts — and bring the same 
           proven methodology to enterprises across every sector. Intelligent automation that 
           works 24/7 to enhance operations, reduce costs, and deliver measurable results.
         </p>
         
         {/* Key Benefits */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-12 max-w-4xl mx-auto">
           <div className="bg-navy-800/50 p-6 rounded-lg border border-navy-700">
             <h3 className="text-gold font-semibold mb-2">24/7 Intelligent Operations</h3>
             <p className="text-white text-sm">AI-powered systems that never sleep, ensuring seamless operations around the clock</p>
@@ -44,7 +44,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onBookSession, onSolutionsCli
         </div>
         
         {/* CTA Boxes */}
-        <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16">
+        <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-16">
           <HoverVisibleContainer 
             className="w-full md:w-[350px]"
             showIndicator={false}

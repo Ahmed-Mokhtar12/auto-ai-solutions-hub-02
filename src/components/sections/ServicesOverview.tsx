@@ -48,11 +48,11 @@ const ServicesOverview: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-navy-800/5">
+    <section className="py-12 md:py-20 bg-navy-800/5">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">AI Solutions</h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">AI Solutions</h2>
+          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-6">
             Specialized in hospitality AI with proven expertise that extends across every industry. 
             From luxury hotels to enterprise operations, we deliver intelligent automation that works.
           </p>
@@ -62,7 +62,7 @@ const ServicesOverview: React.FC = () => {
         </div>
 
         {/* Main Services */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 mb-12 md:mb-20">
           {services.map((service, index) => (
             <HoverVisibleContainer
               key={index}
@@ -105,7 +105,7 @@ const ServicesOverview: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           {specializedServices.map((service, index) => (
             <HoverVisibleContainer
               key={index}

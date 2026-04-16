@@ -32,17 +32,17 @@ const ProcessSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-20">
+    <section className="py-12 md:py-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-6">How We Work</h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">How We Work</h2>
+          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
             Our proven 4-step process ensures successful AI implementation that delivers measurable results 
             and transforms your business operations.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
           {steps.map((step, index) => (
             <HoverVisibleContainer
               key={index}
@@ -51,7 +51,7 @@ const ProcessSection: React.FC = () => {
               showIndicator={false}
             >
               <div className="relative">
-                <div className="relative bg-navy-800/80 p-8 rounded-xl border border-navy-700 
+                <div className="relative bg-navy-800/80 p-6 md:p-8 rounded-xl border border-navy-700 
                               hover:border-gold hover:shadow-gold/20 transition-all duration-300 hover:scale-105 h-full">
                   <div className="text-center mb-6">
                     <div className="inline-flex items-center justify-center w-20 h-20 bg-navy-700 rounded-full mb-4">

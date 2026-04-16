@@ -35,13 +35,13 @@ const TestimonialsSection: React.FC = () => {
   const t = testimonials[current];
 
   return (
-    <section className="py-20">
+    <section className="py-12 md:py-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-foreground mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             What Our <span className="text-gold">Clients</span> Say
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
             Real results from enterprises that chose Digit Lab as their AI partner.
           </p>
         </div>
@@ -80,8 +80,8 @@ const TestimonialsSection: React.FC = () => {
                 <button
                   key={i}
                   onClick={() => setCurrent(i)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    i === current ? 'w-6 bg-gold' : 'w-2 bg-navy-700'
+                  className={`h-3 rounded-full transition-all duration-300 ${
+                    i === current ? 'w-8 bg-gold' : 'w-3 bg-navy-700'
                   }`}
                 />
               ))}
