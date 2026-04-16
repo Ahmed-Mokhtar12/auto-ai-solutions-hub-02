@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { MessageCircle, X, Send, Mic, MicOff } from 'lucide-react';
+import { MessageCircle, X, Send, Mic, MicOff, Phone, PhoneOff } from 'lucide-react';
 import { useChatApi, BatchMeta } from '@/hooks/chat/useChatApi';
+import { useVapi } from '@/hooks/useVapi';
 import { ChatMessage, generateMessageId } from '@/utils/messageUtils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
