@@ -6,104 +6,104 @@ import { Link } from 'react-router-dom';
 const Footer: React.FC = () => {
   return (
     <footer className="fixed bottom-0 left-0 right-0 z-40 border-t border-[#F8D042]/30 bg-[#0B0F19]/95 backdrop-blur-md">
-      <div className="container mx-auto px-4 py-1.5">
+      <div className="container mx-auto px-4 py-1">
         {/* Main 4-column grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2.5 mb-0.5">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2">
 
           {/* Column 1 — Brand + Socials */}
-          <div className="flex flex-col gap-2">
-            <p className="text-[#F8D042] text-sm font-semibold tracking-wide">DigitLab.ai</p>
-            <p className="text-white/50 text-xs">AI-Powered Automation Solutions</p>
-            <div className="flex items-center gap-3 mt-1">
+          <div className="flex flex-col gap-0.5">
+            <p className="text-[#F8D042] text-xs font-semibold tracking-wide">DigitLab.ai</p>
+            <p className="text-white/50 text-[10px] leading-tight">AI-Powered Automation Solutions</p>
+            <div className="flex items-center gap-2 mt-0.5">
               <a
                 href="https://www.facebook.com/aiautomationai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 md:w-7 md:h-7 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
+                className="flex items-center justify-center w-6 h-6 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
                 title="Facebook"
               >
-                <Facebook className="h-4 w-4 md:h-3.5 md:w-3.5" />
+                <Facebook className="h-3 w-3" />
               </a>
               <a
                 href="https://www.instagram.com/ai_digitlab/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 md:w-7 md:h-7 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
+                className="flex items-center justify-center w-6 h-6 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
                 title="Instagram"
               >
-                <Instagram className="h-4 w-4 md:h-3.5 md:w-3.5" />
+                <Instagram className="h-3 w-3" />
               </a>
               <a
                 href="https://www.linkedin.com/company/106986356/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 md:w-7 md:h-7 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
+                className="flex items-center justify-center w-6 h-6 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
                 title="LinkedIn"
               >
-                <Linkedin className="h-4 w-4 md:h-3.5 md:w-3.5" />
+                <Linkedin className="h-3 w-3" />
               </a>
               <a
                 href="https://wa.me/009715913426"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 md:w-7 md:h-7 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
+                className="flex items-center justify-center w-6 h-6 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
                 title="WhatsApp"
               >
-                <MessageSquare className="h-4 w-4 md:h-3.5 md:w-3.5" />
+                <MessageSquare className="h-3 w-3" />
               </a>
             </div>
           </div>
 
           {/* Column 2 — Solutions */}
-          <div className="flex flex-col gap-1.5">
-            <p className="text-[#F8D042] text-xs font-semibold uppercase tracking-wider mb-1">Solutions</p>
-            <Link to="/ai-agents" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">AI Agents</Link>
-            <Link to="/generative-ai" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">Generative AI</Link>
-            <Link to="/responsible-ai" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">Responsible AI</Link>
+          <div className="flex flex-col gap-0">
+            <p className="text-[#F8D042] text-[10px] font-semibold uppercase tracking-wider mb-0.5">Solutions</p>
+            <Link to="/ai-agents" className="text-white/50 text-[11px] hover:text-[#F8D042] transition-colors py-0.5">AI Agents</Link>
+            <Link to="/generative-ai" className="text-white/50 text-[11px] hover:text-[#F8D042] transition-colors py-0.5">Generative AI</Link>
+            <Link to="/responsible-ai" className="text-white/50 text-[11px] hover:text-[#F8D042] transition-colors py-0.5">Responsible AI</Link>
           </div>
 
           {/* Column 3 — Company */}
-          <div className="flex flex-col gap-1.5">
-            <p className="text-[#F8D042] text-xs font-semibold uppercase tracking-wider mb-1">Company</p>
-            <Link to="/about-us" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">About Us</Link>
-            <Link to="/security" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">Security</Link>
-            <Link to="/contact" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">Contact Us</Link>
-            <Link to="/privacy-policy" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">Privacy Policy</Link>
-            <Link to="/terms-of-service" className="text-white/50 text-xs hover:text-[#F8D042] transition-colors py-1">Terms of Service</Link>
+          <div className="flex flex-col gap-0">
+            <p className="text-[#F8D042] text-[10px] font-semibold uppercase tracking-wider mb-0.5">Company</p>
+            <Link to="/about-us" className="text-white/50 text-[11px] hover:text-[#F8D042] transition-colors py-0.5">About Us</Link>
+            <Link to="/security" className="text-white/50 text-[11px] hover:text-[#F8D042] transition-colors py-0.5">Security</Link>
+            <Link to="/contact" className="text-white/50 text-[11px] hover:text-[#F8D042] transition-colors py-0.5">Contact Us</Link>
+            <Link to="/privacy-policy" className="text-white/50 text-[11px] hover:text-[#F8D042] transition-colors py-0.5">Privacy Policy</Link>
+            <Link to="/terms-of-service" className="text-white/50 text-[11px] hover:text-[#F8D042] transition-colors py-0.5">Terms of Service</Link>
           </div>
 
           {/* Column 4 — Contact */}
-          <div className="flex flex-col gap-1.5">
-            <p className="text-[#F8D042] text-xs font-semibold uppercase tracking-wider mb-1">Contact</p>
+          <div className="flex flex-col gap-0">
+            <p className="text-[#F8D042] text-[10px] font-semibold uppercase tracking-wider mb-0.5">Contact</p>
             <a
               href="mailto:Ai.Agent@DigitLab.ai"
-              className="inline-flex items-center gap-1.5 text-white/50 text-xs hover:text-[#F8D042] transition-colors"
+              className="inline-flex items-center gap-1 text-white/50 text-[11px] hover:text-[#F8D042] transition-colors py-0.5"
             >
-              <Mail className="h-3.5 w-3.5 text-[#F8D042] shrink-0" />
+              <Mail className="h-3 w-3 text-[#F8D042] shrink-0" />
               Ai.Agent@DigitLab.ai
             </a>
             <a
               href="tel:+9715913426"
-              className="inline-flex items-center gap-1.5 text-white/50 text-xs hover:text-[#F8D042] transition-colors"
+              className="inline-flex items-center gap-1 text-white/50 text-[11px] hover:text-[#F8D042] transition-colors py-0.5"
             >
-              <Phone className="h-3.5 w-3.5 text-[#F8D042] shrink-0" />
+              <Phone className="h-3 w-3 text-[#F8D042] shrink-0" />
               +971 591 3426
             </a>
             <a
               href="https://wa.me/009715913426"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-white/50 text-xs hover:text-[#F8D042] transition-colors"
+              className="inline-flex items-center gap-1 text-white/50 text-[11px] hover:text-[#F8D042] transition-colors py-0.5"
             >
-              <MessageSquare className="h-3.5 w-3.5 text-[#F8D042] shrink-0" />
+              <MessageSquare className="h-3 w-3 text-[#F8D042] shrink-0" />
               WhatsApp
             </a>
           </div>
         </div>
 
         {/* Copyright */}
-        <div className="text-center border-t border-white/5 pt-1">
-          <p className="text-white/40 text-xs">
+        <div className="text-center border-t border-white/5 pt-0.5">
+          <p className="text-white/40 text-[10px]">
             © {new Date().getFullYear()} DigitLab.ai — All rights reserved.
           </p>
         </div>
