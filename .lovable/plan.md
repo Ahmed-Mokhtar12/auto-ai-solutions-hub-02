@@ -1,18 +1,19 @@
 
 
-## Reduce Footer Height to 12–13% of Viewport
+## Make Footer Headers Bigger/Bolder, Shrink Content Below
 
-Currently the footer is ~16–18% of the viewport (140–160px on 887px). Target: 12–13% (~106–115px).
+The user wants the 4 column headers (DigitLab.ai, Solutions, Company, Contact) to be more prominent, and the links/text beneath them to be smaller.
 
-### Changes
+### Changes in `src/components/Footer.tsx`
 
-**`src/components/Footer.tsx`**
-- Reduce container padding from `py-3` to `py-2`
-- Reduce grid gap from `gap-3 md:gap-5` to `gap-2 md:gap-3`
-- Reduce bottom copyright section padding from `pt-2` to `pt-1.5`
-- Reduce `mb-1.5` to `mb-1`
+**Headers — make bolder and bigger:**
+- "DigitLab.ai": `text-xs font-semibold` → `text-sm font-bold`
+- "Solutions", "Company", "Contact" headers: `text-[10px] font-semibold` → `text-xs font-bold`
 
-**All subpages** — no change needed; `pb-[10vh]` already undershoots 12%, so content won't overlap.
+**Content below headers — shrink:**
+- Tagline "AI-Powered Automation Solutions": `text-[10px]` → `text-[9px]`
+- All links (Solutions, Company columns): `text-[11px]` → `text-[10px]`
+- Contact info (email, phone, WhatsApp): `text-[11px]` → `text-[10px]`
 
-**Update `mem://ui/fixed-footer`** — reflect the new ~12% target height.
+No other files affected.
 
