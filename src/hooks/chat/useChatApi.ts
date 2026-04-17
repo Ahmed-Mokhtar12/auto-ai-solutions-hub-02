@@ -42,22 +42,28 @@ export const parseWebhookResponse = (data: any): ChatApiResult => {
     if (data.data !== undefined) containers.push(data.data);
   }
 
+  const CANONICAL_CALENDLY_URL = 'https://calendly.com/ahmed-mokhtar12/30min';
+  const isValidCalendlyUrl = (u: unknown): u is string =>
+    typeof u === 'string' &&
+    /^https?:\/\//i.test(u) &&
+    /calendly\.com\//i.test(u) &&
+    !/YOUR[-_]CALENDLY[-_]LINK/i.test(u);
+
   for (const c of containers) {
     if (!isObj(c)) continue;
     if (c.type === 'booking_cta' && isObj(c.button)) {
-      const url = c.button.url;
-      if (typeof url === 'string' && /^https?:\/\//i.test(url)) {
-        const labelRaw = c.button.label;
-        const label =
-          typeof labelRaw === 'string' && labelRaw.trim()
-            ? labelRaw.trim()
-            : 'Book a Demo';
-        const text =
-          extractText(c) ??
-          extractText(data) ??
-          '';
-        return { text, cta: { label, url } };
-      }
+      const rawUrl = c.button.url;
+      const url = isValidCalendlyUrl(rawUrl) ? rawUrl : CANONICAL_CALENDLY_URL;
+      const labelRaw = c.button.label;
+      const label =
+        typeof labelRaw === 'string' && labelRaw.trim()
+          ? labelRaw.trim()
+          : 'Book a Demo';
+      const text =
+        extractText(c) ??
+        extractText(data) ??
+        '';
+      return { text, cta: { label, url } };
     }
   }
 
