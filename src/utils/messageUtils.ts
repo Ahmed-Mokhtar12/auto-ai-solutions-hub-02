@@ -11,8 +11,14 @@ export const generateMessageId = (): string => {
 /**
  * Message type definition
  */
+export interface ChatCta {
+  label: string;
+  url: string;
+}
+
 export interface ChatMessage {
   text: string;
   sender: 'user' | 'system';
   id: string;
+  cta?: ChatCta;
 }
