@@ -6,7 +6,7 @@ import logoV3 from '@/assets/digitlab-logo-v3.png';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="fixed bottom-0 left-0 right-0 z-40 border-t border-[#F8D042]/30 bg-[#0B0F19]/95 backdrop-blur-md">
+    <footer className="border-t border-[#F8D042]/30 bg-[#0B0F19]/95 backdrop-blur-md">
       <div className="container mx-auto px-4 py-1">
         {/* Main 4-column grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2">
