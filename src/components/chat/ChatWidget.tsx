@@ -222,7 +222,7 @@ const ChatWidget: React.FC = () => {
           "w-14 h-14 shadow-lg transition-all duration-300",
           "bg-navy-800 border border-gold/30",
           "hover:scale-110 hover:shadow-xl",
-          "bottom-[calc(15vh+1rem)] right-[10rem]",
+          "bottom-[calc(15vh+9rem)] right-6",
           callStatus === 'active'
             ? "text-green-500 hover:shadow-green-500/20 ring-2 ring-green-500/40"
             : callStatus === 'connecting'
@@ -247,7 +247,7 @@ const ChatWidget: React.FC = () => {
           "w-14 h-14 shadow-lg transition-all duration-300",
           "bg-navy-800 border border-gold/30 text-green-500",
           "hover:scale-110 hover:shadow-green-500/20 hover:shadow-xl",
-          "bottom-[calc(15vh+1rem)] right-[5.5rem]"
+          "bottom-[calc(15vh+5rem)] right-6"
         )}
         aria-label="Chat on WhatsApp"
       >
