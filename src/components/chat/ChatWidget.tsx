@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { MessageCircle, X, Send, Mic, MicOff, Phone, PhoneOff } from 'lucide-react';
+import { MessageCircle, X, Send, Mic, MicOff, Phone, PhoneOff, ExternalLink } from 'lucide-react';
 import { useChatApi, BatchMeta } from '@/hooks/chat/useChatApi';
 import { useVapi } from '@/hooks/useVapi';
 import { ChatMessage, generateMessageId } from '@/utils/messageUtils';
@@ -312,16 +312,35 @@ const ChatWidget: React.FC = () => {
             </div>
           )}
           {messages.map((msg) => (
-            <div
-              key={msg.id}
-              className={cn(
-                "max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap animate-fade-in",
-                msg.sender === 'user'
-                  ? "ml-auto bg-gold/15 text-foreground rounded-br-md"
-                  : "mr-auto bg-navy-700/60 text-foreground border border-gold/10 rounded-bl-md"
+            <div key={msg.id} className="flex flex-col gap-2 animate-fade-in">
+              <div
+                className={cn(
+                  "max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap",
+                  msg.sender === 'user'
+                    ? "ml-auto bg-gold/15 text-foreground rounded-br-md"
+                    : "mr-auto bg-navy-700/60 text-foreground border border-gold/10 rounded-bl-md"
+                )}
+              >
+                {msg.text}
+              </div>
+              {msg.sender === 'system' && msg.cta && (
+                <a
+                  href={msg.cta.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    "mr-auto inline-flex items-center gap-2 max-w-[85%]",
+                    "bg-gold text-navy-900 font-semibold text-sm",
+                    "rounded-full px-5 py-2.5",
+                    "shadow-lg shadow-gold/20",
+                    "hover:bg-gold/90 hover:scale-[1.02] active:scale-[0.98]",
+                    "transition-all duration-200"
+                  )}
+                >
+                  <span>{msg.cta.label}</span>
+                  <ExternalLink size={14} />
+                </a>
               )}
-            >
-              {msg.text}
             </div>
           ))}
 
