@@ -58,8 +58,8 @@ const ChatWidget: React.FC = () => {
     if (isOpen) setTimeout(() => inputRef.current?.focus(), 300);
   }, [isOpen]);
 
-  const addMessage = useCallback((text: string, sender: 'user' | 'system') => {
-    setMessages(prev => [...prev, { id: generateMessageId(), text, sender }]);
+  const addMessage = useCallback((text: string, sender: 'user' | 'system', cta?: { label: string; url: string }) => {
+    setMessages(prev => [...prev, { id: generateMessageId(), text, sender, cta }]);
   }, []);
 
   // ── Flush logic (stable — no deps that change per render) ───
@@ -86,7 +86,7 @@ const ChatWidget: React.FC = () => {
     try {
       const response = await sendChatMessageRef.current(joined, meta);
       pendingMessagesRef.current = [];
-      addMessage(response, 'system');
+      addMessage(response.text, 'system', response.cta);
     } catch {
       addMessage('Sorry, I encountered an error. Please try again.', 'system');
       if (pendingMessagesRef.current.length > 0) setIsBatching(true);
