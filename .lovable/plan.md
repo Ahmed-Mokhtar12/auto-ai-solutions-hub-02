@@ -1,36 +1,58 @@
 
+## Plan: `booking_cta` Support with Robust Parsing
 
-## Plan: Integrate VAPI Voice Call Button
+### Files to change
 
-Add a floating phone icon button next to the WhatsApp and chat buttons that starts a VAPI voice call with the AI assistant.
+**1. `src/utils/messageUtils.ts`**
+- Extend `ChatMessage` with optional `cta?: { label: string; url: string }`.
 
-### What changes
+**2. `src/hooks/chat/useChatApi.ts`**
+- Change `sendChatMessage` return type to `Promise<{ text: string; cta?: { label: string; url: string } }>`.
+- Add a `parseWebhookResponse(data)` helper that:
+  - Walks candidate containers in order: `data`, `data.output`, `data.reply`, `data.data`.
+  - For each, checks if `type === 'booking_cta'` with a `button` object.
+  - Extracts `cta.url` (must be string starting with `http`); if missing/invalid → no CTA.
+  - Extracts `cta.label`; defaults to `"Book a Demo"` when missing.
+  - Extracts message text from (in order): container's `message`, `text`, `reply.message`, `output.message`, then top-level fallbacks already used today (`reply`, `output`, `message`, raw string).
+- Plain-text path unchanged → returns `{ text }` only.
 
-**1. Add VAPI script to `index.html`**
-- Add the VAPI web SDK script and config:
-  ```html
-  <script>
-    window.vapiPublicKey = "0def23cd-0eff-4436-9295-e10b67221d11";
-    window.assistantId = "ce112156-dae6-42ae-925a-c23db6110e70";
-  </script>
-  <script defer src="https://cdn.vapi.ai/web.js"></script>
-  ```
+**3. `src/components/chat/ChatWidget.tsx`**
+- Update `addMessage(text, sender, cta?)` to accept and store optional CTA.
+- In `flushMessages`, destructure `{ text, cta }` from the API response and pass through.
+- In the message render loop, when `msg.cta` exists, render below the bubble:
+  - `<a href target="_blank" rel="noopener noreferrer">` styled as a premium gold pill: `bg-gold text-navy-900 font-semibold rounded-full px-5 py-2.5 hover:bg-gold/90 hover:scale-[1.02] transition shadow-lg shadow-gold/20`, with an external-link icon.
+  - Block-level under the bubble, max-width 85%, mobile-friendly tap target.
 
-**2. Create `src/hooks/useVapi.ts`**
-- Custom hook to initialize the Vapi SDK, start/stop calls, and track call state (idle, connecting, active)
-- Uses `window.vapiPublicKey` and `window.assistantId`
+### Detection logic (frontend)
 
-**3. Update `src/components/chat/ChatWidget.tsx`**
-- Add a phone icon button (same `w-14 h-14` circle style) positioned to the left of the WhatsApp button
-- Uses `useVapi` hook — clicking toggles the voice call on/off
-- Shows a pulsing green indicator when call is active, red when connecting
-- Position: `right-[10rem]` (left of WhatsApp at `right-[5.5rem]`, left of chat at `right-6`)
+Treats response as booking CTA when any of these contain `type: "booking_cta"` + `button.url` (http-prefixed):
+- `data`, `data.output`, `data.reply`, `data.data`
 
-**4. Add type declarations in `src/vite-env.d.ts`**
-- Declare `window.vapiPublicKey`, `window.assistantId`, and the Vapi class on the Window interface
+Message text resolved from (first match wins):
+- container `.message` → `.text` → `.reply.message` → `.output.message` → existing fallbacks
 
-### Technical details
-- The VAPI public key `0def23cd-0eff-4436-9295-e10b67221d11` is a publishable key, safe to store in code
-- Assistant ID: `ce112156-dae6-42ae-925a-c23db6110e70`
-- Three floating buttons in a row: Phone → WhatsApp → Chat (right to left)
+### Final supported response shape
 
+```json
+{
+  "type": "booking_cta",
+  "message": "Absolutely — pick a time:",
+  "button": { "label": "Book a Demo", "url": "https://calendly.com/..." }
+}
+```
+Also accepted nested under `output`, `reply`, or `data`. Plain text / `{reply: "..."}` / `{output: "..."}` continue to work unchanged.
+
+### Refactor scope
+
+- `useChatApi`'s response-parsing block is extracted into a small pure helper. No other code paths change.
+- `ChatWidget.addMessage` signature gains one optional arg — all existing call sites still compile.
+
+### Edge cases to know before updating n8n
+
+- If `button.url` does not start with `http(s)`, the CTA is silently dropped (text still renders) — keeps the link safe.
+- If `button.label` is missing/empty, defaults to **"Book a Demo"**.
+- If `message` is missing on a `booking_cta` payload, the bubble shows an empty string above the button — recommend always sending `message`.
+- Multiple `booking_cta`s per reply are not supported — one CTA per assistant message.
+- Batched user messages still produce a single assistant reply; CTA detection runs once per reply.
+- Query params (`utm_source=website_chat`, `name`, `email`, `company`) should be appended in n8n directly to the URL — frontend forwards as-is.
+- Do not auto-open: frontend will never navigate; user must click.
