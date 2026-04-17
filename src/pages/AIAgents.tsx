@@ -30,7 +30,7 @@ const useCases = [
 
 const AIAgents = () => {
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden pb-[10vh]">
+    <div className="min-h-screen flex flex-col relative overflow-hidden">
       <DynamicBackground />
       <Header />
 
