@@ -43,7 +43,7 @@ export const useChatState = () => {
       const response = await sendChatMessage(message);
       
       // Add system response
-      addSystemMessage(response);
+      addSystemMessage(response.text);
     } catch (error) {
       // Remove user message if API call failed
       console.error('Failed to send message:', error);
