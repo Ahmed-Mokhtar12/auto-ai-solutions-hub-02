@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Mail, Facebook, Instagram, Linkedin, MessageSquare } from 'lucide-react';
+import { Mail, Facebook, Instagram, Linkedin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import logoV3 from '@/assets/digitlab-logo-v3.png';
 
@@ -41,16 +41,7 @@ const Footer: React.FC = () => {
                 className="flex items-center justify-center w-6 h-6 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
                 title="LinkedIn"
               >
-                <Linkedin className="h-3 w-3" />
-              </a>
-              <a
-                href="https://wa.me/15556395391"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center w-6 h-6 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
-                title="WhatsApp"
-              >
-                <MessageSquare className="h-3 w-3" />
+              <Linkedin className="h-3 w-3" />
               </a>
             </div>
           </div>
