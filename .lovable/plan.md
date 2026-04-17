@@ -1,31 +1,17 @@
 
-User wants the footer to no longer be fixed to the bottom of the viewport. Instead, it should sit at the natural bottom of each page, only visible when scrolled to the end.
+Stack the three floating buttons vertically in the bottom-right corner. Chat (message) icon stays put; WhatsApp moves directly above it; Phone (call) moves above WhatsApp.
 
-## Plan: Make footer non-fixed (normal page bottom)
+## Change
 
-### Changes
+**`src/components/chat/ChatWidget.tsx`** — update `right` and `bottom` classes on the three buttons:
 
-**1. `src/components/Footer.tsx`**
-- Remove `fixed bottom-0 left-0 right-0 z-40` classes from the `<footer>`. Keep border, background, blur, and layout intact so it still looks the same — just flows in normal document order at the end of the page.
+- **Chat toggle** (unchanged): `bottom-[calc(15vh+1rem)] right-6`
+- **WhatsApp**: change `bottom-[calc(15vh+1rem)] right-[5.5rem]` → `bottom-[calc(15vh+5rem)] right-6` (one button-height + gap above chat)
+- **Phone (VAPI)**: change `bottom-[calc(15vh+1rem)] right-[10rem]` → `bottom-[calc(15vh+9rem)] right-6` (two button-heights + gaps above chat)
 
-**2. Remove `pb-[10vh]` (or `pb-[15vh]`) bottom padding from page wrappers** that was reserving space for the fixed footer:
-- `src/pages/Index.tsx`
-- `src/pages/Services.tsx`
-- `src/pages/AboutUs.tsx`
-- `src/pages/AIAgents.tsx`
-- `src/pages/GenerativeAI.tsx`
-- `src/pages/ResponsibleAI.tsx`
-- `src/pages/Security.tsx`
-- `src/pages/Contact.tsx`
-- `src/pages/PrivacyPolicy.tsx`
-- `src/pages/TermsOfService.tsx`
-- `src/pages/industries/IndustryPageTemplate.tsx`
+Each button is `w-14 h-14` (3.5rem) with ~0.5rem gap, so 4rem spacing between centers works cleanly.
 
-Each page already uses `min-h-screen flex flex-col` with `flex-grow` on `<main>`, so the footer will correctly sit at the bottom on short pages and below content on long pages.
+The chat panel anchor (`bottom-[calc(15vh+5rem)] right-6`) is unchanged — it opens from the chat icon as before.
 
-**3. Update memory** `mem://ui/fixed-footer` to reflect that the footer is now a normal in-flow footer at the bottom of each page (no longer fixed).
-
-### Result
-- Landing page: footer appears only after scrolling past all sections.
-- Subpages: footer sits naturally below the content card.
-- Chat widget and floating buttons remain unaffected (they're independently positioned).
+## Result
+Vertical column at bottom-right: Phone (top) → WhatsApp (middle) → Chat (bottom), matching the reference image.
