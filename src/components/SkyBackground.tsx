@@ -68,13 +68,13 @@ const SkyBackground: React.FC = () => {
         </defs>
 
         <g className="cloud-drift-a" style={{ transformBox: 'fill-box' }}>
-          <rect x="0" y="8%" width="200%" height="30%" filter="url(#cloud-filter-a)" />
+          <rect x="0" y="0" width="200%" height="100%" filter="url(#cloud-filter-a)" />
         </g>
         <g className="cloud-drift-b" style={{ transformBox: 'fill-box' }}>
-          <rect x="0" y="32%" width="200%" height="28%" filter="url(#cloud-filter-b)" />
+          <rect x="0" y="0" width="200%" height="100%" filter="url(#cloud-filter-b)" />
         </g>
         <g className="cloud-drift-c" style={{ transformBox: 'fill-box' }}>
-          <rect x="0" y="58%" width="200%" height="22%" filter="url(#cloud-filter-c)" />
+          <rect x="0" y="0" width="200%" height="100%" filter="url(#cloud-filter-c)" />
         </g>
       </svg>
 
