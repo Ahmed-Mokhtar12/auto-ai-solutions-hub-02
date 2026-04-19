@@ -186,9 +186,6 @@ const Header: React.FC = () => {
         </nav>
 
         <div className="flex items-center gap-3 ml-auto shrink-0">
-          <Link to="/auth">
-            <Button className="gold-btn text-sm">Your AI Dashboard</Button>
-          </Link>
           <Button onClick={handleBookDemo} className="gold-btn text-sm">
             Request a Demo
           </Button>
