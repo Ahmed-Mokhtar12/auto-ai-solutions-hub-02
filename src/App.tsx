@@ -28,7 +28,7 @@ const App = () => (
     <ThemeProvider>
       <TooltipProvider>
         <Sonner />
-        <div className="dark">
+        <div>
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
