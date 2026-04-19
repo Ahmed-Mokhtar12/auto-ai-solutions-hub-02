@@ -70,7 +70,7 @@ const StarryBackground: React.FC = () => {
           y: Math.random() * canvas.height,
           size: Math.random() * 2,
           opacity: Math.random(),
-          speed: 0.05 + Math.random() * 0.1,
+          speed: 0.01 + Math.random() * 0.03,
           color: getStarColor() // Assign color to each star
         });
       }
