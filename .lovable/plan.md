@@ -1,49 +1,51 @@
 
 
-## Tune SVG Clouds: Wispy Cirrus, ~30% Coverage
+## Implementing 3 fixes + day-mode legibility
 
-### Goal
-Replace the small, repeating "bumpy" cloud pattern with sparse, elongated, wispy cirrus streaks. Sky should read as ~70% clear blue.
+### 1. Cloud band seams — `SkyBackground.tsx`
+All 3 `<rect>` → `x="0" y="0" width="200%" height="100%"`. Overlapping full-canvas layers blend organically (different seeds + baseFrequencies keep patterns distinct). No more horizontal stripes.
 
-### Changes — `src/components/SkyBackground.tsx` only
+### 2. Transparent navbar — `Header.tsx`
+Add `bg-transparent` explicitly to the `<header>` element (both mobile + desktop branches) so nothing paints over the sky. Dropdown panels keep their own `bg-background/95` styling — only the bar is see-through.
 
-Adjust the three `<filter>` defs. Key levers:
+### 3. Unified sky behind everything
 
-**1. Lower `baseFrequency` dramatically + heavily anisotropic (x ≪ y)** → larger shapes, stretched horizontally like cirrus streaks instead of round bumps.
+**`src/index.css`** — body bg conditional:
+```css
+body { @apply text-foreground; background: transparent; }
+html.dark body { @apply bg-navy-900; }
+```
 
-**2. Increase `numOctaves` to 4** → more organic, irregular detail; breaks visible tile rhythm.
+**`src/pages/Index.tsx`** — CTA section: `bg-navy-800/30` → `dark:bg-navy-800/30` (no bg in day mode).
 
-**3. Soften `feColorMatrix` alpha** → much more transparent so blue sky dominates.
+**Audit + gate opaque section bgs in day mode**:
+- `TrustSection.tsx` — `bg-navy-800/30` → `dark:bg-navy-800/30`; badge pills `bg-navy-800/60 border-navy-700` → add `dark:` prefix + day-mode equivalent `bg-white/20 border-white/30`.
+- `SocialProofSection`, `ProcessSection`, `IndustrySolutions`, `ServicesOverview`, `HeroSection`, `TestimonialsSection` — scan for `bg-navy-*` on the section root and on cards; gate with `dark:` and add light glass equivalent (`bg-white/10` or `bg-white/15` with `border-white/20`) for day mode.
+- `solution-card` utility in `index.css` (`bg-navy-800`) → split into dark/day variants or override per-section.
 
-| Filter | baseFrequency (x y) | numOctaves | alpha mult | alpha offset |
-|---|---|---|---|---|
-| cloud-filter-a | `0.003 0.012` | 4 | 1.05 | -0.55 |
-| cloud-filter-b | `0.0025 0.010` | 4 | 1.0 | -0.6 |
-| cloud-filter-c | `0.004 0.014` | 4 | 1.05 | -0.5 |
+### 4. Day-mode text legibility
+After stripping dark backgrounds, light text on light sky needs help. Two-pronged:
 
-Why x much lower than y: `feTurbulence` baseFrequency controls noise scale per axis. A small x value stretches the noise horizontally → long thin streaks (cirrus shape). Larger y keeps vertical detail tight → feathery edges, not blobs.
+**a. Light glass cards** — every section card/box gets `dark:bg-navy-800 bg-white/10 backdrop-blur-sm border-white/20` pattern so content sits on a soft frosted panel, sky still visible through.
 
-Why mult ~1.0–1.05 with offset ~-0.5 to -0.6: Only the brightest noise peaks survive the alpha cutoff, so most of the rect becomes fully transparent → ~70% clear sky. The remaining wisps are soft because the multiplier barely amplifies.
+**b. Text shadow utility** — add to `index.css`:
+```css
+@layer utilities {
+  .day-text-shadow { text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+}
+```
+Apply via `html:not(.dark) .needs-shadow` or directly add `[&:not(.dark_*)]` — simpler: add a `.day-readable` class on hero headlines / any text floating directly over sky (no card behind it). Footer text already on dark footer — untouched.
 
-**4. Vary cloud band heights/positions slightly** so the three layers don't all start aligned (further reduces perceived repetition):
-- Band A: y=8%, height=30%
-- Band B: y=32%, height=28%
-- Band C: y=58%, height=22%
-
-(Current values are fine; minor nudges only — no structural change.)
-
-### Not changing
-- CSS gradient (`#1a6eb5 → #b8dff0`) — user said colors are good.
-- Animation keyframes / durations (60s, 80s, 100s) in `index.css`.
-- Bottom haze layer.
-- 200% rect width (still required for seamless loop).
-
-### Tuning lever for follow-up
-If still too dense after first render → drop multiplier to `0.95` and offset to `-0.65` (clouds become barely-there veils). If too sparse → bump multiplier back to `1.1`.
+### Files changed
+- `src/components/SkyBackground.tsx` — full-canvas overlapping rects
+- `src/components/Header.tsx` — explicit `bg-transparent` on header
+- `src/index.css` — body bg conditional + `.day-text-shadow` utility + `solution-card` day variant
+- `src/pages/Index.tsx` — gate CTA bg
+- `src/components/sections/*.tsx` (Trust, SocialProof, Process, IndustrySolutions, ServicesOverview, Hero, Testimonials) — gate `bg-navy-*` with `dark:` + add light glass variant for day mode; add `.day-text-shadow` to any floating headlines
+- `mem://design/sky-background-details` — note unified background + day glass pattern
 
 ### QA
-- 998px desktop + 375px mobile: confirm sky is dominantly blue, cloud streaks are elongated and wispy, no obvious tile/wallpaper repeat, hero text remains crisp.
-
-### Files Changed
-- `src/components/SkyBackground.tsx` — update three `feTurbulence` baseFrequency/numOctaves and three `feColorMatrix` alpha rows.
+- Day @ 998px + 375px: sky visible behind navbar, all sections, footer area; no horizontal cloud seams; all text readable (cards have light glass, floating text has shadow).
+- Night unchanged: navy bg + stars + dark cards.
+- Toggle day/night several times — no flicker.
 
