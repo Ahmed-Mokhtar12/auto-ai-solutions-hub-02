@@ -166,30 +166,20 @@ html:not(.dark) .day-readable {
   40% { transform: scale(1.2); opacity: 1; }
 }
 
-/* Gentle cloud drift — alternate direction so loop never snaps */
-@keyframes cloud-drift-x {
-  0%   { transform: translate3d(0, 0, 0); }
-  50%  { transform: translate3d(6%, 0, 0); }
-  100% { transform: translate3d(0, 0, 0); }
+/* SVG cloud band drift — seamless loop via 200%-wide rects */
+@keyframes cloud-band-drift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
 
-@keyframes cloud-drift-x-rev {
-  0%   { transform: translate3d(0, 0, 0); }
-  50%  { transform: translate3d(-5%, 0, 0); }
-  100% { transform: translate3d(0, 0, 0); }
-}
-
-.cloud-strip-slow {
-  animation: cloud-drift-x 180s ease-in-out infinite;
-}
-
-.cloud-strip-slower {
-  animation: cloud-drift-x-rev 240s ease-in-out infinite;
-}
+.cloud-drift-a { animation: cloud-band-drift 60s linear infinite; transform-origin: center; }
+.cloud-drift-b { animation: cloud-band-drift 80s linear infinite; transform-origin: center; }
+.cloud-drift-c { animation: cloud-band-drift 100s linear infinite; transform-origin: center; }
 
 @media (prefers-reduced-motion: reduce) {
-  .cloud-strip-slow,
-  .cloud-strip-slower {
+  .cloud-drift-a,
+  .cloud-drift-b,
+  .cloud-drift-c {
     animation: none;
   }
 }

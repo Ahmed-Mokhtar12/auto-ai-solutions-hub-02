@@ -1,50 +1,41 @@
 
 
-## Make the hero sky fully seamless and natural-looking
+## Match footer style to the light glass tiles (day mode)
 
-### What is causing the visible lines now
-The current day sky uses SVG `feTurbulence` cloud layers tiled across a full-screen `<svg>`. Even though the horizontal motion was made loop-safe, this setup can still create visible horizontal banding or rectangular seam artifacts from how the filtered areas are rasterized and repeated. That matches the 3 horizontal lines visible in the screenshot.
+User wants the footer to look like the "99% Client Retention" card — light frosted glass over the sky, not the current solid dark navy bar. Night mode footer should remain dark.
 
-### Implementation approach
-Replace the current day-mode cloud rendering with a softer, non-tiled sky system that does not rely on SVG turbulence patterns.
+### Change — `src/components/Footer.tsx`
 
-1. **Keep a single smooth sky gradient**
-   - Preserve the realistic blue sky feel, but refine the gradient stops so the background reads as one continuous sky from top to bottom.
-   - No hard stop transitions.
+Replace the footer's hard-coded dark background with a day/night-aware glass treatment:
 
-2. **Replace SVG turbulence clouds with blurred gradient cloud layers**
-   - Build clouds from several oversized, low-opacity radial gradients / blurred cloud blobs.
-   - Spread them across the viewport with different scales and opacities so they feel organic instead of repeated.
-   - Use soft masking and blur so there are no hard edges, no horizontal bands, and no tile boundaries.
+- `<footer>` classes:
+  - From: `border-t border-[#F8D042]/30 bg-[#0B0F19]/95 backdrop-blur-md`
+  - To: `border-t border-white/30 bg-white/15 backdrop-blur-sm dark:border-[#F8D042]/30 dark:bg-[#0B0F19]/95 dark:backdrop-blur-md`
 
-3. **Use subtle drift animation without visible reset**
-   - Animate the cloud groups very slowly with gentle horizontal drift.
-   - Use mirrored/alternate motion or duplicated oversized groups so the motion never snaps and never exposes a repeated seam.
-   - Keep motion minimal so the result feels like a natural sky, not an obvious animated texture.
+This matches the established day-mode glass pattern (`bg-white/15 backdrop-blur-sm border-white/30`) used by the stat cards, while preserving the dark navy + gold border for night mode.
 
-4. **Preserve the rest of the page**
-   - Keep night mode unchanged.
-   - Keep the existing day-mode readability pattern, haze feel, and overall hero composition unchanged.
-   - Only improve the day sky rendering.
+### Text legibility in day mode
 
-### Files to update
-- `src/components/SkyBackground.tsx`
-  - Remove the current SVG turbulence/pattern cloud system.
-  - Rebuild the day background with:
-    - one continuous sky gradient layer
-    - multiple soft blurred cloud overlays
-    - subtle atmospheric haze
-- `src/index.css`
-  - Replace the current cloud drift animation classes with simpler slow-drift keyframes for the new cloud groups.
-  - Keep reduced-motion support.
+Currently footer text uses `text-white/50`, `text-white/40`, `text-white/60` — these vanish on a light glass panel. Gate them per mode:
+
+- Tagline (`text-white/50`) → `text-navy-900/70 dark:text-white/50`
+- Nav links (`text-white/50`) → `text-navy-900/75 dark:text-white/50` (hover stays gold)
+- Social icon buttons: `bg-white/5 border-white/10 text-white/60` → `bg-navy-900/5 border-navy-900/15 text-navy-900/70 dark:bg-white/5 dark:border-white/10 dark:text-white/60` (gold hover state stays unchanged — works on both)
+- Copyright (`text-white/40`) → `text-navy-900/60 dark:text-white/40`
+- Section headings already `text-[#F8D042]` (gold) — readable on both, no change.
+- Wordmark SVG is gold — fine on both.
+- Bottom border `border-white/5` → `border-navy-900/10 dark:border-white/5`
+
+### Not changing
+- Layout, spacing, columns, font sizes, links, icons.
+- Sky background, header, sections — all already correct.
+- Night mode appearance — identical to today.
 
 ### QA
-- Day mode shows no horizontal lines, no rectangular seams, and no tiling artifacts.
-- Sky looks smooth and realistic behind the hero content.
-- Cloud movement feels gentle and continuous, with no visible jump at any loop boundary.
-- Night mode remains exactly as it is now.
-- Check desktop and mobile widths to make sure no new seams appear at different viewport sizes.
+- Day mode: footer reads as a light frosted panel matching the stat cards; sky/clouds visible through it; all text legible against the glass.
+- Night mode: unchanged — dark navy bar with gold accents.
+- Toggle day/night: clean swap, no flash.
 
-### Technical notes
-I would intentionally move away from `feTurbulence` here, because the issue is visual naturalness and seam-free rendering, not just loop timing. Large blurred gradient-based cloud layers are more controllable, lighter, and much less likely to produce the horizontal band artifacts visible in the current implementation.
+### Files Changed
+- `src/components/Footer.tsx` — footer container + all text/border color classes gated per mode.
 
