@@ -1,20 +1,20 @@
 
 
-## Fix "Chat with us" tooltip visibility in day mode
+## Update floating button tooltips: black text on light glass background
 
-The tooltip pill behind the chat button is dark/transparent and blends into the light blue sky, making the text unreadable. Need to locate it and make it readable in day mode.
+User wants the three tooltip pills ("Voice call", "WhatsApp", "Chat with us") to match the day-mode card style — light frosted glass with black text instead of the current dark navy with white text.
 
-### Investigation needed
-Find the "Chat with us" tooltip — likely in `ChatWidget.tsx` or `FloatingServiceBox.tsx` near the floating action buttons (call/WhatsApp/chat).
+### Change — `src/components/chat/ChatWidget.tsx`
 
-### Fix
-Update the tooltip pill's classes so it has solid contrast in day mode:
-- Background: keep dark navy with higher opacity (e.g. `bg-navy-900/90`) so white text reads on light sky.
-- Text: ensure `text-white` with optional subtle shadow.
-- Night mode: unchanged.
+All three tooltip `<span>` elements currently use:
+`bg-navy-900/90 backdrop-blur-sm border border-gold/30 text-white font-medium`
 
-If the current style is `bg-navy-900/40` or similar low-opacity dark, bump to `bg-navy-900/85 backdrop-blur-sm` and add `text-white font-medium`.
+Update to day-mode glass with black text, gated for night mode to keep the dark variant:
+
+`bg-white/80 backdrop-blur-sm border border-white/40 text-navy-900 font-semibold dark:bg-navy-900/90 dark:border-gold/30 dark:text-white`
+
+This matches the established day-mode card pattern (light frosted white glass) used by the stat cards and section tiles. Night mode keeps the existing dark navy + gold border + white text.
 
 ### Files Changed
-- `src/components/chat/ChatWidget.tsx` (or wherever the "Chat with us" label lives) — adjust tooltip background opacity + text color for day-mode legibility.
+- `src/components/chat/ChatWidget.tsx` — three tooltip spans (Voice call, WhatsApp, Chat with us) updated to light glass / black text in day mode, dark in night mode.
 
