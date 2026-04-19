@@ -1,17 +1,18 @@
 
 
-## Slow down cloud drift animations
+## Slow down stars' downward drift
 
-Current speeds in `src/index.css`:
-- `.cloud-drift-a`: 60s
-- `.cloud-drift-b`: 80s
-- `.cloud-drift-c`: 100s
+In `src/components/NightBackground.tsx`, stars currently drift downward at `0.05 + Math.random() * 0.1` px/frame (range 0.05–0.15). Reduce by ~4× for a much calmer night sky.
 
-Increase by ~50% for a slower, more relaxed drift:
-- `.cloud-drift-a`: 60s → 90s
-- `.cloud-drift-b`: 80s → 120s
-- `.cloud-drift-c`: 100s → 150s
+### Change — `src/components/NightBackground.tsx`
+
+In `initStars()`, update the `speed` assignment:
+
+- From: `speed: 0.05 + Math.random() * 0.1`
+- To: `speed: 0.01 + Math.random() * 0.03` (range 0.01–0.04, ~4× slower)
+
+Twinkling, star count, colors, and meteors all remain unchanged.
 
 ### Files Changed
-- `src/index.css` — update the three `animation` durations on `.cloud-drift-a/b/c`.
+- `src/components/NightBackground.tsx` — single line in `initStars()` for slower vertical drift.
 
