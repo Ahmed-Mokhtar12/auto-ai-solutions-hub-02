@@ -1,51 +1,41 @@
 
 
-## Implementing 3 fixes + day-mode legibility
+## Match footer style to the light glass tiles (day mode)
 
-### 1. Cloud band seams — `SkyBackground.tsx`
-All 3 `<rect>` → `x="0" y="0" width="200%" height="100%"`. Overlapping full-canvas layers blend organically (different seeds + baseFrequencies keep patterns distinct). No more horizontal stripes.
+User wants the footer to look like the "99% Client Retention" card — light frosted glass over the sky, not the current solid dark navy bar. Night mode footer should remain dark.
 
-### 2. Transparent navbar — `Header.tsx`
-Add `bg-transparent` explicitly to the `<header>` element (both mobile + desktop branches) so nothing paints over the sky. Dropdown panels keep their own `bg-background/95` styling — only the bar is see-through.
+### Change — `src/components/Footer.tsx`
 
-### 3. Unified sky behind everything
+Replace the footer's hard-coded dark background with a day/night-aware glass treatment:
 
-**`src/index.css`** — body bg conditional:
-```css
-body { @apply text-foreground; background: transparent; }
-html.dark body { @apply bg-navy-900; }
-```
+- `<footer>` classes:
+  - From: `border-t border-[#F8D042]/30 bg-[#0B0F19]/95 backdrop-blur-md`
+  - To: `border-t border-white/30 bg-white/15 backdrop-blur-sm dark:border-[#F8D042]/30 dark:bg-[#0B0F19]/95 dark:backdrop-blur-md`
 
-**`src/pages/Index.tsx`** — CTA section: `bg-navy-800/30` → `dark:bg-navy-800/30` (no bg in day mode).
+This matches the established day-mode glass pattern (`bg-white/15 backdrop-blur-sm border-white/30`) used by the stat cards, while preserving the dark navy + gold border for night mode.
 
-**Audit + gate opaque section bgs in day mode**:
-- `TrustSection.tsx` — `bg-navy-800/30` → `dark:bg-navy-800/30`; badge pills `bg-navy-800/60 border-navy-700` → add `dark:` prefix + day-mode equivalent `bg-white/20 border-white/30`.
-- `SocialProofSection`, `ProcessSection`, `IndustrySolutions`, `ServicesOverview`, `HeroSection`, `TestimonialsSection` — scan for `bg-navy-*` on the section root and on cards; gate with `dark:` and add light glass equivalent (`bg-white/10` or `bg-white/15` with `border-white/20`) for day mode.
-- `solution-card` utility in `index.css` (`bg-navy-800`) → split into dark/day variants or override per-section.
+### Text legibility in day mode
 
-### 4. Day-mode text legibility
-After stripping dark backgrounds, light text on light sky needs help. Two-pronged:
+Currently footer text uses `text-white/50`, `text-white/40`, `text-white/60` — these vanish on a light glass panel. Gate them per mode:
 
-**a. Light glass cards** — every section card/box gets `dark:bg-navy-800 bg-white/10 backdrop-blur-sm border-white/20` pattern so content sits on a soft frosted panel, sky still visible through.
+- Tagline (`text-white/50`) → `text-navy-900/70 dark:text-white/50`
+- Nav links (`text-white/50`) → `text-navy-900/75 dark:text-white/50` (hover stays gold)
+- Social icon buttons: `bg-white/5 border-white/10 text-white/60` → `bg-navy-900/5 border-navy-900/15 text-navy-900/70 dark:bg-white/5 dark:border-white/10 dark:text-white/60` (gold hover state stays unchanged — works on both)
+- Copyright (`text-white/40`) → `text-navy-900/60 dark:text-white/40`
+- Section headings already `text-[#F8D042]` (gold) — readable on both, no change.
+- Wordmark SVG is gold — fine on both.
+- Bottom border `border-white/5` → `border-navy-900/10 dark:border-white/5`
 
-**b. Text shadow utility** — add to `index.css`:
-```css
-@layer utilities {
-  .day-text-shadow { text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
-}
-```
-Apply via `html:not(.dark) .needs-shadow` or directly add `[&:not(.dark_*)]` — simpler: add a `.day-readable` class on hero headlines / any text floating directly over sky (no card behind it). Footer text already on dark footer — untouched.
-
-### Files changed
-- `src/components/SkyBackground.tsx` — full-canvas overlapping rects
-- `src/components/Header.tsx` — explicit `bg-transparent` on header
-- `src/index.css` — body bg conditional + `.day-text-shadow` utility + `solution-card` day variant
-- `src/pages/Index.tsx` — gate CTA bg
-- `src/components/sections/*.tsx` (Trust, SocialProof, Process, IndustrySolutions, ServicesOverview, Hero, Testimonials) — gate `bg-navy-*` with `dark:` + add light glass variant for day mode; add `.day-text-shadow` to any floating headlines
-- `mem://design/sky-background-details` — note unified background + day glass pattern
+### Not changing
+- Layout, spacing, columns, font sizes, links, icons.
+- Sky background, header, sections — all already correct.
+- Night mode appearance — identical to today.
 
 ### QA
-- Day @ 998px + 375px: sky visible behind navbar, all sections, footer area; no horizontal cloud seams; all text readable (cards have light glass, floating text has shadow).
-- Night unchanged: navy bg + stars + dark cards.
-- Toggle day/night several times — no flicker.
+- Day mode: footer reads as a light frosted panel matching the stat cards; sky/clouds visible through it; all text legible against the glass.
+- Night mode: unchanged — dark navy bar with gold accents.
+- Toggle day/night: clean swap, no flash.
+
+### Files Changed
+- `src/components/Footer.tsx` — footer container + all text/border color classes gated per mode.
 
