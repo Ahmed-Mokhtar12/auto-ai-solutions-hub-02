@@ -57,7 +57,7 @@ const Footer: React.FC = () => {
           {/* Column 3 — Company */}
           <div className="flex flex-col gap-0">
             <p className="text-[#F8D042] text-xs font-bold uppercase tracking-wider mb-0.5">Company</p>
-            <Link to="/about-us" className="text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">About Us</Link>
+            <Link to="/about" className="text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">About Us</Link>
             <Link to="/security" className="text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">Security</Link>
             <Link to="/contact" className="text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">Contact Us</Link>
             <Link to="/privacy-policy" className="text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">Privacy Policy</Link>
