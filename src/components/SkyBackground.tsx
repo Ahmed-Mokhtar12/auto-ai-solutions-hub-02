@@ -16,7 +16,7 @@ const SkyBackground: React.FC = () => {
         }}
       />
 
-      {/* Layer B — SVG turbulence clouds */}
+      {/* Layer B — SVG turbulence clouds, tiled via <pattern> for seamless loop */}
       <svg
         className="absolute inset-0 w-full h-full"
         preserveAspectRatio="xMidYMid slice"
@@ -65,16 +65,52 @@ const SkyBackground: React.FC = () => {
                       0 0 0 1.05 -0.5"
             />
           </filter>
+
+          {/*
+            Each pattern renders the filtered turbulence into a single 100%-wide tile.
+            Filling a 200%-wide rect with this pattern makes the right half a pixel-perfect
+            copy of the left half, so a translateX(-50%) loop has no visible seam.
+          */}
+          <pattern
+            id="cloud-pattern-a"
+            patternUnits="userSpaceOnUse"
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+          >
+            <rect x="0" y="0" width="100%" height="100%" filter="url(#cloud-filter-a)" />
+          </pattern>
+          <pattern
+            id="cloud-pattern-b"
+            patternUnits="userSpaceOnUse"
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+          >
+            <rect x="0" y="0" width="100%" height="100%" filter="url(#cloud-filter-b)" />
+          </pattern>
+          <pattern
+            id="cloud-pattern-c"
+            patternUnits="userSpaceOnUse"
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+          >
+            <rect x="0" y="0" width="100%" height="100%" filter="url(#cloud-filter-c)" />
+          </pattern>
         </defs>
 
         <g className="cloud-drift-a" style={{ transformBox: 'fill-box' }}>
-          <rect x="0" y="0" width="200%" height="100%" filter="url(#cloud-filter-a)" />
+          <rect x="0" y="0" width="200%" height="100%" fill="url(#cloud-pattern-a)" />
         </g>
         <g className="cloud-drift-b" style={{ transformBox: 'fill-box' }}>
-          <rect x="0" y="0" width="200%" height="100%" filter="url(#cloud-filter-b)" />
+          <rect x="0" y="0" width="200%" height="100%" fill="url(#cloud-pattern-b)" />
         </g>
         <g className="cloud-drift-c" style={{ transformBox: 'fill-box' }}>
-          <rect x="0" y="0" width="200%" height="100%" filter="url(#cloud-filter-c)" />
+          <rect x="0" y="0" width="200%" height="100%" fill="url(#cloud-pattern-c)" />
         </g>
       </svg>
 
