@@ -49,17 +49,17 @@ const TestimonialsSection: React.FC = () => {
 
         <HoverVisibleContainer autoHideDelay={2500} initialVisibility={false} showIndicator={false}>
           <div className="max-w-3xl mx-auto">
-            <div className="bg-navy-800/60 border border-navy-700 rounded-xl p-8 md:p-12 relative">
+            <div className="dark:bg-navy-800/60 dark:border-navy-700 bg-white/20 border-white/40 backdrop-blur-md border rounded-xl p-8 md:p-12 relative">
               <Quote className="h-10 w-10 text-gold/30 absolute top-6 left-6" />
 
               <div className="text-center">
-                <p className="text-lg md:text-xl text-foreground/90 italic leading-relaxed mb-8 pt-4">
+                <p className="text-lg md:text-xl text-foreground/95 day-readable dark:text-foreground/90 italic leading-relaxed mb-8 pt-4">
                   "{t.quote}"
                 </p>
 
                 <div className="mb-2">
-                  <p className="text-foreground font-semibold text-lg">{t.name}</p>
-                  <p className="text-muted-foreground text-sm">{t.title}, {t.company}</p>
+                  <p className="text-foreground day-readable font-semibold text-lg">{t.name}</p>
+                  <p className="text-foreground/80 day-readable dark:text-muted-foreground text-sm">{t.title}, {t.company}</p>
                 </div>
                 <span className="text-xs bg-gold/10 text-gold px-3 py-1 rounded-full border border-gold/20">
                   {t.industry}
@@ -72,7 +72,7 @@ const TestimonialsSection: React.FC = () => {
                 variant="ghost"
                 size="icon"
                 onClick={prev}
-                className="text-muted-foreground hover:text-gold"
+                className="text-foreground/80 dark:text-muted-foreground hover:text-gold"
               >
                 <ChevronLeft className="h-5 w-5" />
               </Button>
@@ -83,7 +83,7 @@ const TestimonialsSection: React.FC = () => {
                     key={i}
                     onClick={() => setCurrent(i)}
                     className={`h-3 rounded-full transition-all duration-300 ${
-                      i === current ? 'w-8 bg-gold' : 'w-3 bg-navy-700'
+                      i === current ? 'w-8 bg-gold' : 'w-3 dark:bg-navy-700 bg-white/40'
                     }`}
                   />
                 ))}
@@ -93,7 +93,7 @@ const TestimonialsSection: React.FC = () => {
                 variant="ghost"
                 size="icon"
                 onClick={next}
-                className="text-muted-foreground hover:text-gold"
+                className="text-foreground/80 dark:text-muted-foreground hover:text-gold"
               >
                 <ChevronRight className="h-5 w-5" />
               </Button>
