@@ -1,41 +1,34 @@
 
 
-## Match footer style to the light glass tiles (day mode)
+## Fix the visible "jump" in the cloud loop
 
-User wants the footer to look like the "99% Client Retention" card — light frosted glass over the sky, not the current solid dark navy bar. Night mode footer should remain dark.
+One of the cloud layers visibly snaps back at the end of its cycle. Fix is to make the last frame pixel-identical to the first frame so the loop is truly seamless.
 
-### Change — `src/components/Footer.tsx`
+### Why it happens
 
-Replace the footer's hard-coded dark background with a day/night-aware glass treatment:
+In `SkyBackground.tsx` each layer is a 200%-wide rect filled with `feTurbulence` noise, animated `translateX(0)` → `translateX(-50%)`. For seamless looping, the left half (0–100%) must match the right half (100–200%). But `feTurbulence` generates unique noise across the full width — so when it snaps back, you see the jump.
 
-- `<footer>` classes:
-  - From: `border-t border-[#F8D042]/30 bg-[#0B0F19]/95 backdrop-blur-md`
-  - To: `border-t border-white/30 bg-white/15 backdrop-blur-sm dark:border-[#F8D042]/30 dark:bg-[#0B0F19]/95 dark:backdrop-blur-md`
+### Fix: tile the noise via SVG `<pattern>`
 
-This matches the established day-mode glass pattern (`bg-white/15 backdrop-blur-sm border-white/30`) used by the stat cards, while preserving the dark navy + gold border for night mode.
+- For each of the 3 cloud filters, wrap the filtered output in a `<pattern>` sized 100% × 100% (`patternUnits="userSpaceOnUse"`).
+- Fill a 200%-wide rect with that pattern → the right half is an exact copy of the left half.
+- Keep the same `translateX(0) → translateX(-50%)` animation → the second tile lands exactly where the first was. No visible snap.
 
-### Text legibility in day mode
+Apply to all 3 layers so whichever one was glitching is fixed.
 
-Currently footer text uses `text-white/50`, `text-white/40`, `text-white/60` — these vanish on a light glass panel. Gate them per mode:
+### Keep unchanged
 
-- Tagline (`text-white/50`) → `text-navy-900/70 dark:text-white/50`
-- Nav links (`text-white/50`) → `text-navy-900/75 dark:text-white/50` (hover stays gold)
-- Social icon buttons: `bg-white/5 border-white/10 text-white/60` → `bg-navy-900/5 border-navy-900/15 text-navy-900/70 dark:bg-white/5 dark:border-white/10 dark:text-white/60` (gold hover state stays unchanged — works on both)
-- Copyright (`text-white/40`) → `text-navy-900/60 dark:text-white/40`
-- Section headings already `text-[#F8D042]` (gold) — readable on both, no change.
-- Wordmark SVG is gold — fine on both.
-- Bottom border `border-white/5` → `border-navy-900/10 dark:border-white/5`
+- Cloud look, density, opacity, colors.
+- Durations: 60s / 80s / 100s.
+- Day/night logic, gradient, haze, navbar, footer, sections.
+- `prefers-reduced-motion` handling.
 
-### Not changing
-- Layout, spacing, columns, font sizes, links, icons.
-- Sky background, header, sections — all already correct.
-- Night mode appearance — identical to today.
+### Files changed
+
+- `src/components/SkyBackground.tsx` — wrap each turbulence filter in a `<pattern>`, fill rect with the pattern so left/right halves are pixel-identical.
 
 ### QA
-- Day mode: footer reads as a light frosted panel matching the stat cards; sky/clouds visible through it; all text legible against the glass.
-- Night mode: unchanged — dark navy bar with gold accents.
-- Toggle day/night: clean swap, no flash.
 
-### Files Changed
-- `src/components/Footer.tsx` — footer container + all text/border color classes gated per mode.
+- Watch each layer through a full cycle (60s, 80s, 100s) — no snap at loop boundary.
+- Day mode otherwise unchanged; night mode untouched.
 
