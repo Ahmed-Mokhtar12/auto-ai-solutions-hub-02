@@ -157,7 +157,7 @@ const Header: React.FC = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-background/95 backdrop-blur-xl border-gold/20 min-w-[240px]">
               <DropdownMenuLabel className="text-xs text-gold/60 uppercase tracking-wider">Our Specialties</DropdownMenuLabel>
-              {industries.map((ind, i) => (
+              {industries.map((ind) => (
                 <DropdownMenuItem key={ind.label} asChild>
                   <Link to={ind.href} className="flex items-center gap-3 px-3 py-2.5 cursor-pointer">
                     <ind.icon className="h-4 w-4 text-gold/70" />
@@ -165,7 +165,7 @@ const Header: React.FC = () => {
                       <div className="font-medium text-sm">{ind.label}</div>
                       <div className="text-xs text-muted-foreground">{ind.desc}</div>
                     </div>
-                    {i === 0 && (
+                    {ind.label === 'Hospitality' && (
                       <span className="ml-auto text-[10px] bg-gold/20 text-gold px-1.5 py-0.5 rounded-full">Core</span>
                     )}
                   </Link>

@@ -24,7 +24,7 @@ const ChatWidget: React.FC = () => {
   const [isBatching, setIsBatching] = useState(false);
   const [showBatchDots, setShowBatchDots] = useState(false);
 
-  const { sendChatMessage, isLoading } = useChatApi();
+  const { sendChatMessage, isLoading, sessionId } = useChatApi();
   const { status: callStatus, toggleCall } = useVapi();
   const isMobile = useIsMobile();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -43,12 +43,8 @@ const ChatWidget: React.FC = () => {
   const sendChatMessageRef = useRef(sendChatMessage);
   sendChatMessageRef.current = sendChatMessage;
 
-  const sessionIdRef = useRef(
-    (() => {
-      try { return localStorage.getItem('digitlab_chat_session_id') || crypto.randomUUID(); }
-      catch { return crypto.randomUUID(); }
-    })()
-  );
+  const sessionIdRef = useRef(sessionId);
+  sessionIdRef.current = sessionId;
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
