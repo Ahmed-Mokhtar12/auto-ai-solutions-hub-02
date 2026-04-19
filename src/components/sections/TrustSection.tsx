@@ -10,16 +10,16 @@ const trustBadges = [
 
 const TrustSection: React.FC = () => {
   return (
-    <section className="py-10 md:py-16 bg-navy-800/30">
+    <section className="py-10 md:py-16 dark:bg-navy-800/30">
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap justify-center gap-3 md:gap-8">
           {trustBadges.map((badge, i) => (
             <div
               key={i}
-              className="flex items-center gap-2 bg-navy-800/60 border border-navy-700 px-4 py-2.5 rounded-full"
+              className="flex items-center gap-2 dark:bg-navy-800/60 dark:border-navy-700 bg-white/20 border-white/40 backdrop-blur-sm border px-4 py-2.5 rounded-full"
             >
               <span className="text-gold">{badge.icon}</span>
-              <span className="text-sm font-medium text-foreground/80">{badge.label}</span>
+              <span className="text-sm font-medium text-foreground/90 dark:text-foreground/80 day-readable">{badge.label}</span>
             </div>
           ))}
         </div>

@@ -35,8 +35,8 @@ const ProcessSection: React.FC = () => {
     <section className="py-12 md:py-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">How We Work</h2>
-          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-white day-readable mb-6">How We Work</h2>
+          <p className="text-lg md:text-xl text-gray-100 day-readable dark:text-gray-300 max-w-3xl mx-auto">
             Our proven 4-step process ensures successful AI implementation that delivers measurable results 
             and transforms your business operations.
           </p>
@@ -51,21 +51,21 @@ const ProcessSection: React.FC = () => {
               showIndicator={false}
             >
               <div className="relative">
-                <div className="relative bg-navy-800/80 p-6 md:p-8 rounded-xl border border-navy-700 
+                <div className="relative dark:bg-navy-800/80 dark:border-navy-700 bg-white/20 border-white/40 backdrop-blur-md border p-6 md:p-8 rounded-xl
                               hover:border-gold hover:shadow-gold/20 transition-all duration-300 hover:scale-105 h-full">
                   <div className="text-center mb-6">
-                    <div className="inline-flex items-center justify-center w-20 h-20 bg-navy-700 rounded-full mb-4">
+                    <div className="inline-flex items-center justify-center w-20 h-20 dark:bg-navy-700 bg-white/30 backdrop-blur-sm rounded-full mb-4">
                       {step.icon}
                     </div>
                     <div className="text-gold font-bold text-lg mb-2">Step {index + 1}</div>
-                    <h3 className="text-xl font-semibold text-white mb-3">{step.title}</h3>
+                    <h3 className="text-xl font-semibold text-white day-readable mb-3">{step.title}</h3>
                   </div>
                   
-                  <p className="text-gray-300 mb-4 leading-relaxed text-center">{step.description}</p>
+                  <p className="text-gray-100 day-readable dark:text-gray-300 mb-4 leading-relaxed text-center">{step.description}</p>
                   
                   <ul className="space-y-2">
                     {step.details.map((detail, idx) => (
-                      <li key={idx} className="text-sm text-gray-300 flex items-center">
+                      <li key={idx} className="text-sm text-gray-100 day-readable dark:text-gray-300 flex items-center">
                         <span className="w-1.5 h-1.5 bg-gold rounded-full mr-3 flex-shrink-0"></span>
                         {detail}
                       </li>

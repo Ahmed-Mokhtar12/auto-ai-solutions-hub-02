@@ -56,13 +56,13 @@ const industries = [
 
 const IndustrySolutions: React.FC = () => {
   return (
-    <section className="py-12 md:py-20 bg-navy-800/20">
+    <section className="py-12 md:py-20 dark:bg-navy-800/20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground day-readable mb-4">
             Industry <span className="text-gold">Solutions</span>
           </h2>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-foreground/90 day-readable dark:text-muted-foreground max-w-3xl mx-auto">
             Deep hospitality expertise. Proven methodology adaptable to any enterprise vertical.
           </p>
         </div>
@@ -72,10 +72,10 @@ const IndustrySolutions: React.FC = () => {
             <HoverVisibleContainer key={index} autoHideDelay={2500} initialVisibility={false} showIndicator={false}>
               <Link
                 to={industry.href}
-                className={`relative p-6 rounded-lg border transition-all duration-300 h-full animate-fade-in block hover:scale-[1.02] ${
+                className={`relative p-6 rounded-lg border backdrop-blur-md transition-all duration-300 h-full animate-fade-in block hover:scale-[1.02] ${
                   industry.featured
-                    ? 'bg-navy-800/80 border-gold/40 shadow-lg shadow-gold/5'
-                    : 'bg-navy-800/50 border-navy-700 hover:border-gold/20'
+                    ? 'dark:bg-navy-800/80 bg-white/25 border-gold/40 shadow-lg shadow-gold/5'
+                    : 'dark:bg-navy-800/50 dark:border-navy-700 bg-white/15 border-white/30 hover:border-gold/40'
                 }`}
                 style={{ animationDelay: `${index * 100}ms` }}
               >
@@ -87,16 +87,16 @@ const IndustrySolutions: React.FC = () => {
 
                 <div className="flex items-center gap-3 mb-4 mt-1">
                   {industry.icon}
-                  <h3 className="text-xl font-bold text-foreground">{industry.title}</h3>
+                  <h3 className="text-xl font-bold text-foreground day-readable">{industry.title}</h3>
                 </div>
 
-                <p className="text-muted-foreground text-sm mb-4">{industry.description}</p>
+                <p className="text-foreground/85 day-readable dark:text-muted-foreground text-sm mb-4">{industry.description}</p>
 
                 <div className="flex flex-wrap gap-2">
                   {industry.useCases.map((uc, i) => (
                     <span
                       key={i}
-                      className="text-xs bg-navy-700/80 text-gold/90 px-2.5 py-1.5 rounded-full border border-navy-700"
+                      className="text-xs dark:bg-navy-700/80 dark:border-navy-700 bg-white/30 border-white/40 text-gold px-2.5 py-1.5 rounded-full border"
                     >
                       {uc}
                     </span>

@@ -48,15 +48,15 @@ const ServicesOverview: React.FC = () => {
   ];
 
   return (
-    <section className="py-12 md:py-20 bg-navy-800/5">
+    <section className="py-12 md:py-20 dark:bg-navy-800/5">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">AI Solutions</h2>
-          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-white day-readable mb-4">AI Solutions</h2>
+          <p className="text-lg md:text-xl text-gray-100 day-readable dark:text-gray-300 max-w-3xl mx-auto mb-6">
             Specialized in hospitality AI with proven expertise that extends across every industry. 
             From luxury hotels to enterprise operations, we deliver intelligent automation that works.
           </p>
-          <div className="bg-gold/10 border border-gold/30 rounded-lg p-3 max-w-xl mx-auto">
+          <div className="bg-gold/10 border border-gold/30 rounded-lg p-3 max-w-xl mx-auto backdrop-blur-sm">
             <p className="text-gold font-medium">🏆 Hospitality Specialists | Enterprise Ready</p>
           </div>
         </div>
@@ -72,17 +72,17 @@ const ServicesOverview: React.FC = () => {
             >
               <Link
                 to={service.link}
-                className="group bg-navy-800/80 p-8 rounded-xl border border-navy-700 
+                className="group dark:bg-navy-800/80 dark:border-navy-700 bg-white/20 border-white/40 backdrop-blur-md border p-8 rounded-xl
                          hover:border-gold hover:shadow-gold/20 transition-all duration-300 hover:scale-105 block"
               >
                 <div className="flex items-center mb-4">
                   {service.icon}
-                  <h3 className="text-xl font-semibold text-white ml-3">{service.title}</h3>
+                  <h3 className="text-xl font-semibold text-white day-readable ml-3">{service.title}</h3>
                 </div>
-                <p className="text-gray-300 mb-6 leading-relaxed">{service.description}</p>
+                <p className="text-gray-100 day-readable dark:text-gray-300 mb-6 leading-relaxed">{service.description}</p>
                 <ul className="space-y-2 mb-6">
                   {service.features.map((feature, idx) => (
-                    <li key={idx} className="text-sm text-gray-300 flex items-center">
+                    <li key={idx} className="text-sm text-gray-100 day-readable dark:text-gray-300 flex items-center">
                       <span className="w-2 h-2 bg-gold rounded-full mr-3 flex-shrink-0"></span>
                       {feature}
                     </li>
@@ -98,8 +98,8 @@ const ServicesOverview: React.FC = () => {
 
         {/* Specialized Hospitality Services */}
         <div className="text-center mb-12">
-          <h3 className="text-2xl font-bold text-white mb-4">Hospitality-Specific Solutions</h3>
-          <p className="text-gray-300 max-w-2xl mx-auto">
+          <h3 className="text-2xl font-bold text-white day-readable mb-4">Hospitality-Specific Solutions</h3>
+          <p className="text-gray-100 day-readable dark:text-gray-300 max-w-2xl mx-auto">
             Industry-leading AI tools built for the unique needs of hotels, restaurants, and hospitality businesses. 
             We also serve Manufacturing, Finance, Retail, Healthcare, and more.
           </p>
@@ -114,14 +114,14 @@ const ServicesOverview: React.FC = () => {
               showIndicator={false}
             >
               <div
-                className="bg-navy-800/50 p-6 rounded-lg border border-navy-700 
+                className="dark:bg-navy-800/50 dark:border-navy-700 bg-white/15 border-white/30 backdrop-blur-sm border p-6 rounded-lg
                          hover:border-gold/50 transition-all duration-300"
               >
                 <div className="flex items-center mb-3">
                   {service.icon}
-                  <h4 className="text-lg font-medium text-white ml-3">{service.title}</h4>
+                  <h4 className="text-lg font-medium text-white day-readable ml-3">{service.title}</h4>
                 </div>
-                <p className="text-gray-300 text-sm leading-relaxed">{service.description}</p>
+                <p className="text-gray-100 day-readable dark:text-gray-300 text-sm leading-relaxed">{service.description}</p>
               </div>
             </HoverVisibleContainer>
           ))}

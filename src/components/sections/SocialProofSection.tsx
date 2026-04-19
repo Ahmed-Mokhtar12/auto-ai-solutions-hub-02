@@ -32,11 +32,11 @@ const SocialProofSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-12 md:py-20 bg-navy-800/20">
+    <section className="py-12 md:py-20 dark:bg-navy-800/20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Proven Results Across Industries</h2>
-          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-white day-readable mb-6">Proven Results Across Industries</h2>
+          <p className="text-lg md:text-xl text-gray-100 day-readable dark:text-gray-300 max-w-3xl mx-auto">
             From luxury hotels to enterprise operations, our AI solutions deliver measurable impact. 
             We bring deep hospitality expertise and proven methodologies to every industry we serve.
           </p>
@@ -52,13 +52,13 @@ const SocialProofSection: React.FC = () => {
                 initialVisibility={false}
                 showIndicator={false}
               >
-                <div className="bg-navy-800/50 p-6 rounded-lg border border-navy-700 text-center">
+                <div className="dark:bg-navy-800/50 dark:border-navy-700 bg-white/15 border-white/30 backdrop-blur-sm border p-6 rounded-lg text-center">
                   <div className="flex justify-center mb-4">
                     {stat.icon}
                   </div>
                   <div className="text-3xl font-bold text-gold mb-2">{stat.number}</div>
-                  <div className="text-lg font-semibold text-white mb-2">{stat.label}</div>
-                  <div className="text-sm text-gray-300">{stat.description}</div>
+                  <div className="text-lg font-semibold text-white day-readable mb-2">{stat.label}</div>
+                  <div className="text-sm text-gray-100 day-readable dark:text-gray-300">{stat.description}</div>
                 </div>
               </HoverVisibleContainer>
             ))}
