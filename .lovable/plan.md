@@ -1,55 +1,49 @@
 
 
-## Implementation Plan: Pure CSS + SVG Sky
+## Tune SVG Clouds: Wispy Cirrus, ~30% Coverage
 
-### Files to change
-1. **`src/components/SkyBackground.tsx`** — full rewrite
-2. **`src/index.css`** — replace cloud drift keyframes
-3. **`mem://design/sky-background-details`** — update notes
+### Goal
+Replace the small, repeating "bumpy" cloud pattern with sparse, elongated, wispy cirrus streaks. Sky should read as ~70% clear blue.
 
-### SkyBackground.tsx structure
-- Remove all image imports (`sky-base.jpg`, `clouds-layer-1.png`, `clouds-layer-2.png`).
-- Fixed full-viewport container (`fixed inset-0 z-0 pointer-events-none`).
-- **Layer A — sky gradient** (CSS `linear-gradient`): `#1a6eb5 0% → #3d9bd4 40% → #87CEEB 75% → #b8dff0 100%`.
-- **Layer B — SVG turbulence clouds**, full width/height, `preserveAspectRatio="xMidYMid slice"`:
-  - 3 `<filter>` defs using `feTurbulence type="fractalNoise"` with different `baseFrequency` and `seed` values.
-  - Each filter ends with `feColorMatrix` mapping noise to white-with-alpha. **Starting tuning per user note**: alpha multiplier `1.15`, offset `-0.5` (wispy, sky shows through clearly).
-  - 3 `<g>` cloud bands at different y-positions (10%, 35%, 55%), each containing a `<rect width="200%">` with the filter applied.
-  - Each band gets one of three CSS classes: `.cloud-drift-a`, `.cloud-drift-b`, `.cloud-drift-c`.
-- **Layer C — bottom atmospheric haze**: absolute `bottom-0 inset-x-0 h-[8%]`, `linear-gradient(to top, rgba(220,235,245,0.4), transparent)`.
+### Changes — `src/components/SkyBackground.tsx` only
 
-### index.css changes
-Replace the existing `cloud-drift-slow` / `cloud-drift-slower` keyframes and `.cloud-drift-1` / `.cloud-drift-2` rules with:
+Adjust the three `<filter>` defs. Key levers:
 
-```css
-@keyframes cloud-band-drift {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-.cloud-drift-a { animation: cloud-band-drift 60s linear infinite; transform-origin: center; }
-.cloud-drift-b { animation: cloud-band-drift 80s linear infinite; transform-origin: center; }
-.cloud-drift-c { animation: cloud-band-drift 100s linear infinite; transform-origin: center; }
+**1. Lower `baseFrequency` dramatically + heavily anisotropic (x ≪ y)** → larger shapes, stretched horizontally like cirrus streaks instead of round bumps.
 
-@media (prefers-reduced-motion: reduce) {
-  .cloud-drift-a, .cloud-drift-b, .cloud-drift-c { animation: none; }
-}
-```
+**2. Increase `numOctaves` to 4** → more organic, irregular detail; breaks visible tile rhythm.
 
-Because each band's `<rect>` is 200% wide and the noise tile is identical at the 0% and 50% mark, translating by -50% loops invisibly.
+**3. Soften `feColorMatrix` alpha** → much more transparent so blue sky dominates.
 
-### Tuning lever (per user note)
-The two numbers to tweak after first render are inside each `feColorMatrix` last row:
-- alpha multiplier (currently `1.15`, range `1.1–1.4`)
-- alpha offset (currently `-0.5`, range `-0.55 to -0.45`)
-Lower multiplier + less negative offset = wispier, more transparent.
+| Filter | baseFrequency (x y) | numOctaves | alpha mult | alpha offset |
+|---|---|---|---|---|
+| cloud-filter-a | `0.003 0.012` | 4 | 1.05 | -0.55 |
+| cloud-filter-b | `0.0025 0.010` | 4 | 1.0 | -0.6 |
+| cloud-filter-c | `0.004 0.014` | 4 | 1.05 | -0.5 |
 
-### QA after implementation
-- 998px desktop: clouds wispy, sky blue clearly visible through them, no seam, hero text readable.
-- 375px mobile: same checks.
-- Verify night mode still works (untouched).
-- If clouds too dense → lower multiplier toward 1.1.
+Why x much lower than y: `feTurbulence` baseFrequency controls noise scale per axis. A small x value stretches the noise horizontally → long thin streaks (cirrus shape). Larger y keeps vertical detail tight → feathery edges, not blobs.
 
-### Notes
-- Old asset files (`sky-base.jpg`, cloud PNGs, preview PNGs) left on disk — harmless, removable later.
-- Zero network cost, GPU-composited.
+Why mult ~1.0–1.05 with offset ~-0.5 to -0.6: Only the brightest noise peaks survive the alpha cutoff, so most of the rect becomes fully transparent → ~70% clear sky. The remaining wisps are soft because the multiplier barely amplifies.
+
+**4. Vary cloud band heights/positions slightly** so the three layers don't all start aligned (further reduces perceived repetition):
+- Band A: y=8%, height=30%
+- Band B: y=32%, height=28%
+- Band C: y=58%, height=22%
+
+(Current values are fine; minor nudges only — no structural change.)
+
+### Not changing
+- CSS gradient (`#1a6eb5 → #b8dff0`) — user said colors are good.
+- Animation keyframes / durations (60s, 80s, 100s) in `index.css`.
+- Bottom haze layer.
+- 200% rect width (still required for seamless loop).
+
+### Tuning lever for follow-up
+If still too dense after first render → drop multiplier to `0.95` and offset to `-0.65` (clouds become barely-there veils). If too sparse → bump multiplier back to `1.1`.
+
+### QA
+- 998px desktop + 375px mobile: confirm sky is dominantly blue, cloud streaks are elongated and wispy, no obvious tile/wallpaper repeat, hero text remains crisp.
+
+### Files Changed
+- `src/components/SkyBackground.tsx` — update three `feTurbulence` baseFrequency/numOctaves and three `feColorMatrix` alpha rows.
 
