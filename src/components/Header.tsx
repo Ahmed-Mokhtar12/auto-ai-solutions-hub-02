@@ -64,11 +64,6 @@ const Header: React.FC = () => {
               <SheetContent side="right" className="bg-background/95 backdrop-blur-xl border-gold/20 w-[280px]">
                 <SheetTitle className="text-gold text-lg mb-6">Menu</SheetTitle>
                 <nav className="flex flex-col gap-1">
-                  <SheetClose asChild>
-                    <Link to="/auth" className="gold-btn text-sm text-center px-4 py-2.5 rounded-md mb-4 block">
-                      Your AI Dashboard
-                    </Link>
-                  </SheetClose>
                   {/* Services section */}
                   <p className="text-xs text-muted-foreground uppercase tracking-wider px-3 pt-4 pb-2">Services</p>
                   {services.map((s) => (
