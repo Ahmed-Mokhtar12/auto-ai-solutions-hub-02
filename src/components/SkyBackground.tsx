@@ -1,7 +1,4 @@
 import React from 'react';
-import skyBase from '@/assets/sky-base.jpg';
-import cloudsLayer1 from '@/assets/clouds-layer-1.png';
-import cloudsLayer2 from '@/assets/clouds-layer-2.png';
 
 const SkyBackground: React.FC = () => {
   return (
@@ -10,37 +7,84 @@ const SkyBackground: React.FC = () => {
       style={{ pointerEvents: 'none' }}
       aria-hidden="true"
     >
-      {/* Photographic sky base */}
+      {/* Layer A — sky gradient */}
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: `url(${skyBase})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          background:
+            'linear-gradient(to bottom, #1a6eb5 0%, #3d9bd4 40%, #87CEEB 75%, #b8dff0 100%)',
         }}
       />
 
-      {/* Cloud layer 1 — primary wispy cirrus, slow drift */}
-      <div
-        className="absolute inset-0 cloud-drift-1"
-        style={{
-          backgroundImage: `url(${cloudsLayer1})`,
-          backgroundRepeat: 'repeat-x',
-          backgroundSize: 'auto 100%',
-          opacity: 0.85,
-          mixBlendMode: 'screen',
-        }}
-      />
+      {/* Layer B — SVG turbulence clouds */}
+      <svg
+        className="absolute inset-0 w-full h-full"
+        preserveAspectRatio="xMidYMid slice"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <filter id="cloud-filter-a" x="0" y="0" width="100%" height="100%">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.012 0.025"
+              numOctaves="3"
+              seed="2"
+            />
+            <feColorMatrix
+              values="0 0 0 0 1
+                      0 0 0 0 1
+                      0 0 0 0 1
+                      0 0 0 1.15 -0.5"
+            />
+          </filter>
+          <filter id="cloud-filter-b" x="0" y="0" width="100%" height="100%">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.008 0.018"
+              numOctaves="2"
+              seed="7"
+            />
+            <feColorMatrix
+              values="0 0 0 0 1
+                      0 0 0 0 1
+                      0 0 0 0 1
+                      0 0 0 1.15 -0.5"
+            />
+          </filter>
+          <filter id="cloud-filter-c" x="0" y="0" width="100%" height="100%">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.015 0.03"
+              numOctaves="3"
+              seed="13"
+            />
+            <feColorMatrix
+              values="0 0 0 0 1
+                      0 0 0 0 1
+                      0 0 0 0 1
+                      0 0 0 1.15 -0.5"
+            />
+          </filter>
+        </defs>
 
-      {/* Cloud layer 2 — sparser, slower for parallax depth */}
+        <g className="cloud-drift-a" style={{ transformBox: 'fill-box' }}>
+          <rect x="0" y="10%" width="200%" height="35%" filter="url(#cloud-filter-a)" />
+        </g>
+        <g className="cloud-drift-b" style={{ transformBox: 'fill-box' }}>
+          <rect x="0" y="35%" width="200%" height="30%" filter="url(#cloud-filter-b)" />
+        </g>
+        <g className="cloud-drift-c" style={{ transformBox: 'fill-box' }}>
+          <rect x="0" y="55%" width="200%" height="25%" filter="url(#cloud-filter-c)" />
+        </g>
+      </svg>
+
+      {/* Layer C — bottom atmospheric haze */}
       <div
-        className="absolute inset-0 cloud-drift-2"
+        className="absolute bottom-0 inset-x-0"
         style={{
-          backgroundImage: `url(${cloudsLayer2})`,
-          backgroundRepeat: 'repeat-x',
-          backgroundSize: 'auto 100%',
-          opacity: 0.6,
-          mixBlendMode: 'screen',
+          height: '8%',
+          background:
+            'linear-gradient(to top, rgba(220,235,245,0.4), transparent)',
         }}
       />
     </div>
