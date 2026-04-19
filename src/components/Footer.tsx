@@ -6,7 +6,7 @@ import wordmark from '@/assets/digitlab-wordmark.svg';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="border-t border-[#F8D042]/30 bg-[#0B0F19]/95 backdrop-blur-md">
+    <footer className="border-t border-white/30 bg-white/15 backdrop-blur-sm dark:border-[#F8D042]/30 dark:bg-[#0B0F19]/95 dark:backdrop-blur-md">
       <div className="container mx-auto px-4 py-1">
         {/* Main 4-column grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2">
@@ -14,13 +14,13 @@ const Footer: React.FC = () => {
           {/* Column 1 — Brand + Socials */}
           <div className="flex flex-col gap-0.5">
             <img src={wordmark} alt="DigitLab.ai" className="h-5 w-auto object-contain" />
-            <p className="text-white/50 text-[9px] leading-tight">AI-Powered Automation Solutions</p>
+            <p className="text-navy-900/70 dark:text-white/50 text-[9px] leading-tight">AI-Powered Automation Solutions</p>
             <div className="flex items-center gap-2 mt-0.5">
               <a
                 href="https://www.facebook.com/DigitLabai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-6 h-6 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
+                className="flex items-center justify-center w-6 h-6 rounded-full bg-navy-900/5 border border-navy-900/15 text-navy-900/70 dark:bg-white/5 dark:border-white/10 dark:text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
                 title="Facebook"
               >
                 <Facebook className="h-3 w-3" />
@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
                 href="https://www.instagram.com/ai_digitlab/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-6 h-6 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
+                className="flex items-center justify-center w-6 h-6 rounded-full bg-navy-900/5 border border-navy-900/15 text-navy-900/70 dark:bg-white/5 dark:border-white/10 dark:text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
                 title="Instagram"
               >
                 <Instagram className="h-3 w-3" />
@@ -38,7 +38,7 @@ const Footer: React.FC = () => {
                 href="https://www.linkedin.com/company/106986356/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-6 h-6 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
+                className="flex items-center justify-center w-6 h-6 rounded-full bg-navy-900/5 border border-navy-900/15 text-navy-900/70 dark:bg-white/5 dark:border-white/10 dark:text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
                 title="LinkedIn"
               >
               <Linkedin className="h-3 w-3" />
@@ -49,19 +49,19 @@ const Footer: React.FC = () => {
           {/* Column 2 — Solutions */}
           <div className="flex flex-col gap-0">
             <p className="text-[#F8D042] text-xs font-bold uppercase tracking-wider mb-0.5">Solutions</p>
-            <Link to="/ai-agents" className="text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">AI Agents</Link>
-            <Link to="/generative-ai" className="text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">Generative AI</Link>
-            <Link to="/responsible-ai" className="text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">Responsible AI</Link>
+            <Link to="/ai-agents" className="text-navy-900/75 dark:text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">AI Agents</Link>
+            <Link to="/generative-ai" className="text-navy-900/75 dark:text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">Generative AI</Link>
+            <Link to="/responsible-ai" className="text-navy-900/75 dark:text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">Responsible AI</Link>
           </div>
 
           {/* Column 3 — Company */}
           <div className="flex flex-col gap-0">
             <p className="text-[#F8D042] text-xs font-bold uppercase tracking-wider mb-0.5">Company</p>
-            <Link to="/about" className="text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">About Us</Link>
-            <Link to="/security" className="text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">Security</Link>
-            <Link to="/contact" className="text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">Contact Us</Link>
-            <Link to="/privacy-policy" className="text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">Privacy Policy</Link>
-            <Link to="/terms-of-service" className="text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">Terms of Service</Link>
+            <Link to="/about" className="text-navy-900/75 dark:text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">About Us</Link>
+            <Link to="/security" className="text-navy-900/75 dark:text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">Security</Link>
+            <Link to="/contact" className="text-navy-900/75 dark:text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">Contact Us</Link>
+            <Link to="/privacy-policy" className="text-navy-900/75 dark:text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">Privacy Policy</Link>
+            <Link to="/terms-of-service" className="text-navy-900/75 dark:text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5">Terms of Service</Link>
           </div>
 
           {/* Column 4 — Contact */}
@@ -69,7 +69,7 @@ const Footer: React.FC = () => {
             <p className="text-[#F8D042] text-xs font-bold uppercase tracking-wider mb-0.5">Contact</p>
             <a
               href="mailto:Ai.Agent@DigitLab.ai"
-              className="inline-flex items-center gap-1 text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5"
+              className="inline-flex items-center gap-1 text-navy-900/75 dark:text-white/50 text-[10px] hover:text-[#F8D042] transition-colors py-0.5"
             >
               <Mail className="h-3 w-3 text-[#F8D042] shrink-0" />
               Ai.Agent@DigitLab.ai
@@ -78,8 +78,8 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Copyright */}
-        <div className="text-center border-t border-white/5 pt-0.5">
-          <p className="text-white/40 text-[10px]">
+        <div className="text-center border-t border-navy-900/10 dark:border-white/5 pt-0.5">
+          <p className="text-navy-900/60 dark:text-white/40 text-[10px]">
             © {new Date().getFullYear()} DigitLab.ai — All rights reserved.
           </p>
         </div>
