@@ -26,55 +26,55 @@ const SkyBackground: React.FC = () => {
           <filter id="cloud-filter-a" x="0" y="0" width="100%" height="100%">
             <feTurbulence
               type="fractalNoise"
-              baseFrequency="0.012 0.025"
-              numOctaves="3"
+              baseFrequency="0.003 0.012"
+              numOctaves="4"
               seed="2"
             />
             <feColorMatrix
               values="0 0 0 0 1
                       0 0 0 0 1
                       0 0 0 0 1
-                      0 0 0 1.15 -0.5"
+                      0 0 0 1.05 -0.55"
             />
           </filter>
           <filter id="cloud-filter-b" x="0" y="0" width="100%" height="100%">
             <feTurbulence
               type="fractalNoise"
-              baseFrequency="0.008 0.018"
-              numOctaves="2"
+              baseFrequency="0.0025 0.010"
+              numOctaves="4"
               seed="7"
             />
             <feColorMatrix
               values="0 0 0 0 1
                       0 0 0 0 1
                       0 0 0 0 1
-                      0 0 0 1.15 -0.5"
+                      0 0 0 1.0 -0.6"
             />
           </filter>
           <filter id="cloud-filter-c" x="0" y="0" width="100%" height="100%">
             <feTurbulence
               type="fractalNoise"
-              baseFrequency="0.015 0.03"
-              numOctaves="3"
+              baseFrequency="0.004 0.014"
+              numOctaves="4"
               seed="13"
             />
             <feColorMatrix
               values="0 0 0 0 1
                       0 0 0 0 1
                       0 0 0 0 1
-                      0 0 0 1.15 -0.5"
+                      0 0 0 1.05 -0.5"
             />
           </filter>
         </defs>
 
         <g className="cloud-drift-a" style={{ transformBox: 'fill-box' }}>
-          <rect x="0" y="10%" width="200%" height="35%" filter="url(#cloud-filter-a)" />
+          <rect x="0" y="8%" width="200%" height="30%" filter="url(#cloud-filter-a)" />
         </g>
         <g className="cloud-drift-b" style={{ transformBox: 'fill-box' }}>
-          <rect x="0" y="35%" width="200%" height="30%" filter="url(#cloud-filter-b)" />
+          <rect x="0" y="32%" width="200%" height="28%" filter="url(#cloud-filter-b)" />
         </g>
         <g className="cloud-drift-c" style={{ transformBox: 'fill-box' }}>
-          <rect x="0" y="55%" width="200%" height="25%" filter="url(#cloud-filter-c)" />
+          <rect x="0" y="58%" width="200%" height="22%" filter="url(#cloud-filter-c)" />
         </g>
       </svg>
 
