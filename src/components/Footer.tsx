@@ -6,7 +6,7 @@ import wordmark from '@/assets/digitlab-wordmark.svg';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="border-t border-white/30 bg-white/15 backdrop-blur-sm dark:border-[#F8D042]/30 dark:bg-[#0B0F19]/95 dark:backdrop-blur-md">
+    <footer className="border-t border-navy-900/20 bg-navy-900/25 backdrop-blur-md dark:border-[#F8D042]/30 dark:bg-[#0B0F19]/95 dark:backdrop-blur-md">
       <div className="container mx-auto px-4 py-1">
         {/* Main 4-column grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2">
