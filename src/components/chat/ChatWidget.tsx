@@ -212,7 +212,7 @@ const ChatWidget: React.FC = () => {
     <>
       {/* VAPI Voice Call button */}
       <div className="fixed z-50 bottom-[calc(15vh+9rem)] right-6 group">
-        <span className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-3 px-2.5 py-1 rounded-md bg-navy-900/90 backdrop-blur-sm border border-gold/30 text-white font-medium text-xs whitespace-nowrap shadow-lg opacity-0 translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200">
+        <span className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-3 px-2.5 py-1 rounded-md bg-white/80 backdrop-blur-sm border border-white/40 text-navy-900 font-semibold dark:bg-navy-900/90 dark:border-gold/30 dark:text-white text-xs whitespace-nowrap shadow-lg opacity-0 translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200">
           {callStatus === 'idle' ? 'Voice call' : callStatus === 'connecting' ? 'Connecting...' : 'End call'}
         </span>
         <button
@@ -239,7 +239,7 @@ const ChatWidget: React.FC = () => {
 
       {/* WhatsApp floating button */}
       <div className="fixed z-50 bottom-[calc(15vh+5rem)] right-6 group">
-        <span className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-3 px-2.5 py-1 rounded-md bg-navy-900/90 backdrop-blur-sm border border-gold/30 text-white font-medium text-xs whitespace-nowrap shadow-lg opacity-0 translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200">
+        <span className="pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-3 px-2.5 py-1 rounded-md bg-white/80 backdrop-blur-sm border border-white/40 text-navy-900 font-semibold dark:bg-navy-900/90 dark:border-gold/30 dark:text-white text-xs whitespace-nowrap shadow-lg opacity-0 translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200">
           WhatsApp
         </span>
         <a
@@ -263,7 +263,7 @@ const ChatWidget: React.FC = () => {
       {/* Floating toggle button */}
       <div className="fixed z-50 bottom-[calc(15vh+1rem)] right-6 group">
         <span className={cn(
-          "pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-3 px-2.5 py-1 rounded-md bg-navy-900/90 backdrop-blur-sm border border-gold/30 text-white font-medium text-xs whitespace-nowrap shadow-lg transition-all duration-200",
+          "pointer-events-none absolute right-full top-1/2 -translate-y-1/2 mr-3 px-2.5 py-1 rounded-md bg-white/80 backdrop-blur-sm border border-white/40 text-navy-900 font-semibold dark:bg-navy-900/90 dark:border-gold/30 dark:text-white text-xs whitespace-nowrap shadow-lg transition-all duration-200",
           isOpen ? "opacity-0" : "opacity-0 translate-x-1 group-hover:opacity-100 group-hover:translate-x-0"
         )}>
           Chat with us
