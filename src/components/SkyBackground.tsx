@@ -1,126 +1,89 @@
 import React from 'react';
 
+/**
+ * Seamless day sky:
+ * - One continuous gradient (no hard stops)
+ * - Soft blurred radial-gradient "cloud" blobs spread across an oversized strip
+ * - Two duplicated strips drift in opposite directions (alternate) so there is
+ *   no snap-back and no repeating tile seam.
+ */
 const SkyBackground: React.FC = () => {
+  // Reusable cloud-blob background. Multiple soft radial gradients at varied
+  // positions/sizes/opacities — no tiling, no hard edges.
+  const cloudBlobs: React.CSSProperties = {
+    backgroundImage: [
+      'radial-gradient(ellipse 38% 22% at 8% 30%, rgba(255,255,255,0.55), rgba(255,255,255,0) 70%)',
+      'radial-gradient(ellipse 30% 18% at 22% 65%, rgba(255,255,255,0.40), rgba(255,255,255,0) 70%)',
+      'radial-gradient(ellipse 42% 24% at 38% 22%, rgba(255,255,255,0.50), rgba(255,255,255,0) 72%)',
+      'radial-gradient(ellipse 26% 16% at 50% 78%, rgba(255,255,255,0.35), rgba(255,255,255,0) 70%)',
+      'radial-gradient(ellipse 44% 26% at 65% 40%, rgba(255,255,255,0.55), rgba(255,255,255,0) 72%)',
+      'radial-gradient(ellipse 30% 18% at 78% 70%, rgba(255,255,255,0.40), rgba(255,255,255,0) 70%)',
+      'radial-gradient(ellipse 36% 22% at 90% 28%, rgba(255,255,255,0.50), rgba(255,255,255,0) 72%)',
+    ].join(', '),
+    filter: 'blur(28px)',
+    willChange: 'transform',
+  };
+
+  const cloudBlobsAlt: React.CSSProperties = {
+    backgroundImage: [
+      'radial-gradient(ellipse 34% 20% at 12% 55%, rgba(255,255,255,0.45), rgba(255,255,255,0) 70%)',
+      'radial-gradient(ellipse 40% 22% at 30% 25%, rgba(255,255,255,0.50), rgba(255,255,255,0) 72%)',
+      'radial-gradient(ellipse 28% 18% at 48% 60%, rgba(255,255,255,0.38), rgba(255,255,255,0) 70%)',
+      'radial-gradient(ellipse 46% 26% at 68% 30%, rgba(255,255,255,0.55), rgba(255,255,255,0) 72%)',
+      'radial-gradient(ellipse 32% 20% at 84% 62%, rgba(255,255,255,0.42), rgba(255,255,255,0) 70%)',
+      'radial-gradient(ellipse 30% 18% at 95% 40%, rgba(255,255,255,0.40), rgba(255,255,255,0) 70%)',
+    ].join(', '),
+    filter: 'blur(34px)',
+    willChange: 'transform',
+  };
+
   return (
     <div
       className="fixed inset-0 w-full h-full z-0 overflow-hidden"
       style={{ pointerEvents: 'none' }}
       aria-hidden="true"
     >
-      {/* Layer A — sky gradient */}
+      {/* Continuous sky gradient */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            'linear-gradient(to bottom, #1a6eb5 0%, #3d9bd4 40%, #87CEEB 75%, #b8dff0 100%)',
+            'linear-gradient(to bottom, #1a6eb5 0%, #3d9bd4 45%, #87CEEB 80%, #b8dff0 100%)',
         }}
       />
 
-      {/* Layer B — SVG turbulence clouds, tiled via <pattern> for seamless loop */}
-      <svg
-        className="absolute inset-0 w-full h-full"
-        preserveAspectRatio="xMidYMid slice"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <defs>
-          <filter id="cloud-filter-a" x="0" y="0" width="100%" height="100%">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.003 0.012"
-              numOctaves="4"
-              seed="2"
-            />
-            <feColorMatrix
-              values="0 0 0 0 1
-                      0 0 0 0 1
-                      0 0 0 0 1
-                      0 0 0 1.05 -0.55"
-            />
-          </filter>
-          <filter id="cloud-filter-b" x="0" y="0" width="100%" height="100%">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.0025 0.010"
-              numOctaves="4"
-              seed="7"
-            />
-            <feColorMatrix
-              values="0 0 0 0 1
-                      0 0 0 0 1
-                      0 0 0 0 1
-                      0 0 0 1.0 -0.6"
-            />
-          </filter>
-          <filter id="cloud-filter-c" x="0" y="0" width="100%" height="100%">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.004 0.014"
-              numOctaves="4"
-              seed="13"
-            />
-            <feColorMatrix
-              values="0 0 0 0 1
-                      0 0 0 0 1
-                      0 0 0 0 1
-                      0 0 0 1.05 -0.5"
-            />
-          </filter>
+      {/* Cloud layer 1 — wide drifting strip, slow */}
+      <div
+        className="cloud-strip-slow absolute"
+        style={{
+          top: '-10%',
+          left: '-50%',
+          width: '200%',
+          height: '120%',
+          ...cloudBlobs,
+        }}
+      />
 
-          {/*
-            Each pattern renders the filtered turbulence into a single 100%-wide tile.
-            Filling a 200%-wide rect with this pattern makes the right half a pixel-perfect
-            copy of the left half, so a translateX(-50%) loop has no visible seam.
-          */}
-          <pattern
-            id="cloud-pattern-a"
-            patternUnits="userSpaceOnUse"
-            x="0"
-            y="0"
-            width="100%"
-            height="100%"
-          >
-            <rect x="0" y="0" width="100%" height="100%" filter="url(#cloud-filter-a)" />
-          </pattern>
-          <pattern
-            id="cloud-pattern-b"
-            patternUnits="userSpaceOnUse"
-            x="0"
-            y="0"
-            width="100%"
-            height="100%"
-          >
-            <rect x="0" y="0" width="100%" height="100%" filter="url(#cloud-filter-b)" />
-          </pattern>
-          <pattern
-            id="cloud-pattern-c"
-            patternUnits="userSpaceOnUse"
-            x="0"
-            y="0"
-            width="100%"
-            height="100%"
-          >
-            <rect x="0" y="0" width="100%" height="100%" filter="url(#cloud-filter-c)" />
-          </pattern>
-        </defs>
+      {/* Cloud layer 2 — alternate direction, even slower, softer */}
+      <div
+        className="cloud-strip-slower absolute"
+        style={{
+          top: '-15%',
+          left: '-50%',
+          width: '200%',
+          height: '130%',
+          opacity: 0.85,
+          ...cloudBlobsAlt,
+        }}
+      />
 
-        <g className="cloud-drift-a" style={{ transformBox: 'fill-box' }}>
-          <rect x="0" y="0" width="200%" height="100%" fill="url(#cloud-pattern-a)" />
-        </g>
-        <g className="cloud-drift-b" style={{ transformBox: 'fill-box' }}>
-          <rect x="0" y="0" width="200%" height="100%" fill="url(#cloud-pattern-b)" />
-        </g>
-        <g className="cloud-drift-c" style={{ transformBox: 'fill-box' }}>
-          <rect x="0" y="0" width="200%" height="100%" fill="url(#cloud-pattern-c)" />
-        </g>
-      </svg>
-
-      {/* Layer C — bottom atmospheric haze */}
+      {/* Bottom atmospheric haze */}
       <div
         className="absolute bottom-0 inset-x-0"
         style={{
-          height: '8%',
+          height: '12%',
           background:
-            'linear-gradient(to top, rgba(220,235,245,0.4), transparent)',
+            'linear-gradient(to top, rgba(220,235,245,0.55), transparent)',
         }}
       />
     </div>
