@@ -24,7 +24,7 @@ const ChatWidget: React.FC = () => {
   const [isBatching, setIsBatching] = useState(false);
   const [showBatchDots, setShowBatchDots] = useState(false);
 
-  const { sendChatMessage, isLoading } = useChatApi();
+  const { sendChatMessage, isLoading, sessionId } = useChatApi();
   const { status: callStatus, toggleCall } = useVapi();
   const isMobile = useIsMobile();
   const messagesEndRef = useRef<HTMLDivElement>(null);
