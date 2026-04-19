@@ -17,7 +17,7 @@ const Footer: React.FC = () => {
             <p className="text-white/50 text-[9px] leading-tight">AI-Powered Automation Solutions</p>
             <div className="flex items-center gap-2 mt-0.5">
               <a
-                href="https://www.facebook.com/aiautomationai"
+                href="https://www.facebook.com/DigitLabai"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center w-6 h-6 rounded-full bg-white/5 border border-white/10 text-white/60 hover:text-[#F8D042] hover:border-[#F8D042]/40 hover:bg-[#F8D042]/10 transition-all"
