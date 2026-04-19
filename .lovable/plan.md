@@ -1,52 +1,55 @@
 
 
-# Full Code Audit — DigitLab.ai
+## Implementation Plan: Pure CSS + SVG Sky
 
-## Findings
+### Files to change
+1. **`src/components/SkyBackground.tsx`** — full rewrite
+2. **`src/index.css`** — replace cloud drift keyframes
+3. **`mem://design/sky-background-details`** — update notes
 
-### 🔴 Must-fix before publish
+### SkyBackground.tsx structure
+- Remove all image imports (`sky-base.jpg`, `clouds-layer-1.png`, `clouds-layer-2.png`).
+- Fixed full-viewport container (`fixed inset-0 z-0 pointer-events-none`).
+- **Layer A — sky gradient** (CSS `linear-gradient`): `#1a6eb5 0% → #3d9bd4 40% → #87CEEB 75% → #b8dff0 100%`.
+- **Layer B — SVG turbulence clouds**, full width/height, `preserveAspectRatio="xMidYMid slice"`:
+  - 3 `<filter>` defs using `feTurbulence type="fractalNoise"` with different `baseFrequency` and `seed` values.
+  - Each filter ends with `feColorMatrix` mapping noise to white-with-alpha. **Starting tuning per user note**: alpha multiplier `1.15`, offset `-0.5` (wispy, sky shows through clearly).
+  - 3 `<g>` cloud bands at different y-positions (10%, 35%, 55%), each containing a `<rect width="200%">` with the filter applied.
+  - Each band gets one of three CSS classes: `.cloud-drift-a`, `.cloud-drift-b`, `.cloud-drift-c`.
+- **Layer C — bottom atmospheric haze**: absolute `bottom-0 inset-x-0 h-[8%]`, `linear-gradient(to top, rgba(220,235,245,0.4), transparent)`.
 
-1. **Broken nav link in Footer** — `Footer.tsx` line 60 links to `/about-us`, but the route in `App.tsx` is `/about`. Clicking "About Us" in the footer hits the 404 page.
-2. **Broken "Your AI Dashboard" buttons** — `Header.tsx` (desktop line 194 + mobile line 68) link to `/auth`, but `App.tsx` redirects `/auth` → `/`. Per memory ("site is fully public, no authentication"), these CTAs should be removed entirely, not silently redirected.
-3. **Dead auth code still shipped in bundle** — `src/pages/Auth.tsx`, `src/components/auth/AuthForm.tsx`, `src/contexts/AuthContext.tsx`, `src/components/ProtectedRoute.tsx` all reference Supabase auth flows but are never used (and `AuthProvider` is not even mounted in `App.tsx`, so `AuthForm` would crash if reached). Remove these files to shrink bundle and eliminate confusion.
-4. **NotFound page off-brand** — `pages/NotFound.tsx` uses light gray bg + blue links, breaking the navy/gold theme. Rebuild with `DynamicBackground`, `Header`, `Footer`, gold link.
+### index.css changes
+Replace the existing `cloud-drift-slow` / `cloud-drift-slower` keyframes and `.cloud-drift-1` / `.cloud-drift-2` rules with:
 
-### ⚠️ Minor / recommended
+```css
+@keyframes cloud-band-drift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.cloud-drift-a { animation: cloud-band-drift 60s linear infinite; transform-origin: center; }
+.cloud-drift-b { animation: cloud-band-drift 80s linear infinite; transform-origin: center; }
+.cloud-drift-c { animation: cloud-band-drift 100s linear infinite; transform-origin: center; }
 
-5. **Header "Industries" → Hospitality "Core" badge** — fine, but the dropdown shows it only on first item via index check; brittle if list reorders. Use `ind.label === 'Hospitality'`.
-6. **`ChatWidget` session ID** — created via `localStorage.getItem(...) || crypto.randomUUID()` but never written back. The 60-min TTL session in `useChatApi` is the source of truth; the ref in `ChatWidget` can drift. Use `useChatApi`'s exported `sessionId` instead of the local ref (used only by `flushBeacon`).
-7. **`index.html` still loads `cdn.gpteng.co/gptengineer.js`** — fine in preview, but consider removing for production publish (it's the Lovable editor script).
-8. **SEO** — `index.html` title/description are good; missing `<html lang>` localization hint for Arabic visitors (optional). Favicon path `/digitlab-logo-v3.png` — confirm file exists in `public/`.
-9. **Theme toggle** — `App.tsx` wraps everything in `<div className="dark">` forcing dark mode regardless of `ThemeContext` state. Either drop the hard-coded `dark` class or remove `ThemeToggle`.
+@media (prefers-reduced-motion: reduce) {
+  .cloud-drift-a, .cloud-drift-b, .cloud-drift-c { animation: none; }
+}
+```
 
-### 🔒 Security review (focused)
+Because each band's `<rect>` is 200% wide and the noise tile is identical at the 0% and 50% mark, translating by -50% loops invisibly.
 
-10. ✅ **Supabase scan clean** — no exposed tables / missing RLS findings. Project has tables (`Chat History`, `profiles`, etc.) but they aren't queried client-side, so anon key exposure is acceptable (anon key is a publishable key by design).
-11. ✅ **Input validation** — `Contact.tsx` and `useChatApi` both use `zod` + `sanitizeInput`. Good.
-12. ✅ **XSS** — only one `dangerouslySetInnerHTML` usage in `ui/chart.tsx`, content is internally generated CSS (safe, not user input).
-13. ✅ **External links** — all `target="_blank"` use `rel="noopener noreferrer"`.
-14. ⚠️ **Webhook URL exposed in client** — `n8n.digitlab.ai/webhook/chat` is callable by anyone. Mitigation: add rate-limiting, HMAC signature, or origin checks at the n8n side. Not blocking, but worth noting.
-15. ⚠️ **Email harvesting** — `Ai.Agent@DigitLab.ai` appears in plain `mailto:` links across Footer/Contact/Privacy/Terms/Security. Acceptable for a business contact, but bots will scrape it. Optional: obfuscate or use a contact form only.
-16. ✅ **No localStorage-based auth/role checks** — site has no auth, so privilege escalation N/A.
-17. ✅ **Console logs** — clean. No runtime errors.
+### Tuning lever (per user note)
+The two numbers to tweak after first render are inside each `feColorMatrix` last row:
+- alpha multiplier (currently `1.15`, range `1.1–1.4`)
+- alpha offset (currently `-0.5`, range `-0.55 to -0.45`)
+Lower multiplier + less negative offset = wispier, more transparent.
 
-## Proposed fix scope (one batch)
+### QA after implementation
+- 998px desktop: clouds wispy, sky blue clearly visible through them, no seam, hero text readable.
+- 375px mobile: same checks.
+- Verify night mode still works (untouched).
+- If clouds too dense → lower multiplier toward 1.1.
 
-**A. Critical (apply now):**
-- Fix footer `/about-us` → `/about`.
-- Remove "Your AI Dashboard" buttons from `Header.tsx` (desktop + mobile).
-- Delete `src/pages/Auth.tsx`, `src/components/auth/AuthForm.tsx`, `src/contexts/AuthContext.tsx`, `src/components/ProtectedRoute.tsx`.
-- Remove `<Route path="/auth" ...>` from `App.tsx`.
-- Rebrand `NotFound.tsx` (navy/gold + back-home button using site layout).
-
-**B. Recommended polish:**
-- Switch ChatWidget to use `sessionId` from `useChatApi` (single source of truth).
-- Make Hospitality "Core" badge label-based, not index-based.
-- Decide on theme: either remove forced `dark` class in `App.tsx` to honor `ThemeContext`, or remove `ThemeToggle` to be honest about dark-only.
-
-**C. Out of scope (informational only):**
-- Webhook hardening on the n8n side (server change, not codebase).
-- Email obfuscation (optional UX call).
-
-Approve **A only**, **A + B**, or **all** and I'll apply in default mode.
+### Notes
+- Old asset files (`sky-base.jpg`, cloud PNGs, preview PNGs) left on disk — harmless, removable later.
+- Zero network cost, GPU-composited.
 
