@@ -71,7 +71,12 @@
   }
 
   body {
-    @apply bg-navy-900 text-foreground;
+    @apply text-foreground;
+    background: transparent;
+  }
+
+  html.dark body {
+    @apply bg-navy-900;
   }
   
   /* Slow blinking animation for the "Thinking..." text */
@@ -130,7 +135,7 @@
 
 @layer utilities {
   .solution-card {
-    @apply bg-navy-800 rounded-xl p-6 shadow-lg h-full;
+    @apply dark:bg-navy-800 bg-white/15 backdrop-blur-sm border border-white/30 dark:border-transparent rounded-xl p-6 shadow-lg h-full;
   }
   
   .solution-option {
@@ -140,6 +145,20 @@
   .gold-btn {
     @apply bg-gold text-navy-900 font-medium py-2 px-6 rounded-md hover:opacity-90 transition-opacity;
   }
+
+  .day-text-shadow {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  }
+
+  /* Day-mode glass card pattern: light frosted panel that lets sky show through */
+  .glass-card-day {
+    @apply bg-white/15 backdrop-blur-sm border border-white/30;
+  }
+}
+
+/* Apply day-text-shadow automatically to common floating text in day mode */
+html:not(.dark) .day-readable {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 }
 
 @keyframes thinking-dot {

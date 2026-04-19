@@ -45,7 +45,7 @@ const Header: React.FC = () => {
 
   if (isMobile) {
     return (
-      <header className="w-full py-4 px-4 relative z-30">
+      <header className="w-full py-4 px-4 relative z-30 bg-transparent backdrop-blur-0">
         <div className="flex justify-between items-center">
           <Logo />
           <div className="flex items-center gap-3">
@@ -126,7 +126,7 @@ const Header: React.FC = () => {
   }
 
   return (
-    <header className="w-full py-6 relative z-30">
+    <header className="w-full py-6 relative z-30 bg-transparent backdrop-blur-0">
       <div className="container mx-auto px-4 flex items-center">
         <Logo />
         <nav className="flex items-center gap-4 lg:gap-6 ml-8">
