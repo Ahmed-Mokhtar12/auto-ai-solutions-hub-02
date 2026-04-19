@@ -146,3 +146,30 @@
   0%, 80%, 100% { transform: scale(0.5); opacity: 0.2; }
   40% { transform: scale(1.2); opacity: 1; }
 }
+
+/* Photorealistic sky cloud drift — extremely slow for natural feel */
+@keyframes cloud-drift-slow {
+  from { background-position: 0 0; }
+  to { background-position: -2000px 0; }
+}
+
+@keyframes cloud-drift-slower {
+  from { background-position: 0 0; }
+  to { background-position: -2000px 0; }
+}
+
+.cloud-drift-1 {
+  animation: cloud-drift-slow 60s linear infinite;
+}
+
+.cloud-drift-2 {
+  animation: cloud-drift-slower 90s linear infinite;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cloud-drift-1,
+  .cloud-drift-2 {
+    animation: none;
+  }
+}
