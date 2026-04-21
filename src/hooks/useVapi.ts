@@ -1,18 +1,32 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import Vapi from '@vapi-ai/web';
 
 type CallStatus = 'idle' | 'connecting' | 'active';
 
 export function useVapi() {
   const [status, setStatus] = useState<CallStatus>('idle');
-  const vapiRef = useRef<VapiInstance | null>(null);
+  const vapiRef = useRef<Vapi | null>(null);
 
   const getVapi = useCallback(() => {
     if (vapiRef.current) return vapiRef.current;
-    if (!window.Vapi || !window.vapiPublicKey) return null;
-    const instance = new window.Vapi(window.vapiPublicKey);
-    instance.on('call-start', () => setStatus('active'));
-    instance.on('call-end', () => setStatus('idle'));
-    instance.on('error', () => setStatus('idle'));
+    const publicKey = window.vapiPublicKey;
+    if (!publicKey) {
+      console.error('[Vapi] Missing window.vapiPublicKey');
+      return null;
+    }
+    const instance = new Vapi(publicKey);
+    instance.on('call-start', () => {
+      console.log('[Vapi] call-start');
+      setStatus('active');
+    });
+    instance.on('call-end', () => {
+      console.log('[Vapi] call-end');
+      setStatus('idle');
+    });
+    instance.on('error', (e: unknown) => {
+      console.error('[Vapi] error event', e);
+      setStatus('idle');
+    });
     vapiRef.current = instance;
     return instance;
   }, []);
@@ -25,10 +39,16 @@ export function useVapi() {
     }
     const vapi = getVapi();
     if (!vapi) return;
+    const assistantId = window.assistantId;
+    if (!assistantId) {
+      console.error('[Vapi] Missing window.assistantId');
+      return;
+    }
     setStatus('connecting');
     try {
-      await vapi.start(window.assistantId);
-    } catch {
+      await vapi.start(assistantId);
+    } catch (err) {
+      console.error('[Vapi] start() failed', err);
       setStatus('idle');
     }
   }, [status, getVapi]);
@@ -36,7 +56,7 @@ export function useVapi() {
   useEffect(() => {
     return () => {
       vapiRef.current?.stop();
-      vapiRef.current?.removeAllListeners();
+      vapiRef.current?.removeAllListeners?.();
     };
   }, []);
 
