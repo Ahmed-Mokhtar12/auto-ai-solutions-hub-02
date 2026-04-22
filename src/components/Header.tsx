@@ -192,7 +192,7 @@ const Header: React.FC = () => {
 
         <div className="flex items-center gap-3 ml-auto shrink-0">
           <Button asChild variant="outline" className="border-gold text-gold hover:bg-gold/10 hover:text-gold text-sm">
-            <Link to="/dashboard">Dashboard</Link>
+            <Link to="/dashboard">Your Dashboard</Link>
           </Button>
           <Button onClick={handleBookDemo} className="gold-btn text-sm">
             Request a Demo
