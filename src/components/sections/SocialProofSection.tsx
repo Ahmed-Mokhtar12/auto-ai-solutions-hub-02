@@ -56,7 +56,7 @@ const SocialProofSection: React.FC = () => {
                   <div className="flex justify-center mb-4">
                     {stat.icon}
                   </div>
-                  <div className="text-3xl font-bold text-gold mb-2">{stat.number}</div>
+                  <div className="text-3xl font-bold text-gold mb-2 [-webkit-text-stroke:1px_black] [paint-order:stroke_fill]">{stat.number}</div>
                   <div className="text-lg font-semibold text-white day-readable mb-2">{stat.label}</div>
                   <div className="text-sm text-gray-100 day-readable dark:text-gray-300">{stat.description}</div>
                 </div>
