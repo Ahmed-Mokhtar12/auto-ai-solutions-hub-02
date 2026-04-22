@@ -57,7 +57,7 @@ const ServicesOverview: React.FC = () => {
             From luxury hotels to enterprise operations, we deliver intelligent automation that works.
           </p>
           <div className="bg-gold/10 border border-gold/30 rounded-lg p-3 max-w-xl mx-auto backdrop-blur-sm">
-            <p className="text-gold font-medium">🏆 Hospitality Specialists | Enterprise Ready</p>
+            <p className="text-gold gold-outline font-medium">🏆 Hospitality Specialists | Enterprise Ready</p>
           </div>
         </div>
 
@@ -88,7 +88,7 @@ const ServicesOverview: React.FC = () => {
                     </li>
                   ))}
                 </ul>
-                <div className="text-gold text-sm font-medium group-hover:text-gold/80">
+                <div className="text-gold gold-outline text-sm font-medium group-hover:text-gold/80">
                   Learn More →
                 </div>
               </Link>
