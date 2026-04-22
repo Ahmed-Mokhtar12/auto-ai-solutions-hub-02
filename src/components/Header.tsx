@@ -115,6 +115,11 @@ const Header: React.FC = () => {
                         Contact
                       </Link>
                     </SheetClose>
+                    <SheetClose asChild>
+                      <Link to="/dashboard" className="px-3 py-2.5 text-sm text-foreground/80 hover:text-gold transition-colors rounded-md hover:bg-gold/5">
+                        Dashboard
+                      </Link>
+                    </SheetClose>
                   </div>
                 </nav>
               </SheetContent>
@@ -186,6 +191,9 @@ const Header: React.FC = () => {
         </nav>
 
         <div className="flex items-center gap-3 ml-auto shrink-0">
+          <Button asChild variant="outline" className="border-gold text-gold hover:bg-gold/10 hover:text-gold text-sm">
+            <Link to="/dashboard">Dashboard</Link>
+          </Button>
           <Button onClick={handleBookDemo} className="gold-btn text-sm">
             Request a Demo
           </Button>

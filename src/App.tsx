@@ -13,6 +13,7 @@ import TermsOfService from "./pages/TermsOfService";
 import Security from "./pages/Security";
 import AboutUs from "./pages/AboutUs";
 import Contact from "./pages/Contact";
+import Dashboard from "./pages/Dashboard";
 import Hospitality from "./pages/industries/Hospitality";
 import Manufacturing from "./pages/industries/Manufacturing";
 import Finance from "./pages/industries/Finance";
@@ -48,6 +49,7 @@ const App = () => (
               <Route path="/terms-of-service" element={<TermsOfService />} />
               <Route path="/security" element={<Security />} />
               <Route path="/about" element={<AboutUs />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
