@@ -18,7 +18,7 @@ const TrustSection: React.FC = () => {
               key={i}
               className="flex items-center gap-2 dark:bg-navy-800/60 dark:border-navy-700 bg-white/20 border-white/40 backdrop-blur-sm border px-4 py-2.5 rounded-full"
             >
-              <span className="text-gold">{badge.icon}</span>
+              <span className="text-gold gold-outline">{badge.icon}</span>
               <span className="text-sm font-medium text-foreground/90 dark:text-foreground/80 day-readable">{badge.label}</span>
             </div>
           ))}
