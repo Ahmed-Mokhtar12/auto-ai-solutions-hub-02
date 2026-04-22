@@ -57,7 +57,7 @@ const ProcessSection: React.FC = () => {
                     <div className="inline-flex items-center justify-center w-20 h-20 dark:bg-navy-700 bg-white/30 backdrop-blur-sm rounded-full mb-4">
                       {step.icon}
                     </div>
-                    <div className="text-gold font-bold text-lg mb-2">Step {index + 1}</div>
+                    <div className="text-gold gold-outline font-bold text-lg mb-2">Step {index + 1}</div>
                     <h3 className="text-xl font-semibold text-white day-readable mb-3">{step.title}</h3>
                   </div>
                   
