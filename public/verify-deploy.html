@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Deploy Verification — DigitLab</title>
+<style>
+  :root {
+    --navy: #0b1530;
+    --navy-2: #111d3f;
+    --gold: #d4af37;
+    --gold-soft: #e8c96a;
+    --text: #eef1f8;
+    --muted: #9aa3bd;
+    --pass: #34d399;
+    --fail: #f87171;
+    --warn: #fbbf24;
+    --border: rgba(212,175,55,.25);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: linear-gradient(160deg, #060c1f, #0b1530 50%, #111d3f); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; min-height: 100vh; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 20px 80px; }
+  h1 { font-size: 28px; margin: 0 0 6px; color: var(--gold); letter-spacing: .3px; }
+  .sub { color: var(--muted); margin-bottom: 28px; font-size: 14px; }
+  .banner { padding: 18px 20px; border-radius: 12px; margin-bottom: 24px; font-weight: 600; border: 1px solid var(--border); background: rgba(255,255,255,.03); }
+  .banner.ok { border-color: rgba(52,211,153,.5); background: rgba(52,211,153,.08); color: var(--pass); }
+  .banner.bad { border-color: rgba(248,113,113,.5); background: rgba(248,113,113,.08); color: var(--fail); }
+  .banner.pending { color: var(--gold-soft); }
+  ul.checks { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  li.check { padding: 14px 16px; border: 1px solid var(--border); border-radius: 10px; background: rgba(255,255,255,.02); display: flex; gap: 14px; align-items: flex-start; }
+  li.check .icon { font-size: 20px; line-height: 1.2; min-width: 24px; text-align: center; }
+  li.check .body { flex: 1; }
+  li.check .title { font-weight: 600; margin-bottom: 4px; }
+  li.check .detail { font-size: 13px; color: var(--muted); white-space: pre-wrap; word-break: break-word; }
+  li.pass { border-color: rgba(52,211,153,.4); }
+  li.fail { border-color: rgba(248,113,113,.4); }
+  li.warn { border-color: rgba(251,191,36,.4); }
+  .footer-note { margin-top: 32px; padding: 16px; border-radius: 10px; border: 1px dashed var(--border); color: var(--gold-soft); font-size: 13px; }
+  code { background: rgba(255,255,255,.06); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+  button.rerun { margin-top: 20px; background: var(--gold); color: #1a1300; border: 0; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+  button.rerun:hover { background: var(--gold-soft); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Pre-upload Deploy Verification</h1>
+  <div class="sub">Run this on your built <code>dist/</code> output (locally via <code>npx serve dist</code>) or after uploading to Hostinger. Delete this file before going live.</div>
+
+  <div id="banner" class="banner pending">Running checks…</div>
+  <ul id="checks" class="checks"></ul>
+  <button class="rerun" onclick="location.reload()">Re-run checks</button>
+
+  <div class="footer-note">
+    ⚠️ <strong>Remember to delete <code>verify-deploy.html</code></strong> from <code>public_html/</code> after verification — it should not ship to production visitors.
+  </div>
+</div>
+
+<script>
+(async function () {
+  const list = document.getElementById('checks');
+  const banner = document.getElementById('banner');
+  const results = [];
+
+  function render() {
+    list.innerHTML = results.map(r => `
+      <li class="check ${r.status}">
+        <div class="icon">${r.status === 'pass' ? '✅' : r.status === 'fail' ? '❌' : '⚠️'}</div>
+        <div class="body">
+          <div class="title">${r.title}</div>
+          <div class="detail">${r.detail}</div>
+        </div>
+      </li>
+    `).join('');
+  }
+
+  function add(title, status, detail) {
+    results.push({ title, status, detail });
+    render();
+  }
+
+  async function fetchText(url, init) {
+    const res = await fetch(url, init);
+    const text = init && init.method === 'HEAD' ? '' : await res.text();
+    return { res, text };
+  }
+
+  // 1. index.html reachable
+  let indexHtml = '';
+  try {
+    const { res, text } = await fetchText('/index.html', { cache: 'no-store' });
+    if (!res.ok) {
+      add('index.html reachable', 'fail', `HTTP ${res.status} when fetching /index.html`);
+    } else {
+      indexHtml = text;
+      add('index.html reachable', 'pass', `Fetched /index.html (${text.length} bytes)`);
+    }
+  } catch (e) {
+    add('index.html reachable', 'fail', String(e));
+  }
+
+  // 2. No /src/main.tsx reference
+  if (indexHtml) {
+    if (/\/src\/main\.tsx/i.test(indexHtml)) {
+      add('No dev source reference', 'fail', 'index.html still references /src/main.tsx — you uploaded source, not the built dist/.');
+    } else {
+      add('No dev source reference', 'pass', 'No /src/main.tsx tag found.');
+    }
+  }
+
+  // 3 + 4. Compiled assets referenced
+  const jsMatches = [...indexHtml.matchAll(/(?:src|href)=["']([^"']*\/assets\/[^"']+\.js)["']/g)].map(m => m[1]);
+  const cssMatches = [...indexHtml.matchAll(/href=["']([^"']*\/assets\/[^"']+\.css)["']/g)].map(m => m[1]);
+
+  if (jsMatches.length === 0) {
+    add('Compiled JS asset referenced', 'fail', 'No /assets/*.js reference found in index.html.');
+  } else {
+    const hashed = jsMatches.find(u => /-[A-Za-z0-9_-]{6,}\.js$/.test(u));
+    add('Compiled JS asset referenced', hashed ? 'pass' : 'warn',
+      (hashed ? 'Found hashed bundle: ' : 'Found JS but no hash pattern: ') + jsMatches.join(', '));
+  }
+  if (cssMatches.length === 0) {
+    add('Compiled CSS asset referenced', 'warn', 'No /assets/*.css reference found (OK only if your build truly emits no CSS).');
+  } else {
+    add('Compiled CSS asset referenced', 'pass', 'Found: ' + cssMatches.join(', '));
+  }
+
+  // 5. Each asset 200 + correct MIME
+  for (const url of [...jsMatches, ...cssMatches]) {
+    try {
+      const res = await fetch(url, { method: 'HEAD', cache: 'no-store' });
+      const ct = (res.headers.get('content-type') || '').toLowerCase();
+      const isJs = url.endsWith('.js');
+      const expected = isJs ? 'javascript' : 'css';
+      if (!res.ok) {
+        add(`Asset reachable: ${url}`, 'fail', `HTTP ${res.status}`);
+      } else if (!ct.includes(expected)) {
+        add(`MIME for ${url}`, 'fail', `Expected ${expected}, got "${ct || 'unknown'}". On Hostinger this means .htaccess MIME rules aren't applied.`);
+      } else {
+        add(`Asset OK: ${url}`, 'pass', `200 · ${ct}`);
+      }
+    } catch (e) {
+      add(`Asset reachable: ${url}`, 'fail', String(e));
+    }
+  }
+
+  // 6. .htaccess shipped (403 = present + protected, 404 = missing)
+  try {
+    const res = await fetch('/.htaccess', { cache: 'no-store' });
+    if (res.status === 403) {
+      add('.htaccess present', 'pass', '403 Forbidden — Apache is protecting it (correct).');
+    } else if (res.status === 404) {
+      add('.htaccess present', 'fail', '404 — .htaccess missing. Enable "Show hidden files" in your FTP/File Manager and re-upload.');
+    } else if (res.ok) {
+      add('.htaccess present', 'warn', `Server returned ${res.status} and served the file. Present, but Hostinger should normally block direct access.`);
+    } else {
+      add('.htaccess present', 'warn', `Unexpected status ${res.status}.`);
+    }
+  } catch (e) {
+    add('.htaccess present', 'warn', 'Could not check (' + e + '). Skip if running on a non-Apache local server.');
+  }
+
+  // 7. SPA fallback
+  try {
+    const probe = '/__verify_deploy_spa_check__' + Date.now();
+    const res = await fetch(probe, { cache: 'no-store' });
+    const text = await res.text();
+    if (res.ok && /<div\s+id=["']root["']/i.test(text)) {
+      add('SPA fallback (deep links)', 'pass', `Unknown path ${probe} returned the SPA shell.`);
+    } else if (res.status === 404) {
+      add('SPA fallback (deep links)', 'fail', '404 on unknown path — .htaccess rewrite not active. Deep links will break.');
+    } else {
+      add('SPA fallback (deep links)', 'warn', `Status ${res.status} but response did not look like index.html.`);
+    }
+  } catch (e) {
+    add('SPA fallback (deep links)', 'warn', String(e));
+  }
+
+  // Final banner
+  const failed = results.filter(r => r.status === 'fail').length;
+  const warned = results.filter(r => r.status === 'warn').length;
+  if (failed === 0 && warned === 0) {
+    banner.className = 'banner ok';
+    banner.textContent = '✅ Ready to deploy — all checks passed.';
+  } else if (failed === 0) {
+    banner.className = 'banner ok';
+    banner.textContent = `✅ Ready to deploy (with ${warned} warning${warned === 1 ? '' : 's'} to review).`;
+  } else {
+    banner.className = 'banner bad';
+    banner.textContent = `❌ Fix ${failed} issue${failed === 1 ? '' : 's'} before uploading.`;
+  }
+})();
+</script>
+</body>
+</html>
