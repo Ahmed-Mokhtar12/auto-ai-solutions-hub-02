@@ -50,7 +50,7 @@ const TestimonialsSection: React.FC = () => {
         <HoverVisibleContainer autoHideDelay={2500} initialVisibility={false} showIndicator={false}>
           <div className="max-w-3xl mx-auto">
             <div className="dark:bg-navy-800/60 dark:border-navy-700 bg-white/20 border-white/40 backdrop-blur-md border rounded-xl p-8 md:p-12 relative">
-              <Quote className="h-10 w-10 text-gold/30 absolute top-6 left-6" />
+              <Quote className="h-10 w-10 text-gold/30 gold-outline absolute top-6 left-6" />
 
               <div className="text-center">
                 <p className="text-lg md:text-xl text-foreground/95 day-readable dark:text-foreground/90 italic leading-relaxed mb-8 pt-4">
@@ -61,7 +61,7 @@ const TestimonialsSection: React.FC = () => {
                   <p className="text-foreground day-readable font-semibold text-lg">{t.name}</p>
                   <p className="text-foreground/80 day-readable dark:text-muted-foreground text-sm">{t.title}, {t.company}</p>
                 </div>
-                <span className="text-xs bg-gold/10 text-gold px-3 py-1 rounded-full border border-gold/20">
+                <span className="text-xs bg-gold/10 text-gold gold-outline px-3 py-1 rounded-full border border-gold/20">
                   {t.industry}
                 </span>
               </div>

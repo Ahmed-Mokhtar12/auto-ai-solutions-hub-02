@@ -96,7 +96,7 @@ const IndustrySolutions: React.FC = () => {
                   {industry.useCases.map((uc, i) => (
                     <span
                       key={i}
-                      className="text-xs dark:bg-navy-700/80 dark:border-navy-700 bg-white/30 border-white/40 text-gold px-2.5 py-1.5 rounded-full border"
+                      className="text-xs dark:bg-navy-700/80 dark:border-navy-700 bg-white/30 border-white/40 text-gold gold-outline px-2.5 py-1.5 rounded-full border"
                     >
                       {uc}
                     </span>

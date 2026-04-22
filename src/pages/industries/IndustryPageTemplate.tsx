@@ -49,7 +49,7 @@ const IndustryPageTemplate: React.FC<IndustryPageProps> = ({ icon: Icon, title, 
             <p className="text-white/90 text-lg leading-relaxed">{overview}</p>
 
             <div>
-              <h2 className="text-2xl font-semibold text-[#F8D042] mb-4">Use Cases</h2>
+              <h2 className="text-2xl font-semibold text-[#F8D042] gold-outline mb-4">Use Cases</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {useCases.map((uc) => (
                   <div key={uc.title} className="p-5 rounded-lg bg-navy-700/40 border border-navy-700">
@@ -61,11 +61,11 @@ const IndustryPageTemplate: React.FC<IndustryPageProps> = ({ icon: Icon, title, 
             </div>
 
             <div>
-              <h2 className="text-2xl font-semibold text-[#F8D042] mb-4">How We Help</h2>
+              <h2 className="text-2xl font-semibold text-[#F8D042] gold-outline mb-4">How We Help</h2>
               <div className="space-y-4">
                 {steps.map((step) => (
                   <div key={step.number} className="flex items-start gap-4 p-4 rounded-lg bg-navy-700/40 border border-navy-700">
-                    <span className="text-[#F8D042] font-bold text-lg shrink-0">{step.number}</span>
+                    <span className="text-[#F8D042] gold-outline font-bold text-lg shrink-0">{step.number}</span>
                     <div>
                       <h3 className="text-white font-medium text-sm mb-1">{step.title}</h3>
                       <p className="text-white/60 text-xs leading-relaxed">{step.description}</p>

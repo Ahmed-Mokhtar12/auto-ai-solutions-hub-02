@@ -146,6 +146,16 @@
     @apply bg-gold text-navy-900 font-medium py-2 px-6 rounded-md hover:opacity-90 transition-opacity;
   }
 
+  .gold-outline {
+    -webkit-text-stroke: 0.6px #000;
+    paint-order: stroke fill;
+  }
+
+  :global(html.dark) .gold-outline,
+  .dark .gold-outline {
+    -webkit-text-stroke: 0;
+  }
+
   .day-text-shadow {
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
   }

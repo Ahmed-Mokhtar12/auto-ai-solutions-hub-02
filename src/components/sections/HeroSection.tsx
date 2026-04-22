@@ -30,15 +30,15 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onBookSession, onSolutionsCli
         {/* Key Benefits */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-12 max-w-4xl mx-auto">
           <div className="dark:bg-navy-800/50 dark:border-navy-700 bg-white/15 border-white/30 backdrop-blur-sm border p-6 rounded-lg">
-            <h3 className="text-gold font-semibold mb-2">24/7 Intelligent Operations</h3>
+            <h3 className="text-gold gold-outline font-semibold mb-2">24/7 Intelligent Operations</h3>
             <p className="text-white day-readable text-sm">AI-powered systems that never sleep, ensuring seamless operations around the clock</p>
           </div>
           <div className="dark:bg-navy-800/50 dark:border-navy-700 bg-white/15 border-white/30 backdrop-blur-sm border p-6 rounded-lg">
-            <h3 className="text-gold font-semibold mb-2">Up to 70% Cost Reduction</h3>
+            <h3 className="text-gold gold-outline font-semibold mb-2">Up to 70% Cost Reduction</h3>
             <p className="text-white day-readable text-sm">Reduce operational costs while improving service quality and output</p>
           </div>
           <div className="dark:bg-navy-800/50 dark:border-navy-700 bg-white/15 border-white/30 backdrop-blur-sm border p-6 rounded-lg">
-            <h3 className="text-gold font-semibold mb-2">Measurable ROI in 90 Days</h3>
+            <h3 className="text-gold gold-outline font-semibold mb-2">Measurable ROI in 90 Days</h3>
             <p className="text-white day-readable text-sm">See tangible results fast with our rapid deployment methodology</p>
           </div>
         </div>
@@ -52,7 +52,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onBookSession, onSolutionsCli
           >
             <div className="dark:bg-navy-800 dark:border-navy-700 bg-white/20 border-white/40 backdrop-blur-md border p-6 rounded-xl shadow-lg w-full
                            hover:border-gold hover:shadow-gold/20 transition-all duration-300 hover:scale-105">
-              <h2 className="text-xl font-semibold text-gold mb-3">Free AI Consultation</h2>
+              <h2 className="text-xl font-semibold text-gold gold-outline mb-3">Free AI Consultation</h2>
               <p className="text-white day-readable mb-4 text-sm leading-relaxed">
                 Book a free 30-minute session with our AI experts. Whether you're in hospitality 
                 or any other industry, we'll analyze your operations and show you how AI can 
@@ -82,7 +82,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onBookSession, onSolutionsCli
                          hover:border-gold hover:shadow-gold/20 transition-all duration-300 hover:scale-105"
               onClick={onSolutionsClick}
             >
-              <h2 className="text-xl font-semibold text-gold mb-3">Enterprise AI Solutions</h2>
+              <h2 className="text-xl font-semibold text-gold gold-outline mb-3">Enterprise AI Solutions</h2>
               <p className="text-white day-readable mb-4 text-sm leading-relaxed">
                 Explore our AI services — from hospitality-specific tools like AI Concierge 
                 and WhatsApp Guest Assistant, to cross-industry solutions for automation, 

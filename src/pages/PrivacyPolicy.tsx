@@ -9,7 +9,7 @@ import Footer from '@/components/Footer';
 
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
   <div className="mb-8">
-    <h2 className="text-gold text-xl font-semibold mb-3">{title}</h2>
+    <h2 className="text-gold gold-outline text-xl font-semibold mb-3">{title}</h2>
     <div className="text-white/90 leading-relaxed space-y-2">{children}</div>
   </div>
 );
