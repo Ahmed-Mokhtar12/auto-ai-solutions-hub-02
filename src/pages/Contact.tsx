@@ -150,7 +150,7 @@ const Contact = () => {
             {/* Info panel */}
             <div className="space-y-6">
               <div className="bg-navy-800/80 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-navy-700">
-                <h2 className="text-xl font-semibold text-[#F8D042] mb-4">Prefer a live conversation?</h2>
+                <h2 className="text-xl font-semibold text-[#F8D042] gold-outline mb-4">Prefer a live conversation?</h2>
                 <p className="text-white/70 text-sm mb-4">Book a 30-minute discovery call to discuss your AI automation needs.</p>
                 <Button
                   onClick={() => window.open('https://calendly.com/ahmed-mokhtar12/30min', '_blank')}
@@ -162,7 +162,7 @@ const Contact = () => {
               </div>
 
               <div className="bg-navy-800/80 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-navy-700 space-y-3">
-                <h2 className="text-xl font-semibold text-[#F8D042] mb-4">Direct Contact</h2>
+                <h2 className="text-xl font-semibold text-[#F8D042] gold-outline mb-4">Direct Contact</h2>
                 <a href="mailto:Ai.Agent@DigitLab.ai" className="flex items-center gap-3 text-white/70 text-sm hover:text-[#F8D042] transition-colors">
                   <Mail className="h-4 w-4 text-[#F8D042] shrink-0" /> Ai.Agent@DigitLab.ai
                 </a>

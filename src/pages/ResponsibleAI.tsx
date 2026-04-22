@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
   <div className="mb-8">
-    <h2 className="text-2xl font-semibold text-[#F8D042] mb-4">{title}</h2>
+    <h2 className="text-2xl font-semibold text-[#F8D042] gold-outline mb-4">{title}</h2>
     {children}
   </div>
 );
