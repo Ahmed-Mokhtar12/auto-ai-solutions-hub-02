@@ -1,31 +1,38 @@
 
 
-## Pre-upload verification page
+## Restore the "Dashboard" button in the header
 
-### What it does
-A standalone HTML page (`public/verify-deploy.html`) you open **after building** to confirm `dist/` is upload-ready. It runs entirely client-side — no server needed.
+### What's missing
+The header currently shows: Services • Industries • Security • About Us • Contact • **Request a Demo**. There is no "Dashboard" button. Per project memory, "Your AI Dashboard" is a navigation-only button (no auth) — it was removed at some point and needs to be restored next to "Request a Demo".
 
-### Checks performed
-1. **`index.html` exists** and is reachable at `/index.html`.
-2. **No `/src/main.tsx` reference** — fails if the dev script tag is still present.
-3. **Compiled `/assets/*.js` reference present** with hash pattern (`index-[hash].js`).
-4. **Compiled `/assets/*.css` reference present**.
-5. **Each referenced asset returns HTTP 200** (HEAD request) with correct MIME (`application/javascript`, `text/css`).
-6. **`.htaccess` is shipped** — fetches `/.htaccess`; on Hostinger Apache will block it (403) which **counts as present**; 404 = missing.
-7. **SPA fallback works** — fetches a random non-existent path (`/__verify_deploy_spa_check__`) and confirms the response is the SPA `index.html` (contains `<div id="root">`).
+### Where it goes
+`src/components/Header.tsx`
 
-### UI
-- Single page, no dependencies, inline CSS matching the navy/gold aesthetic.
-- Each check shows ✅ pass / ❌ fail / ⚠️ warning + short explanation.
-- Final banner: **"Ready to deploy"** or **"Fix issues before uploading"**.
-- Link at bottom: "Delete this file before going live" reminder.
+- **Desktop** (right side, before the "Request a Demo" button):
+  ```
+  [ Dashboard ]  [ Request a Demo ]
+  ```
+  Style: outline gold button (`variant="outline"` with `border-gold text-gold hover:bg-gold/10`) so it visually defers to the primary gold CTA.
 
-### Usage
-After `npm run build`, open `https://yourdomain.com/verify-deploy.html` once uploaded — or test locally with `npx serve dist`. Delete the file from `public_html/` after verification.
+- **Mobile** (inside the Sheet menu, in the bottom links group with Security / About / Contact): a "Dashboard" link styled like the other items.
 
-### Files
-- **New:** `public/verify-deploy.html` (self-contained, ~150 lines HTML+JS+CSS)
+### Where it links
+Open question — the previous destination isn't in the current code. Two options:
+1. **`/dashboard`** route (would need a placeholder page added to `App.tsx`)
+2. **External URL** (e.g. the n8n/agent dashboard you use)
+
+I'll default to **option 1** with a simple placeholder `Dashboard.tsx` page (navy/gold styling, "Coming soon" message, Back to Home link, fixed footer padding) unless you tell me otherwise.
+
+### Files touched
+- `src/components/Header.tsx` — add Dashboard button (desktop) + link (mobile sheet)
+- `src/pages/Dashboard.tsx` — new placeholder page
+- `src/App.tsx` — register `/dashboard` route
 
 ### Not changed
-No app code, routing, or build config touched. The file is pure static HTML and is copied into `dist/` automatically by Vite.
+Routing for other pages, footer, theme, or any styling tokens.
+
+### Confirm before I build
+Reply with:
+- **"use /dashboard placeholder"** → I'll build as planned, OR
+- **"link to <URL>"** → I'll point the button at that URL instead (no new page/route needed)
 
