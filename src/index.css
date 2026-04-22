@@ -147,7 +147,7 @@
   }
 
   .gold-outline {
-    -webkit-text-stroke: 0.6px #000;
+    -webkit-text-stroke: 1.2px #000;
     paint-order: stroke fill;
   }
 
