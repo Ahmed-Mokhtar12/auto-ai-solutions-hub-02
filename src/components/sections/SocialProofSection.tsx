@@ -6,25 +6,25 @@ import HoverVisibleContainer from '@/components/HoverVisibleContainer';
 const SocialProofSection: React.FC = () => {
   const stats = [
     {
-      icon: <Zap className="h-8 w-8 text-gold" />,
+      icon: <Zap className="h-8 w-8 text-black" />,
       number: "200+",
       label: "AI Workflows Deployed",
       description: "Proven automation solutions across hospitality and enterprise"
     },
     {
-      icon: <Clock className="h-8 w-8 text-gold" />,
+      icon: <Clock className="h-8 w-8 text-black" />,
       number: "15,000+",
       label: "Hours Saved Monthly",
       description: "Monthly time savings across all clients"
     },
     {
-      icon: <TrendingUp className="h-8 w-8 text-gold" />,
+      icon: <TrendingUp className="h-8 w-8 text-black" />,
       number: "70%",
       label: "Average Cost Reduction",
       description: "Typical operational cost savings for our clients"
     },
     {
-      icon: <Star className="h-8 w-8 text-gold" />,
+      icon: <Star className="h-8 w-8 text-black" />,
       number: "99%",
       label: "Client Retention",
       description: "Clients continue using and expanding our services"
@@ -56,7 +56,7 @@ const SocialProofSection: React.FC = () => {
                   <div className="flex justify-center mb-4">
                     {stat.icon}
                   </div>
-                  <div className="text-3xl font-bold text-gold mb-2 [-webkit-text-stroke:1px_black] [paint-order:stroke_fill]">{stat.number}</div>
+                  <div className="text-3xl font-bold text-black mb-2">{stat.number}</div>
                   <div className="text-lg font-semibold text-white day-readable mb-2">{stat.label}</div>
                   <div className="text-sm text-gray-100 day-readable dark:text-gray-300">{stat.description}</div>
                 </div>
