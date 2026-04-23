@@ -13,13 +13,12 @@ import TestimonialsSection from '@/components/sections/TestimonialsSection';
 import TrustSection from '@/components/sections/TrustSection';
 import SocialProofSection from '@/components/sections/SocialProofSection';
 import ChatWidget from '@/components/chat/ChatWidget';
+import { openCalendly } from '@/lib/constants';
 
 export default function Index() {
   const [showSolutions, setShowSolutions] = useState(false);
-  
-  const handleBookSession = () => {
-    window.open('https://calendly.com/ahmed-mokhtar12/30min', '_blank');
-  };
+
+  const handleBookSession = openCalendly;
 
   const handleSolutionsClick = () => {
     setShowSolutions(true);

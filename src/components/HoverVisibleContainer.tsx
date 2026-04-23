@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useElementVisibility } from '@/hooks/useElementVisibility';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface HoverVisibleContainerProps {
   children: React.ReactNode;
@@ -18,6 +19,9 @@ const HoverVisibleContainer: React.FC<HoverVisibleContainerProps> = ({
   showIndicator = false,
   initialVisibility = false
 }) => {
+  const isMobile = useIsMobile();
+
+  // On mobile (no hover), always show content so touch users see everything.
   const {
     isVisible,
     handleMouseEnter,
@@ -25,13 +29,18 @@ const HoverVisibleContainer: React.FC<HoverVisibleContainerProps> = ({
     cleanup
   } = useElementVisibility({
     autoHideDelay,
-    initialVisibility
+    initialVisibility: isMobile ? true : initialVisibility
   });
 
   // Clean up on unmount
   useEffect(() => {
     return cleanup;
   }, [cleanup]);
+
+  // Mobile short-circuit: render children directly, no hover gating.
+  if (isMobile) {
+    return <div className={cn('relative', className)}>{children}</div>;
+  }
 
   return (
     <div 
