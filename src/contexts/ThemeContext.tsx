@@ -16,10 +16,12 @@ export const useTheme = () => {
   return context;
 };
 
+const THEME_STORAGE_KEY = 'isDayMode_v2';
+
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isDayMode, setIsDayMode] = useState(() => {
-    // Initialize from localStorage or default to false (night mode)
-    const savedTheme = localStorage.getItem('isDayMode');
+    // Default to dark mode. Only honor an explicit user choice saved in localStorage.
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
     return savedTheme ? JSON.parse(savedTheme) : false;
   });
 
@@ -29,7 +31,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useEffect(() => {
     // Save theme preference to localStorage
-    localStorage.setItem('isDayMode', JSON.stringify(isDayMode));
+    localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(isDayMode));
     
     // Apply theme to document root
     if (isDayMode) {
