@@ -19,6 +19,7 @@ import {
   SheetClose,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { openCalendly } from "@/lib/constants";
 
 const services = [
   { label: 'AI Agents', href: '/ai-agents', icon: Bot, desc: 'Intelligent automation workflows' },
@@ -39,9 +40,7 @@ const industries = [
 const Header: React.FC = () => {
   const isMobile = useIsMobile();
 
-  const handleBookDemo = () => {
-    window.open('https://calendly.com/ahmed-mokhtar12/30min', '_blank');
-  };
+  const handleBookDemo = openCalendly;
 
   if (isMobile) {
     return (
