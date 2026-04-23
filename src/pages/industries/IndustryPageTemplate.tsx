@@ -7,6 +7,7 @@ import ChatWidget from '@/components/chat/ChatWidget';
 import DynamicBackground from '@/components/DynamicBackground';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
+import { openCalendly } from '@/lib/constants';
 
 interface UseCase {
   title: string;
@@ -77,7 +78,7 @@ const IndustryPageTemplate: React.FC<IndustryPageProps> = ({ icon: Icon, title, 
 
             <div className="text-center pt-4">
               <Button
-                onClick={() => window.open('https://calendly.com/ahmed-mokhtar12/30min', '_blank')}
+                onClick={openCalendly}
                 className="gold-btn text-sm px-8"
               >
                 Request a Demo

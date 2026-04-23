@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { sanitizeInput } from '@/utils/inputSanitizer';
+import { openCalendly } from '@/lib/constants';
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, 'Name is required').max(100, 'Name must be under 100 characters'),
@@ -153,7 +154,7 @@ const Contact = () => {
                 <h2 className="text-xl font-semibold text-[#F8D042] gold-outline mb-4">Prefer a live conversation?</h2>
                 <p className="text-white/70 text-sm mb-4">Book a 30-minute discovery call to discuss your AI automation needs.</p>
                 <Button
-                  onClick={() => window.open('https://calendly.com/ahmed-mokhtar12/30min', '_blank')}
+                  onClick={openCalendly}
                   className="gold-btn text-sm w-full"
                 >
                   <Calendar className="h-4 w-4 mr-2" />
