@@ -2,7 +2,7 @@
 import React from 'react';
 import { Mail, Facebook, Instagram, Linkedin } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import wordmark from '@/assets/digitlab-wordmark.svg';
+import brandLogo from '@/assets/digitlab-brand-logo.png';
 
 const Footer: React.FC = () => {
   return (
@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
 
           {/* Column 1 — Brand + Socials */}
           <div className="flex flex-col gap-0.5">
-            <img src={wordmark} alt="DigitLab.ai" className="h-5 w-auto object-contain" />
+            <img src={brandLogo} alt="DigitLab.ai" className="h-6 w-auto object-contain" />
             <p className="text-navy-900/70 dark:text-white/50 text-[9px] leading-tight">AI-Powered Automation Solutions</p>
             <div className="flex items-center gap-2 mt-0.5">
               <a
