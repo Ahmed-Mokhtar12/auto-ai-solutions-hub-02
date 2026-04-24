@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 190" role="img" aria-labelledby="title">
+  <title id="title">DigitLab.ai</title>
+  <g fill="none" fill-rule="evenodd">
+    <text x="18" y="144" font-family="Georgia, 'Times New Roman', serif" font-size="142" font-weight="700" fill="#FFFFFF">D</text>
+    <text x="78" y="145" font-family="Georgia, 'Times New Roman', serif" font-size="116" font-weight="700" fill="#F2C766">L</text>
+    <text x="204" y="122" font-family="Satoshi, 'Helvetica Neue', Arial, sans-serif" font-size="76" font-weight="400" letter-spacing="1" fill="#FFFFFF">DigitLab</text>
+    <text x="521" y="122" font-family="Satoshi, 'Helvetica Neue', Arial, sans-serif" font-size="76" font-weight="400" letter-spacing="1" fill="#F2C766">.ai</text>
+  </g>
+</svg>
