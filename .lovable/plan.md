@@ -1,35 +1,28 @@
-## Update the DigitLab logo to transparent letters only
+Yes, I understand. The laptop/desktop view will keep the current mouse-hover behavior. On mobile and tablet, the cards should appear automatically as the user scrolls down to them.
 
-### What I will change
-- Create a new logo asset with a transparent background so only the letters/mark remain visible.
-- Remove the small tagline text under the wordmark inside the logo asset (`AI AUTOMATION • INTELLIGENCE • IMPACT`).
-- Replace the current header logo image so the top-left logo no longer appears inside a dark rectangle.
-- Update the footer to use the same cleaned logo asset for consistency.
-- Refresh favicon/app icon references only if needed so branding stays consistent.
+Plan:
 
-### How it will look
-- Header logo: transparent background, just the DigitLab letters/mark.
-- No extra line of small text inside the logo image.
-- The logo will sit naturally on top of the existing sky background instead of bringing its own box behind it.
+1. Update the shared card reveal wrapper
+   - Modify `HoverVisibleContainer` so it supports two behaviors:
+     - Desktop/laptop: keep existing hover-to-show behavior.
+     - Mobile/tablet: use scroll visibility instead of mouse hover.
 
-### Files involved
-- `src/components/Logo.tsx`
-- `src/components/Footer.tsx`
-- `src/assets/digitlab-brand-logo.png` or a replacement transparent asset
-- `public/digitlab-brand-logo.png` and related icon files if the cleaned asset should also be used there
-- `index.html` only if favicon/icon references need to change
+2. Add tablet + mobile scroll detection
+   - Use an `IntersectionObserver` inside `HoverVisibleContainer` for viewports below the desktop breakpoint.
+   - When a card enters the viewport while scrolling, fade/scale it into view.
+   - Keep it visible after it appears so users do not have to hover or tap.
 
-### Technical details
-- I’ll replace the current raster logo asset with a transparent version derived from the approved brand image.
-- If the cleanest result comes from using just the monogram + wordmark on transparency, I’ll export that as the main site logo.
-- I will preserve the existing component sizing/positioning unless the new transparent asset needs a minor adjustment for alignment.
+3. Preserve desktop behavior exactly
+   - For desktop widths, keep `onMouseEnter` / `onMouseLeave` and the existing auto-hide delay.
+   - No change to laptop/computer hover behavior.
 
-### Quality checks
-- Confirm the logo background is truly transparent on both day and night themes.
-- Confirm the small tagline text is fully removed from the displayed logo.
-- Confirm the logo remains crisp in the header and footer and does not overlap the theme toggle.
-- Confirm no stale asset path is still showing the old boxed logo.
+4. Apply automatically to all existing cards using this wrapper
+   - This will affect the existing card sections already using `HoverVisibleContainer`, including hero CTA cards, services cards, industry cards, process cards, testimonials, and social proof cards.
+   - No need to rewrite each individual section.
 
-### Scope note
-- This change targets the logo asset itself and where it is displayed.
-- I will not change the rest of the site copy or layout unless needed for the new logo to fit cleanly.
+Technical details:
+
+- Current mobile behavior renders cards directly and always visible. I will replace that mobile-only shortcut with scroll-based reveal.
+- I will likely use a breakpoint such as `< 1024px` for mobile/tablet scroll reveal, matching the current tablet header behavior.
+- Desktop/laptop `>= 1024px` will remain hover-based.
+- The animation will reuse the existing classes: hidden state `opacity-0 scale-95`, visible state `opacity-100 scale-100`, with the same smooth transition style.
