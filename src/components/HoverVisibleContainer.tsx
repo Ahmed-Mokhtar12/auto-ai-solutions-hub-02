@@ -61,8 +61,8 @@ const HoverVisibleContainer: React.FC<HoverVisibleContainerProps> = ({
         }
       },
       {
-        threshold: 0.18,
-        rootMargin: '0px 0px -10% 0px'
+        threshold: 0.01,
+        rootMargin: '-42% 0px -42% 0px'
       }
     );
 
