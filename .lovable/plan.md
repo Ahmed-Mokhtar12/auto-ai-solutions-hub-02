@@ -1,30 +1,35 @@
-## Implement the new DigitLab logo system
+## Update the DigitLab logo to transparent letters only
 
 ### What I will change
-- Use the uploaded logo image as the new visual brand asset across the site.
-- Replace the current wordmark usage in the header and footer with a project-local logo asset copied from the upload.
-- Update the browser favicon to use the uploaded logo image.
+- Create a new logo asset with a transparent background so only the letters/mark remain visible.
+- Remove the small tagline text under the wordmark inside the logo asset (`AI AUTOMATION • INTELLIGENCE • IMPACT`).
+- Replace the current header logo image so the top-left logo no longer appears inside a dark rectangle.
+- Update the footer to use the same cleaned logo asset for consistency.
+- Refresh favicon/app icon references only if needed so branding stays consistent.
 
-### Placement and sizing
-- Header: keep a clean horizontal logo area, sized similarly to the current wordmark so navigation layout does not shift.
-- Footer: use the same brand asset at a smaller size, preserving the existing compact fixed-footer layout.
-- Favicon: reference the copied image from `public/` so browsers can load it reliably.
+### How it will look
+- Header logo: transparent background, just the DigitLab letters/mark.
+- No extra line of small text inside the logo image.
+- The logo will sit naturally on top of the existing sky background instead of bringing its own box behind it.
 
-### Files to update
-- Copy uploaded image into the project, likely:
-  - `public/digitlab-brand-logo.png` for favicon/public usage
-  - optionally `src/assets/digitlab-brand-logo.png` for React imports
-- Update:
-  - `src/components/Logo.tsx`
-  - `src/components/Footer.tsx`
-  - `index.html`
+### Files involved
+- `src/components/Logo.tsx`
+- `src/components/Footer.tsx`
+- `src/assets/digitlab-brand-logo.png` or a replacement transparent asset
+- `public/digitlab-brand-logo.png` and related icon files if the cleaned asset should also be used there
+- `index.html` only if favicon/icon references need to change
+
+### Technical details
+- I’ll replace the current raster logo asset with a transparent version derived from the approved brand image.
+- If the cleanest result comes from using just the monogram + wordmark on transparency, I’ll export that as the main site logo.
+- I will preserve the existing component sizing/positioning unless the new transparent asset needs a minor adjustment for alignment.
 
 ### Quality checks
-- Confirm the logo renders clearly on the default dark navy background.
-- Confirm it does not overflow the desktop or mobile header.
-- Confirm footer still fits within the fixed 15vh footer contract.
-- Remove or bypass stale favicon references if needed so the new icon is used consistently.
+- Confirm the logo background is truly transparent on both day and night themes.
+- Confirm the small tagline text is fully removed from the displayed logo.
+- Confirm the logo remains crisp in the header and footer and does not overlap the theme toggle.
+- Confirm no stale asset path is still showing the old boxed logo.
 
-### Notes
-- I will not change the site theme, copy, navigation, backend, chat, or page layout.
-- If the uploaded file includes extra whitespace or a full square composition, I will size it conservatively first rather than cropping destructively. If it needs a cleaner transparent SVG later, we can replace the PNG with SVG exports.
+### Scope note
+- This change targets the logo asset itself and where it is displayed.
+- I will not change the rest of the site copy or layout unless needed for the new logo to fit cleanly.
