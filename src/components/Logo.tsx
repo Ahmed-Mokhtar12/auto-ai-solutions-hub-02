@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import wordmark from '@/assets/digitlab-wordmark.svg';
+import brandLogo from '@/assets/digitlab-brand-logo.png';
 
 const Logo: React.FC = () => (
   <Link to="/" aria-label="DigitLab home" className="inline-flex items-center">
-    <img src={wordmark} alt="DigitLab" className="h-8 w-auto" />
+    <img src={brandLogo} alt="DigitLab.ai" className="h-10 w-auto object-contain" />
   </Link>
 );
 
