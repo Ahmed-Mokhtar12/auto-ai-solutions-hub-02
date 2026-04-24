@@ -2,7 +2,7 @@
 import React from 'react';
 import { Mail, Facebook, Instagram, Linkedin } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import brandLogo from '@/assets/digitlab-brand-logo.png';
+import brandLogo from '@/assets/digitlab-brand-logo-clean.png';
 
 const Footer: React.FC = () => {
   return (
