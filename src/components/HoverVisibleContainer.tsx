@@ -1,8 +1,7 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useElementVisibility } from '@/hooks/useElementVisibility';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 interface HoverVisibleContainerProps {
   children: React.ReactNode;
@@ -19,37 +18,73 @@ const HoverVisibleContainer: React.FC<HoverVisibleContainerProps> = ({
   showIndicator = false,
   initialVisibility = false
 }) => {
-  const isMobile = useIsMobile();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [useScrollReveal, setUseScrollReveal] = useState(false);
 
-  // On mobile (no hover), always show content so touch users see everything.
   const {
     isVisible,
+    setIsVisible,
     handleMouseEnter,
     handleMouseLeave,
     cleanup
   } = useElementVisibility({
     autoHideDelay,
-    initialVisibility: isMobile ? true : initialVisibility
+    initialVisibility
   });
+
+  useEffect(() => {
+    const touchQuery = window.matchMedia('(max-width: 1023px)');
+    const updateRevealMode = () => setUseScrollReveal(touchQuery.matches);
+
+    updateRevealMode();
+    touchQuery.addEventListener('change', updateRevealMode);
+
+    return () => touchQuery.removeEventListener('change', updateRevealMode);
+  }, []);
+
+  useEffect(() => {
+    if (!useScrollReveal) {
+      setIsVisible(initialVisibility);
+      return;
+    }
+
+    const element = containerRef.current;
+    if (!element) return;
+
+    setIsVisible(false);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      {
+        threshold: 0.18,
+        rootMargin: '0px 0px -10% 0px'
+      }
+    );
+
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, [initialVisibility, setIsVisible, useScrollReveal]);
 
   // Clean up on unmount
   useEffect(() => {
     return cleanup;
   }, [cleanup]);
 
-  // Mobile short-circuit: render children directly, no hover gating.
-  if (isMobile) {
-    return <div className={cn('relative', className)}>{children}</div>;
-  }
-
   return (
     <div 
+      ref={containerRef}
       className={cn(
         "relative transition-all duration-300",
         className
       )}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={useScrollReveal ? undefined : handleMouseEnter}
+      onMouseLeave={useScrollReveal ? undefined : handleMouseLeave}
     >
       <div
         className={cn(
