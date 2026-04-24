@@ -80,7 +80,7 @@ const HoverVisibleContainer: React.FC<HoverVisibleContainerProps> = ({
     <div 
       ref={containerRef}
       className={cn(
-        "relative transition-all duration-300",
+        "relative transition-all duration-700 ease-out",
         className
       )}
       onMouseEnter={useScrollReveal ? undefined : handleMouseEnter}
@@ -88,7 +88,7 @@ const HoverVisibleContainer: React.FC<HoverVisibleContainerProps> = ({
     >
       <div
         className={cn(
-          "transition-all duration-300",
+          "transition-all duration-700 ease-out",
           isVisible 
             ? "opacity-100 transform scale-100" 
             : "opacity-0 transform scale-95 pointer-events-none"
