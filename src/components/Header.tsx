@@ -39,10 +39,21 @@ const industries = [
 
 const Header: React.FC = () => {
   const isMobile = useIsMobile();
+  const [isTabletHeader, setIsTabletHeader] = React.useState(false);
+
+  React.useEffect(() => {
+    const tabletQuery = window.matchMedia('(min-width: 768px) and (max-width: 1023px)');
+    const updateTabletHeader = () => setIsTabletHeader(tabletQuery.matches);
+
+    updateTabletHeader();
+    tabletQuery.addEventListener('change', updateTabletHeader);
+
+    return () => tabletQuery.removeEventListener('change', updateTabletHeader);
+  }, []);
 
   const handleBookDemo = openCalendly;
 
-  if (isMobile) {
+  if (isMobile || isTabletHeader) {
     return (
       <header className="w-full py-4 px-4 relative z-30 bg-transparent backdrop-blur-0">
         <div className="flex justify-between items-center">
