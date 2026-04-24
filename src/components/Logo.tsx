@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import brandLogo from '@/assets/digitlab-brand-logo-clean.png';
+import brandLogo from '@/assets/digitlab-brand-logo-clean.svg';
 
 const Logo: React.FC = () => (
   <Link to="/" aria-label="DigitLab home" className="inline-flex items-center translate-y-5">
